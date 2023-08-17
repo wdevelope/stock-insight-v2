@@ -11,7 +11,7 @@ config();
   imports: [
     TypeOrmModule.forFeature([Comment]),
     JwtModule.register({
-      secret: process.env.DATABASE_SECRET_KEY,
+      secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: process.env.DATABASE_EXPIRESIN },
     }),
   ],
