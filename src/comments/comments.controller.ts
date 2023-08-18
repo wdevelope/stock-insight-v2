@@ -17,7 +17,7 @@ import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
 import { Users } from 'src/users/users.entity';
 @UseGuards(JwtAuthGuard)
-@Controller('boards')
+@Controller('api/boards')
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 

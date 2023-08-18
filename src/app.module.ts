@@ -8,8 +8,6 @@ import { TypeOrmConfig } from 'config/typeorm.config';
 import { EmailService } from './users/email/email.service';
 import { AppController } from './app.controller';
 import { LikesModule } from './likes/likes.module';
-import { AppController } from './app.controller';
->>>>>>>>> Temporary merge branch 2
 
 @Module({
   imports: [
