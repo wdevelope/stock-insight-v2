@@ -1,10 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotAcceptableException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Comment } from './entities/comment.entity';
 import { Repository } from 'typeorm';
 import { Board } from 'src/boards/entities/board.entity';
+import { Users } from 'src/users/users.entity';
 
 @Injectable()
 export class CommentsService {
@@ -14,31 +19,44 @@ export class CommentsService {
   ) {}
 
   async create(
+    user: Users,
     createCommentDto: CreateCommentDto,
     boardId: Board,
   ): Promise<void> {
     await this.commentsRepository.save({
       comment: createCommentDto.comment,
       board: boardId,
+      user: user,
     });
   }
 
   async findAllByBoard(boardId: number): Promise<Comment[]> {
+    const comment = await this.commentsRepository.findOne({
+      where: { board: { id: boardId } },
+    });
+    if (!comment) {
+      throw new NotFoundException('Comment not found');
+    }
     return this.commentsRepository.find({ where: { board: { id: boardId } } });
   }
 
   async update(
+    user: Users,
     boardId: number,
     commentId: number,
     updateCommentDto: UpdateCommentDto,
-  ) {
+  ): Promise<void> {
     const comment = await this.commentsRepository.findOne({
       where: { id: commentId, board: { id: boardId } },
     });
     if (!comment) {
       throw new NotFoundException('Comment not found');
     }
-    return await this.commentsRepository
+    const userCommentId = user.comment[0].id;
+    if (comment.id !== userCommentId) {
+      throw new NotAcceptableException();
+    }
+    await this.commentsRepository
       .createQueryBuilder()
       .update(Comment)
       .set({
@@ -48,15 +66,18 @@ export class CommentsService {
       .execute();
   }
 
-  async remove(boardId: number, commentId: number): Promise<void> {
+  async remove(user: Users, boardId: number, commentId: number): Promise<void> {
     const comment = await this.commentsRepository.findOne({
       where: { id: commentId, board: { id: boardId } },
     });
 
     if (!comment) {
-      throw new NotFoundException('Comment not found');
+      throw new NotFoundException();
     }
-
+    const userCommentId = user.comment[0].id;
+    if (comment.id !== userCommentId) {
+      throw new NotAcceptableException();
+    }
     await this.commentsRepository.remove(comment);
   }
 }

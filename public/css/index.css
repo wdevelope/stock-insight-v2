@@ -1,0 +1,46 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+
+main {
+  margin-top: 100px;
+  margin-right: 30px;
+  padding-left: 260px;
+}
+
+.navbar {
+  background-color: #01161e;
+}
+
+.navbar-brand {
+  font-size: 30px;
+}
+
+.fixed-top-custom {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1030;
+}
+
+.left-nav-border {
+  border-right: 1px solid #ccc;
+  position: fixed;
+  top: 56px;
+  left: 0;
+  height: calc(100vh - 56px);
+}
+
+.sidebar {
+  color: black;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 19px;
+}
+
+.sidebar-link:hover {
+  color: rgb(255, 93, 93);
+  text-decoration: none;
+}

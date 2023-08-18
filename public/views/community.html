@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>주식 플랫폼</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../static/css/index.css" />
+  </head>
+  <body>
+    <!-- 🔴 위쪽 Nav 🔴-->
+    <nav class="navbar navbar-expand-lg fixed-top-custom">
+      <div class="container-fluid">
+        <!-- 햄버거 메뉴 버튼 추가 -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#sidebarMenu"
+          aria-controls="sidebarMenu"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand text-light" href="http://localhost:3000/main">
+          <i class="fa-brands fa-stack-overflow"> lol lol</i>
+        </a>
+        <!-- 알림,회원 -->
+        <div class="d-flex ms-auto">
+          <button class="btn btn-outline-light me-2">
+            <i class="fas fa-bell fa-2x"></i>
+          </button>
+          <button class="btn btn-outline-light">
+            <i class="fas fa-user fa-2x"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- 🔴 왼쪽 Nav 🔴 -->
+    <nav
+      class="d-flex flex-column align-items-start bg-light p-4 d-none d-lg-block left-nav-border"
+    >
+      <a
+        href="http://localhost:3000/search"
+        class="d-flex align-items-center my-3 sidebar"
+        role="button"
+        aria-label="search"
+      >
+        <i class="fa-solid fa-magnifying-glass me-2" aria-hidden="true"></i>
+        search
+      </a>
+      <a
+        href="http://localhost:3000/news"
+        class="d-flex align-items-center my-3 sidebar"
+        role="button"
+        aria-label="Economy"
+      >
+        <i class="fa-regular fa-newspaper me-2"></i> news
+      </a>
+      <a
+        href="http://localhost:3000/stocks"
+        class="d-flex align-items-center my-3 sidebar"
+        role="button"
+        aria-label="Analysis"
+      >
+        <i class="fas fa-chart-bar me-2" aria-hidden="true"></i> stocks
+      </a>
+      <a
+        href="http://localhost:3000/community"
+        class="d-flex align-items-center my-3 sidebar"
+        role="button"
+        aria-label="Community"
+      >
+        <i class="fas fa-users me-2" aria-hidden="true"></i> Community
+      </a>
+    </nav>
+
+    <!-- 🔴 커뮤니티 메인  🔴 -->
+    <main>
+      <!-- 게시판별로 Nav -->
+      <ul class="nav nav-tabs mt-5" id="boardTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link active"
+            id="home-tab"
+            data-bs-toggle="tab"
+            href="#notice"
+            role="tab"
+            aria-controls="notice"
+            aria-selected="true"
+          >
+            공지사항
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="profile-tab"
+            data-bs-toggle="tab"
+            href="#freeBoard"
+            role="tab"
+            aria-controls="freeBoard"
+            aria-selected="false"
+          >
+            자유게시판
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="contact-tab"
+            data-bs-toggle="tab"
+            href="#stockBoard"
+            role="tab"
+            aria-controls="stockBoard"
+            aria-selected="false"
+          >
+            문의
+          </button>
+        </li>
+      </ul>
+
+      <!-- 게시판 내용 -->
+      <div class="tab-content" id="boardTabsContent">
+        <!-- 공지사항 -->
+        <div
+          class="tab-pane fade show active"
+          id="notice"
+          role="tabpanel"
+          aria-labelledby="home-tab"
+        >
+          <h2 class="my-4">공지사항</h2>
+
+          <!-- 게시글 예시 -->
+          <div class="list-group mt-4">
+            <a
+              href="http://localhost:3000/community/board"
+              class="list-group-item list-group-item-action"
+            >
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <span>[카테고리]</span>
+                  <strong class="mb-1 ms-2">게시글 제목</strong>
+                </div>
+                <div>
+                  <small class="me-2">프로필</small>
+                  <span>2023-08-18</span>
+                  <i class="fas fa-thumbs-up ms-4"></i> 10
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- 자유게시판 -->
+        <div
+          class="tab-pane fade"
+          id="freeBoard"
+          role="tabpanel"
+          aria-labelledby="profile-tab"
+        >
+          <h2 class="my-4">자유게시판</h2>
+          <div class="list-group mt-4">
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <span>[토론]</span>
+                  <strong class="mb-1 ms-2">주식에 관한 토론</strong>
+                </div>
+                <div>
+                  <small class="me-2">사용자1</small>
+                  <span>2023-08-19</span>
+                  <i class="fas fa-thumbs-up ms-4"></i> 8
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- 문의게시판 -->
+        <div
+          class="tab-pane fade"
+          id="stockBoard"
+          role="tabpanel"
+          aria-labelledby="contact-tab"
+        >
+          <h2 class="my-4">문의</h2>
+          <div class="list-group mt-4">
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <span>[피드백]</span>
+                  <strong class="mb-1 ms-2">사이트 UI에 대한 피드백</strong>
+                </div>
+                <div>
+                  <small class="me-2">사용자2</small>
+                  <span>2023-08-20</span>
+                  <i class="fas fa-thumbs-up ms-4"></i> 5
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 🔴 푸터 🔴 -->
+    <footer class="text-center mt-5">
+      © 2023 Stock Platform. All rights reserved.
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.1/umd/popper.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://kit.fontawesome.com/1a93e99cf8.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/static/js/community.js"></script>
+  </body>
+</html>

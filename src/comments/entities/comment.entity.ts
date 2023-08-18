@@ -1,4 +1,5 @@
 import { Board } from 'src/boards/entities/board.entity';
+import { Users } from 'src/users/users.entity';
 import {
   Column,
   CreateDateColumn,
@@ -22,6 +23,12 @@ export class Comment {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ManyToOne(() => Board, (board) => board.comment, { eager: false })
+  @ManyToOne(() => Board, (board) => board.comment, {
+    eager: false,
+    // onDelete: 'CASCADE',
+  })
   board: Board;
+
+  @ManyToOne(() => Users, (user) => user.comment, { eager: false })
+  user: Users;
 }
