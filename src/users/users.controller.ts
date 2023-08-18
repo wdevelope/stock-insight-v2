@@ -18,12 +18,14 @@ import { UserCheckDto } from 'src/auth/dto/user.check.dto';
 import { SignUpDto } from './dto/signUp.dto';
 import { Response } from 'express';
 import { UpdateRequestDto } from './dto/updateRequest.dto';
+import { EmailService } from './email/email.service';
 
 @Controller('users')
 export class UsersController {
   constructor(
     private readonly usersSevice: UsersService,
     private readonly authService: AuthService,
+    private readonly emailService: EmailService,
   ) {}
 
   // POST. http://localhost:3000/users
@@ -67,5 +69,16 @@ export class UsersController {
   @Delete()
   async deleteCurrentUser(@CurrentUser() user: Users) {
     return await this.usersSevice.deleteUser(user.id);
+  }
+
+  // 이메일 인증 해보는 중
+  @Get()
+  sendMail(): any {
+    return this.emailService.example();
+  }
+
+  @Get('template')
+  sendTemplate(): any {
+    return this.emailService.example2();
   }
 }
