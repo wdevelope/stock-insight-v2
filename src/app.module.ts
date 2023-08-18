@@ -7,6 +7,7 @@ import { CommentsModule } from './comments/comments.module';
 import { TypeOrmConfig } from 'config/typeorm.config';
 import { AppController } from './app.controller';
 import { LikesModule } from './likes/likes.module';
+>>>>>>>>> Temporary merge branch 2
 
 @Module({
   imports: [
