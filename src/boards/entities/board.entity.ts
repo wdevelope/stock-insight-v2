@@ -1,8 +1,11 @@
 import { Comment } from 'src/comments/entities/comment.entity';
+import { Likes } from 'src/likes/entities/like.entity';
+import { Users } from 'src/users/users.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -31,9 +34,18 @@ export class Board {
   @UpdateDateColumn()
   updated_at: Date;
 
-  //   @ManyToOne(() => User, (user)=> user.board, {eager: false})
-  //   user : User
+  @ManyToOne(() => Users, (user) => user.board, { eager: false })
+  user: Users;
 
-  @OneToMany(() => Comment, (comment) => comment.board, { eager: true })
-  comment: Comment;
+  @OneToMany(() => Comment, (comment) => comment.board, {
+    // cascade: true,
+    eager: true,
+  })
+  comment: Comment[];
+
+  @OneToMany(() => Likes, (likes) => likes.board, {
+    eager: true,
+    cascade: true,
+  })
+  likes: Likes[];
 }

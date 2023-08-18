@@ -4,9 +4,7 @@ import { BoardsController } from './boards.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Board } from './entities/board.entity';
 import { JwtModule } from '@nestjs/jwt';
-import { config } from 'dotenv';
 import { CommentsModule } from 'src/comments/comments.module';
-config();
 
 @Module({
   imports: [
@@ -17,7 +15,7 @@ config();
     }),
     CommentsModule,
   ],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, BoardsService],
   controllers: [BoardsController],
   providers: [BoardsService],
 })
