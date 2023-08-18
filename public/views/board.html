@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>주식 플랫폼</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../static/css/index.css" />
+    <link rel="stylesheet" href="../static/css/community.css" />
+  </head>
+  <body>
+    <!-- 🔴 위쪽 Nav 🔴-->
+    <nav class="navbar navbar-expand-lg fixed-top-custom">
+      <div class="container-fluid">
+        <!-- 햄버거 메뉴 버튼 추가 -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#sidebarMenu"
+          aria-controls="sidebarMenu"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand text-light" href="http://localhost:3000/main">
+          <i class="fa-brands fa-stack-overflow"> lol lol</i>
+        </a>
+        <!-- 알림,회원 -->
+        <div class="d-flex ms-auto">
+          <button class="btn btn-outline-light me-2">
+            <i class="fas fa-bell fa-2x"></i>
+          </button>
+          <button class="btn btn-outline-light">
+            <i class="fas fa-user fa-2x"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- 🔴 왼쪽 Nav 🔴 -->
+    <nav
+      class="d-flex flex-column align-items-start bg-light p-4 d-none d-lg-block left-nav-border"
+    >
+      <a
+        href="http://localhost:3000/search"
+        class="d-flex align-items-center my-3 sidebar"
+        role="button"
+        aria-label="search"
+      >
+        <i class="fa-solid fa-magnifying-glass me-2" aria-hidden="true"></i>
+        search
+      </a>
+      <a
+        href="http://localhost:3000/news"
+        class="d-flex align-items-center my-3 sidebar"
+        role="button"
+        aria-label="Economy"
+      >
+        <i class="fa-regular fa-newspaper me-2"></i> news
+      </a>
+      <a
+        href="http://localhost:3000/stocks"
+        class="d-flex align-items-center my-3 sidebar"
+        role="button"
+        aria-label="Analysis"
+      >
+        <i class="fas fa-chart-bar me-2" aria-hidden="true"></i> stocks
+      </a>
+      <a
+        href="http://localhost:3000/community"
+        class="d-flex align-items-center my-3 sidebar"
+        role="button"
+        aria-label="Community"
+      >
+        <i class="fas fa-users me-2" aria-hidden="true"></i> Community
+      </a>
+    </nav>
+
+    <!-- 🔴보드 메인 내용🔴 -->
+    <main class="board-container">
+      <!-- 게시글 제목 및 작성자, 날짜 -->
+      <div class="mb-4">
+        <h3 class="display-4">보드 제목</h3>
+        <p class="text-muted">
+          작성자: <span>작성자명</span> | 날짜: <span>2023-08-18</span>
+        </p>
+      </div>
+
+      <!-- 게시글 내용 -->
+      <div class="mb-5">
+        <p>
+          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolorem
+          minima laborum repudiandae eaque, animi doloremque possimus deleniti
+          nemo voluptatibus ipsam consequuntur eius maxime perferendis tenetur
+          tempora, provident quos porro commodi. Lorem ipsum, dolor sit amet
+          consectetur adipisicing elit. Sed, eaque. Eius praesentium molestiae
+          quod? Neque laboriosam saepe sed. Consequatur non architecto sunt amet
+          soluta sed vitae iure! Dolorum, tempore. Facilis, aut beatae possimus
+          impedit veritatis esse quam quae molestiae. Reiciendis exercitationem
+          nemo necessitatibus consectetur eius ullam repellendus ut assumenda
+          reprehenderit earum rem architecto, rerum suscipit velit quod
+          dignissimos neque soluta illo doloribus! Hic exercitationem eligendi
+          voluptas aliquam tempore eveniet quibusdam vitae itaque voluptates.
+          Quo quaerat molestias eaque? Nulla consequuntur dolorum eos sunt
+          libero doloribus, obcaecati perspiciatis dolorem neque distinctio
+          numquam laboriosam repellat facere possimus quas suscipit fugit
+          nesciunt facilis reiciendis.
+        </p>
+      </div>
+
+      <!-- 좋아요 및 댓글 버튼 -->
+      <div class="d-flex justify-content-start mb-4">
+        <button class="btn btn-primary me-3">
+          <i class="fas fa-thumbs-up"></i> 좋아요
+        </button>
+      </div>
+
+      <!-- 댓글 목록 -->
+      <div class="mb-4">
+        <h5>댓글</h5>
+        <div class="list-group">
+          <div class="list-group-item">
+            <div class="d-flex justify-content-between">
+              <strong>사용자명</strong>
+              <small>2023-08-18 13:30</small>
+            </div>
+            <p class="mt-2">댓글 내용이 여기에 표시됩니다.</p>
+          </div>
+        </div>
+        <div class="list-group">
+          <div class="list-group-item">
+            <div class="d-flex justify-content-between">
+              <strong>사용자명</strong>
+              <small>2023-08-18 13:30</small>
+            </div>
+            <p class="mt-2">댓글 내용이 여기에 표시됩니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 댓글 입력 박스 -->
+      <div>
+        <h5>댓글 작성하기</h5>
+        <textarea
+          class="form-control mb-3"
+          rows="4"
+          placeholder="댓글을 입력하세요..."
+        ></textarea>
+        <button class="btn btn-primary">댓글 등록</button>
+      </div>
+    </main>
+
+    <!-- 🔴 푸터 🔴 -->
+    <footer class="text-center mt-5">
+      © 2023 Stock Platform. All rights reserved.
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.1/umd/popper.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://kit.fontawesome.com/1a93e99cf8.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/static/js/board.js"></script>
+  </body>
+</html>
