@@ -5,6 +5,7 @@ import { UsersModule } from './users/users.module';
 import { BoardsModule } from './boards/boards.module';
 import { CommentsModule } from './comments/comments.module';
 import { TypeOrmConfig } from 'config/typeorm.config';
+import { EmailService } from './users/email/email.service';
 
 @Module({
   imports: [
@@ -15,6 +16,6 @@ import { TypeOrmConfig } from 'config/typeorm.config';
     CommentsModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [EmailService],
 })
 export class AppModule {}
