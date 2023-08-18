@@ -20,7 +20,7 @@ import { Response } from 'express';
 import { UpdateRequestDto } from './dto/updateRequest.dto';
 import { EmailService } from './email/email.service';
 
-@Controller('users')
+@Controller('api/users')
 export class UsersController {
   constructor(
     private readonly usersSevice: UsersService,

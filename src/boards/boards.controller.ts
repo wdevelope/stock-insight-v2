@@ -17,7 +17,7 @@ import { CurrentUser } from 'src/common/decorators/user.decorator';
 import { Users } from 'src/users/users.entity';
 
 @UseGuards(JwtAuthGuard)
-@Controller('boards')
+@Controller('api/boards')
 export class BoardsController {
   constructor(private readonly boardsService: BoardsService) {}
 
