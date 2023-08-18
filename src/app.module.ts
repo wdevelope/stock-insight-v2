@@ -6,6 +6,8 @@ import { BoardsModule } from './boards/boards.module';
 import { CommentsModule } from './comments/comments.module';
 import { TypeOrmConfig } from 'config/typeorm.config';
 import { LikesModule } from './likes/likes.module';
+import { AppController } from './app.controller';
+
 
 @Module({
   imports: [
@@ -16,7 +18,7 @@ import { LikesModule } from './likes/likes.module';
     CommentsModule,
     LikesModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [],
 })
 export class AppModule {}
