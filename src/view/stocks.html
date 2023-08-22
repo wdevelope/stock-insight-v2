@@ -104,7 +104,15 @@
     </nav>
 
     <!-- 🔴 메인 🔴 -->
-    <main></main>
+    <main>
+      <div>
+        <ul id="messages"></ul>
+      </div>
+      <div>
+        <input type="text" id="message" />
+        <button onclick="handleSubmitNewMessage()" Submit></button>
+      </div>
+    </main>
 
     <!-- 🔴 푸터 🔴 -->
     <footer class="text-center mt-5">
@@ -124,5 +132,7 @@
     ></script>
     <script src="/static/js/stock.js"></script>
     <script src="/static/js/index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="../socket-client/chat-socket.js"></script>
   </body>
 </html>

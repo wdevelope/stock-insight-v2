@@ -6,6 +6,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Users } from 'src/users/users.entity';
 import { Comment } from 'src/comments/entities/comment.entity';
+import { EventsGateway } from '../events/events.gateway';
+import { Server } from 'socket.io';
+import { channel } from 'diagnostics_channel';
 
 @Injectable()
 export class BoardsService {

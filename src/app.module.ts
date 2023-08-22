@@ -11,6 +11,7 @@ import { LikesModule } from './likes/likes.module';
 import { ViewsModule } from './views/views.module';
 import { NoticeboardsModule } from './noticeboards/noticeboards.module';
 import { StockModule } from './stock/stock.module';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { StockModule } from './stock/stock.module';
     ViewsModule,
     NoticeboardsModule,
     StockModule,
+    EventsModule,
   ],
   controllers: [AppController],
   providers: [EmailService],
