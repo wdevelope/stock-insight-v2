@@ -6,7 +6,7 @@ import { JwtStrategy } from './jwt/jwt.strategy';
 import { UsersModule } from 'src/users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthController } from './auth.controller';
-import { JwtKakaoStrategy } from './strategies/kakao.strategy';
+import { KakaoStrategy } from './strategies/kakao.strategy';
 
 @Module({
   imports: [
@@ -20,7 +20,7 @@ import { JwtKakaoStrategy } from './strategies/kakao.strategy';
 
     forwardRef(() => UsersModule),
   ],
-  providers: [AuthService, JwtStrategy, JwtKakaoStrategy],
+  providers: [AuthService, JwtStrategy, KakaoStrategy],
   exports: [AuthService],
   controllers: [AuthController],
 })

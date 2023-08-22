@@ -5,13 +5,14 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersRepository } from '../users/users.repository';
 import { UserCheckDto } from './dto/user.check.dto';
 import { Response } from 'express';
-import { KakaoLoginAuthDto } from './dto/kakao.dto';
+// import { KakaoLoginAuthDto } from './dto/kakao.dto';
+import { Payload } from './jwt/jwt.payload';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersRepository: UsersRepository,
-    private jwtService: JwtService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async jwtLogIn(data: LoginDto, res: Response) {
@@ -63,20 +64,31 @@ export class AuthService {
     };
   }
 
-  async OAuthLogin(data: KakaoLoginAuthDto, res: Response) {
-    // 1. 회원조회
-    const { email } = data;
-    let user = await this.usersRepository.findUserByEmail(email); //user를 찾아서
+  async validateOAuthLogin(
+    thirdPartyId: string,
+    email: string,
+    nickname: string,
+    provider: string,
+  ): Promise<any> {
+    // DB에서 사용자를 찾거나, 없는 경우 새로 생성하는 로직을 구현
+    let user = await this.usersRepository.findUserByThirdPartyId(
+      thirdPartyId,
+      provider,
+    );
+    if (!user) {
+      // 사용자가 없는 경우 새로 생성
+      user = await this.usersRepository.createUserFromOAuth(
+        thirdPartyId,
+        email,
+        nickname,
+        provider,
+      );
+    }
+    return user;
+  }
 
-    // 2, 회원가입이 안되어있다면?
-    if (!user) user = await this.usersRepository.createKakao({ email });
-
-    // 3. 회원가입이 되어있다면? 로그인(AT, RT를 생성해서 브라우저에 전송)한다
-    const payload = { id: user.id, email: email };
-    const token = this.jwtService.sign(payload);
-
-    return res.send({
-      token: token,
-    });
+  async generateJWT(user: any): Promise<string> {
+    const payload: Payload = { id: user.id, email: user.email };
+    return this.jwtService.sign(payload);
   }
 }
