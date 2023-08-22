@@ -50,4 +50,25 @@ export class UsersRepository extends Repository<Users> {
     const newUser = this.create(user);
     return await this.save(newUser);
   }
+
+  async findUserByThirdPartyId(
+    thirdPartyId: string,
+    provider: string,
+  ): Promise<Users | null> {
+    const user = await this.findOne({ where: { thirdPartyId, provider } });
+
+    return user;
+  }
+
+  async createUserFromOAuth(
+    thirdPartyId: string,
+    email: string,
+    nickname: string,
+    provider: string,
+  ): Promise<Users> {
+    const newUser = this.create({ thirdPartyId, provider, email, nickname });
+    const savedUser = await this.save(newUser);
+
+    return savedUser;
+  }
 }
