@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  ValidationPipe,
+  BadRequestException,
 } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
@@ -21,16 +23,16 @@ import { Users } from 'src/users/users.entity';
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
-  @Post('/:boardId')
+  @Post('/:boardId/comments')
   create(
     @CurrentUser() user: Users,
     @Param('boardId') boardId: Board,
-    @Body() createCommentDto: CreateCommentDto,
+    @Body(ValidationPipe) createCommentDto: CreateCommentDto,
   ) {
     return this.commentsService.create(user, createCommentDto, boardId);
   }
 
-  @Get('/:boardId')
+  @Get('/:boardId/comments')
   findAllByBoard(@Param('boardId') boardId: number): Promise<Comment[]> {
     return this.commentsService.findAllByBoard(boardId);
   }
@@ -40,8 +42,11 @@ export class CommentsController {
     @CurrentUser() user: Users,
     @Param('boardId') boardId: number,
     @Param('commentId') commentId: number,
-    @Body() updateCommentDto: UpdateCommentDto,
+    @Body(ValidationPipe) updateCommentDto: UpdateCommentDto,
   ) {
+    if (!updateCommentDto.comment) {
+      throw new BadRequestException();
+    }
     return this.commentsService.update(
       user,
       boardId,

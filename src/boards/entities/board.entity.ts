@@ -1,6 +1,7 @@
 import { Comment } from 'src/comments/entities/comment.entity';
 import { Likes } from 'src/likes/entities/like.entity';
 import { Users } from 'src/users/users.entity';
+import { Views } from 'src/views/entities/view.entity';
 import {
   Column,
   CreateDateColumn,
@@ -34,7 +35,7 @@ export class Board {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ManyToOne(() => Users, (user) => user.board, { eager: false })
+  @ManyToOne(() => Users, (user) => user.board)
   user: Users;
 
   @OneToMany(() => Comment, (comment) => comment.board, {
@@ -48,4 +49,10 @@ export class Board {
     cascade: true,
   })
   likes: Likes[];
+
+  @OneToMany(() => Views, (views) => views.board, {
+    cascade: true,
+    eager: true,
+  })
+  views: Views;
 }

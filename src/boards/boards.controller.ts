@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  ValidationPipe,
 } from '@nestjs/common';
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -23,7 +24,7 @@ export class BoardsController {
 
   @Post()
   create(
-    @Body() createBoardDto: CreateBoardDto,
+    @Body(ValidationPipe) createBoardDto: CreateBoardDto,
     @CurrentUser() user: Users,
   ): Promise<void> {
     return this.boardsService.create(createBoardDto, user);
