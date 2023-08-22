@@ -8,6 +8,8 @@ import { TypeOrmConfig } from 'config/typeorm.config';
 import { EmailService } from './users/email/email.service';
 import { AppController } from './app.controller';
 import { LikesModule } from './likes/likes.module';
+import { ViewsModule } from './views/views.module';
+import { NoticeboardsModule } from './noticeboards/noticeboards.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { LikesModule } from './likes/likes.module';
     BoardsModule,
     CommentsModule,
     LikesModule,
+    ViewsModule,
+    NoticeboardsModule,
   ],
   controllers: [AppController],
   providers: [EmailService],

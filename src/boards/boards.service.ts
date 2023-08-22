@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotAcceptableException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { Board } from './entities/board.entity';
@@ -49,14 +45,13 @@ export class BoardsService {
     id: number,
     updateBoardDto: UpdateBoardDto,
   ): Promise<void> {
-    const existedBoard = await this.findOne(id);
+    const existedBoard = await this.boardsRepository.findOne({
+      where: { id, user: { id: user.id } },
+    });
     if (!existedBoard) {
       throw new NotFoundException();
     }
-    const boardId = user.board[0].id;
-    if (existedBoard.id !== boardId) {
-      throw new NotAcceptableException();
-    }
+
     await this.boardsRepository
       .createQueryBuilder()
       .update(Board)
@@ -72,14 +67,12 @@ export class BoardsService {
 
   // romove는 find해서 나온 값을 넣어줘야하고 delete는 그냥 id 값 바로 넣어두 됨 추가적으로 엔티티에서 cascade 설정시 remove 사용
   async remove(user: Users, id: number): Promise<void> {
-    const existedBoard = await this.findOne(id);
+    const existedBoard = await this.boardsRepository.findOne({
+      where: { id, user: { id: user.id } },
+    });
+    console.log(existedBoard);
     if (!existedBoard) {
       throw new NotFoundException();
-    }
-    //보드안에 배열로 들어있어서[0].id로 user 안에 boardid 값 가져옴(이게 맞는지 모르겠음 결과는 좋음.)
-    const boardId = user.board[0].id;
-    if (existedBoard.id !== boardId) {
-      throw new NotAcceptableException();
     }
     await this.boardsRepository.manager.transaction(async (transaction) => {
       await transaction.delete(Comment, { board: { id } });
