@@ -23,6 +23,15 @@ export class Users {
   @Column({ nullable: true })
   imgUrl: string;
 
+  @Column({ nullable: true })
+  thirdPartyId?: string;
+
+  @Column({ nullable: true })
+  provider?: string;
+
+  @Column({ default: 'user' })
+  status: string;
+
   @OneToMany(() => Board, (board) => board.user, { eager: true })
   board: Board[];
 

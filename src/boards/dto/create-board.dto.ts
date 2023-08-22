@@ -5,7 +5,7 @@ export class CreateBoardDto {
   title: string;
   @IsString()
   description: string;
-  @IsString()
+  // @IsString()
   image: string;
   join?: number;
 }

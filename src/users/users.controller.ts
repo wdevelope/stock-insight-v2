@@ -19,7 +19,7 @@ import { SignUpDto } from './dto/signUp.dto';
 import { Response } from 'express';
 import { UpdateRequestDto } from './dto/updateRequest.dto';
 import { EmailService } from './email/email.service';
-import { KakaoLoginAuthDto } from 'src/auth/dto/kakao.dto';
+import { EmailDto } from './dto/email.dto';
 
 @Controller('api/users')
 export class UsersController {
@@ -74,7 +74,7 @@ export class UsersController {
 
   // 이메일 보내는것 까지 성공
   @Get('/email')
-  sendTemplate(@Body() body: KakaoLoginAuthDto): any {
+  sendTemplate(@Body() body: EmailDto): any {
     return this.emailService.authEmail(body);
   }
 }

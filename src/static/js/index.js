@@ -41,6 +41,7 @@ async function toggleProfile() {
 
 function goToProfile() {}
 
+// 로그아웃 함수
 function logout() {
   function deleteCookie(name) {
     document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
@@ -50,6 +51,7 @@ function logout() {
   window.location.href = 'http://localhost:3000';
 }
 
+// 쿠키 가져오기 함수
 function getCookie(cookieName) {
   let name = cookieName + '=';
   let decodedCookie = decodeURIComponent(document.cookie);

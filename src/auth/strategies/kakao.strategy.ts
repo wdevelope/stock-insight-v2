@@ -1,8 +1,11 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-kakao';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { AuthService } from '../auth.service';
 
-export class JwtKakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
-  constructor() {
+@Injectable()
+export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
+  constructor(private readonly authService: AuthService) {
     super({
       clientID: process.env.KAKAO_CLIENT_ID,
       clientSecret: process.env.KAKAO_CLIENT_SECRET,
@@ -12,15 +15,18 @@ export class JwtKakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
   }
 
   async validate(accessToken: string, refreshToken: string, profile: any) {
-    // console.log('accessToken'+accessToken)
-    // console.log('refreshToken'+refreshToken)
-    // console.log(profile)
-    // console.log(profile._json.kakao_account.email)
+    const email = profile._json.kakao_account.email;
+    const nickname = profile._json.properties.nickname;
 
-    return {
-      name: profile.displayName,
-      email: profile._json.kakao_account.email,
-      password: profile.id,
-    };
+    const user = await this.authService.validateOAuthLogin(
+      profile.id,
+      email,
+      nickname,
+      'kakao',
+    );
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+    return user;
   }
 }
