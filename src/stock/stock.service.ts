@@ -12,10 +12,11 @@ export class StockService {
   ) {}
 
   async fetchDataAndSaveToDB() {
+    const stockCode = '086520';
     const config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `https://openapi.koreainvestment.com:9443/uapi/domestic-stock/v1/quotations/inquire-price?fid_cond_mrkt_div_code=J&fid_input_iscd=005930`,
+      url: `https://openapi.koreainvestment.com:9443/uapi/domestic-stock/v1/quotations/inquire-price?fid_cond_mrkt_div_code=J&fid_input_iscd=${stockCode}`,
       headers: {
         'content-type': 'application/json',
         authorization: process.env.ACCESS_TOKEN,
@@ -27,22 +28,29 @@ export class StockService {
 
     try {
       const response = await axios.request(config);
-      const data = response.data;
+      const { output } = response.data;
       const entity = new Stock();
-      entity.stck_shrn_iscd = data.output.stck_shrn_iscd;
-      entity.bstp_kor_isnm = data.output.bstp_kor_isnm;
-      entity.stck_oprc = data.output.stck_oprc;
-      entity.stck_hgpr = data.output.stck_hgpr;
-      entity.stck_lwpr = data.output.stck_lwpr;
-      entity.acml_vol = data.output.acml_vol;
-      entity.stck_prpr = data.output.stck_prpr;
-      entity.acml_tr_pbmn = data.output.acml_tr_pbmn;
-      entity.prdy_vrss = data.output.prdy_vrss;
-      entity.hts_avls = data.output.hts_avls;
-      entity.iscd_stat_cls_code = data.output.iscd_stat_cls_code;
-      entity.prdy_ctrt = data.output.prdy_ctrt;
-      entity.prdy_vrss = data.output.prdy_vrss;
-      entity.prdy_vrss_sign = data.output.prdy_vrss_sign;
+      entity.stck_shrn_iscd = output.stck_shrn_iscd;
+      entity.rprs_mrkt_kor_name = output.rprs_mrkt_kor_name;
+      entity.bstp_kor_isnm = output.bstp_kor_isnm;
+      entity.stck_prpr = output.stck_prpr;
+      entity.prdy_vrss = output.prdy_vrss;
+      entity.prdy_vrss_sign = output.prdy_vrss_sign;
+      entity.prdy_ctrt = output.prdy_ctrt;
+      entity.stck_oprc = output.stck_oprc;
+      entity.stck_hgpr = output.stck_hgpr;
+      entity.stck_lwpr = output.stck_lwpr;
+      entity.stck_sdpr = output.stck_sdpr;
+      entity.acml_vol = output.acml_vol;
+      entity.acml_tr_pbmn = output.acml_tr_pbmn;
+      entity.hts_frgn_ehrt = output.hts_frgn_ehrt;
+      entity.hts_avls = output.hts_avls;
+      entity.per = output.per;
+      entity.pbr = output.pbr;
+      entity.w52_hgpr = output.w52_hgpr;
+      entity.w52_lwpr = output.w52_lwpr;
+      entity.whol_loan_rmnd_rate = output.whol_loan_rmnd_rate;
+      entity.iscd_stat_cls_code = output.iscd_stat_cls_code;
 
       await this.stockRepository.save(entity);
     } catch (error) {
