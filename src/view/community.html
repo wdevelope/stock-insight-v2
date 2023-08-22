@@ -32,17 +32,32 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand text-light" href="http://localhost:3000/main">
+        <a
+          class="navbar-brand text-light"
+          href="http://localhost:3000/view/index.html"
+        >
           <i class="fa-brands fa-stack-overflow"> lol lol</i>
         </a>
         <!-- 알림,회원 -->
         <div class="d-flex ms-auto">
+          <!-- 알림 -->
           <button class="btn btn-outline-light me-2">
             <i class="fas fa-bell fa-2x"></i>
           </button>
-          <button class="btn btn-outline-light">
+          <!-- 회원 -->
+          <button class="btn btn-outline-light" onclick="toggleProfile()">
             <i class="fas fa-user fa-2x"></i>
           </button>
+        </div>
+        <!-- 회원 상세 정보 영역 -->
+        <div class="user-details" id="userDetails">
+          <img src="" alt="User Image" class="user-image" />
+          <div class="user-info">
+            <div><strong>닉네임:</strong> <span id="nickname"></span></div>
+            <div><strong>이메일:</strong> <span id="email"></span></div>
+          </div>
+          <button onclick="goToProfile()">회원상세정보</button>
+          <button onclick="logout()">로그아웃</button>
         </div>
       </div>
     </nav>
@@ -52,7 +67,7 @@
       class="d-flex flex-column align-items-start bg-light p-4 d-none d-lg-block left-nav-border"
     >
       <a
-        href="http://localhost:3000/search"
+        href="http://localhost:3000/view/search.html"
         class="d-flex align-items-center my-3 sidebar"
         role="button"
         aria-label="search"
@@ -61,7 +76,7 @@
         search
       </a>
       <a
-        href="http://localhost:3000/news"
+        href="http://localhost:3000/view/news.html"
         class="d-flex align-items-center my-3 sidebar"
         role="button"
         aria-label="Economy"
@@ -69,7 +84,7 @@
         <i class="fa-regular fa-newspaper me-2"></i> news
       </a>
       <a
-        href="http://localhost:3000/stocks"
+        href="http://localhost:3000/view/stocks.html"
         class="d-flex align-items-center my-3 sidebar"
         role="button"
         aria-label="Analysis"
@@ -77,7 +92,7 @@
         <i class="fas fa-chart-bar me-2" aria-hidden="true"></i> stocks
       </a>
       <a
-        href="http://localhost:3000/community"
+        href="http://localhost:3000/view/community.html"
         class="d-flex align-items-center my-3 sidebar"
         role="button"
         aria-label="Community"
@@ -140,9 +155,16 @@
           role="tabpanel"
           aria-labelledby="home-tab"
         >
-          <h2 class="my-4">공지사항</h2>
-
-          <!-- 게시글 예시 -->
+          <div class="d-flex justify-content-between align-items-center my-4">
+            <h2>공지사항</h2>
+            <button
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#writeModal"
+            >
+              글쓰기
+            </button>
+          </div>
           <div class="list-group mt-4">
             <a
               href="http://localhost:3000/community/board"
@@ -170,22 +192,18 @@
           role="tabpanel"
           aria-labelledby="profile-tab"
         >
-          <h2 class="my-4">자유게시판</h2>
-          <div class="list-group mt-4">
-            <a href="#" class="list-group-item list-group-item-action">
-              <div class="d-flex justify-content-between align-items-center">
-                <div>
-                  <span>[토론]</span>
-                  <strong class="mb-1 ms-2">주식에 관한 토론</strong>
-                </div>
-                <div>
-                  <small class="me-2">사용자1</small>
-                  <span>2023-08-19</span>
-                  <i class="fas fa-thumbs-up ms-4"></i> 8
-                </div>
-              </div>
-            </a>
+          <div class="d-flex justify-content-between align-items-center my-4">
+            <h2>자유게시판</h2>
+            <button
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#writeModal"
+            >
+              글쓰기
+            </button>
           </div>
+          <!-- 게시판 내용 들어가는곳 -->
+          <div class="list-group mt-4"></div>
         </div>
 
         <!-- 문의게시판 -->
@@ -195,7 +213,16 @@
           role="tabpanel"
           aria-labelledby="contact-tab"
         >
-          <h2 class="my-4">문의</h2>
+          <div class="d-flex justify-content-between align-items-center my-4">
+            <h2>문의</h2>
+            <button
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#writeModal"
+            >
+              글쓰기
+            </button>
+          </div>
           <div class="list-group mt-4">
             <a href="#" class="list-group-item list-group-item-action">
               <div class="d-flex justify-content-between align-items-center">
@@ -215,6 +242,64 @@
       </div>
     </main>
 
+    <!-- 🔴 모달 설정  🔴 -->
+    <!-- 글쓰기 모달 -->
+    <div
+      class="modal fade"
+      id="writeModal"
+      tabindex="-1"
+      aria-labelledby="writeModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="writeModalLabel">글쓰기</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                <label for="postTitle" class="form-label">제목</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="postTitle"
+                  placeholder="제목을 입력하세요"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="postContent" class="form-label">내용</label>
+                <textarea
+                  class="form-control"
+                  id="postContent"
+                  rows="5"
+                  placeholder="내용을 입력하세요"
+                ></textarea>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              닫기
+            </button>
+            <button type="button" class="btn btn-primary" onclick="savePost()">
+              저장
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- 🔴 푸터 🔴 -->
     <footer class="text-center mt-5">
       © 2023 Stock Platform. All rights reserved.
@@ -231,6 +316,7 @@
       src="https://kit.fontawesome.com/1a93e99cf8.js"
       crossorigin="anonymous"
     ></script>
+    <script src="/static/js/index.js"></script>
     <script src="/static/js/community.js"></script>
   </body>
 </html>

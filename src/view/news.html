@@ -14,10 +14,8 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
     />
-    <link rel="stylesheet" href="../static/css/index.css" />
-    <link rel="stylesheet" href="../static/css/stock.css" />
+    <link rel="stylesheet" href="/static/css/index.css" />
   </head>
-
   <body>
     <!-- 🔴 위쪽 Nav 🔴-->
     <nav class="navbar navbar-expand-lg fixed-top-custom">
@@ -34,27 +32,41 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand text-light" href="http://localhost:3000/main">
+        <a
+          class="navbar-brand text-light"
+          href="http://localhost:3000/view/index.html"
+        >
           <i class="fa-brands fa-stack-overflow"> lol lol</i>
         </a>
         <!-- 알림,회원 -->
         <div class="d-flex ms-auto">
+          <!-- 알림 -->
           <button class="btn btn-outline-light me-2">
             <i class="fas fa-bell fa-2x"></i>
           </button>
-          <button class="btn btn-outline-light">
+          <!-- 회원 -->
+          <button class="btn btn-outline-light" onclick="toggleProfile()">
             <i class="fas fa-user fa-2x"></i>
           </button>
         </div>
+        <!-- 회원 상세 정보 영역 -->
+        <div class="user-details" id="userDetails">
+          <img src="" alt="User Image" class="user-image" />
+          <div class="user-info">
+            <div><strong>닉네임:</strong> <span id="nickname"></span></div>
+            <div><strong>이메일:</strong> <span id="email"></span></div>
+          </div>
+          <button onclick="goToProfile()">회원상세정보</button>
+          <button onclick="logout()">로그아웃</button>
+        </div>
       </div>
     </nav>
-
     <!-- 🔴 왼쪽 Nav 🔴 -->
     <nav
       class="d-flex flex-column align-items-start bg-light p-4 d-none d-lg-block left-nav-border"
     >
       <a
-        href="http://localhost:3000/search"
+        href="http://localhost:3000/view/search.html"
         class="d-flex align-items-center my-3 sidebar"
         role="button"
         aria-label="search"
@@ -63,7 +75,7 @@
         search
       </a>
       <a
-        href="http://localhost:3000/news"
+        href="http://localhost:3000/view/news.html"
         class="d-flex align-items-center my-3 sidebar"
         role="button"
         aria-label="Economy"
@@ -71,7 +83,7 @@
         <i class="fa-regular fa-newspaper me-2"></i> news
       </a>
       <a
-        href="http://localhost:3000/stocks"
+        href="http://localhost:3000/view/stocks.html"
         class="d-flex align-items-center my-3 sidebar"
         role="button"
         aria-label="Analysis"
@@ -79,7 +91,7 @@
         <i class="fas fa-chart-bar me-2" aria-hidden="true"></i> stocks
       </a>
       <a
-        href="http://localhost:3000/community"
+        href="http://localhost:3000/view/community.html"
         class="d-flex align-items-center my-3 sidebar"
         role="button"
         aria-label="Community"
@@ -89,7 +101,42 @@
     </nav>
 
     <!-- 🔴 메인 🔴 -->
-    <main></main>
+    <main>
+      <!-- 뉴스 헤드라인 -->
+      <section>
+        <h1 class="display-4 mb-4">뉴스 헤드라인</h1>
+        <div class="row">
+          <div class="col-lg-8 mb-4">
+            <a href="#" target="_blank"
+              ><img
+                src="path/to/your/image.jpg"
+                alt="Main News Image"
+                class="img-fluid"
+            /></a>
+            <h2><a href="#">주요 뉴스 제목</a></h2>
+            <p>주요 뉴스 요약...</p>
+          </div>
+          <div class="col-lg-4">
+            <h3 class="mb-3">가장 많이 본 뉴스</h3>
+            <ul class="list-unstyled"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 카테고리별 뉴스 섹션 -->
+      <section class="mt-5">
+        <h2 class="mb-4">최신 주식 뉴스</h2>
+        <div class="row" id="stock-news-section"></div>
+      </section>
+
+      <div class="text-center mt-5">
+        <!-- 가운데 정렬을 위한 text-center 클래스 추가 -->
+        <button class="btn btn-primary btn-lg mx-2 prev-page">이전</button>
+        <!-- 큰 버튼을 위한 btn-lg 클래스, 간격을 위한 mx-2 클래스 -->
+        <span class="current-page">1</span>
+        <button class="btn btn-primary btn-lg mx-2 next-page">다음</button>
+      </div>
+    </main>
 
     <!-- 🔴 푸터 🔴 -->
     <footer class="text-center mt-5">
@@ -107,6 +154,7 @@
       src="https://kit.fontawesome.com/1a93e99cf8.js"
       crossorigin="anonymous"
     ></script>
-    <script src="/static/js/stock.js"></script>
+    <script src="/static/js/index.js"></script>
+    <script src="/static/js/news.js"></script>
   </body>
 </html>

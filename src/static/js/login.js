@@ -104,7 +104,17 @@ window.addEventListener('resize', () => {
   }
 });
 
-// 로그인 함수
+// 🟠 쿠키에 값을 설정하는 함수
+function setCookie(cookieName, cookieValue, expirationHour) {
+  const date = new Date();
+  date.setTime(date.getTime() + expirationHour * 60 * 60 * 1000);
+  const expires = `expires=${date.toUTCString()}`;
+  document.cookie = `${cookieName}=${encodeURIComponent(
+    cookieValue,
+  )}; ${expires}; path=/`;
+}
+
+// 🟠 로그인 함수
 async function loginUser() {
   const email = document.getElementById('emailInput').value;
   const password = document.getElementById('passwordInput').value;
@@ -115,7 +125,7 @@ async function loginUser() {
   };
 
   try {
-    const response = await fetch('http://localhost:3000/users/login', {
+    const response = await fetch('http://localhost:3000/api/users/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -124,10 +134,15 @@ async function loginUser() {
     });
 
     const result = await response.json();
+
     // 메인페이지 이동
     if (response.status === 201) {
       alert('로그인이 성공했습니다.');
-      window.location.href = 'http://localhost:3000/main';
+
+      // 토큰을 쿠키에 저장
+      setCookie('Authorization', `Bearer ${result.token}`, 3); // 3은 시간설정
+
+      window.location.href = 'http://localhost:3000/view/index.html';
     } else {
       alert(result.message || '로그인 실패');
     }
@@ -137,7 +152,7 @@ async function loginUser() {
   }
 }
 
-// 회원가입 함수
+// 🟠 회원가입 함수
 async function signup() {
   const email = document.getElementById('signupEmail').value;
   const nickname = document.getElementById('signupNickname').value;
@@ -158,7 +173,7 @@ async function signup() {
   };
 
   try {
-    const response = await fetch('http://localhost:3000/users', {
+    const response = await fetch('http://localhost:3000/api/users', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
