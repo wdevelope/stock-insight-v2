@@ -1,13 +1,12 @@
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import { join } from 'path';
-import * as express from 'express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // 정적 파일 제공
-  app.use('/static', express.static(join(__dirname, '..', '..', 'public')));
+  app.useStaticAssets(join(process.cwd(), 'src'));
 
   await app.listen(process.env.SERVER_PORT);
 }

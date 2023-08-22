@@ -10,6 +10,7 @@ main {
   padding-left: 260px;
 }
 
+/* 메뉴 nav바 */
 .navbar {
   background-color: #01161e;
 }
@@ -43,4 +44,40 @@ main {
 .sidebar-link:hover {
   color: rgb(255, 93, 93);
   text-decoration: none;
+}
+
+/* 유저 정보  */
+.user-details {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 200px;
+  background-color: white;
+  border: 1px solid #414141;
+  border-radius: 10px;
+  z-index: 100;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.user-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.user-info {
+  margin-top: 10px;
+}
+
+.user-details button {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  border-radius: 10px;
+}
+
+.board-container {
+  display: none;
 }
