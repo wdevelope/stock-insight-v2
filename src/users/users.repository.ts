@@ -3,6 +3,7 @@ import { Users } from './users.entity';
 import { DataSource, Repository } from 'typeorm';
 import { UserCreateDto } from './dto/user.create.dto';
 import { UserUpdateDto } from './dto/user.update.dto';
+import { KakaoLoginAuthDto } from '../auth/dto/kakao.dto';
 
 @Injectable()
 export class UsersRepository extends Repository<Users> {
@@ -43,5 +44,10 @@ export class UsersRepository extends Repository<Users> {
   async deleteUser(id: number): Promise<object> {
     const result = await this.delete({ id: id });
     return result;
+  }
+
+  async createKakao(user: KakaoLoginAuthDto): Promise<Users> {
+    const newUser = this.create(user);
+    return await this.save(newUser);
   }
 }
