@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotAcceptableException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -47,15 +43,12 @@ export class CommentsService {
     updateCommentDto: UpdateCommentDto,
   ): Promise<void> {
     const comment = await this.commentsRepository.findOne({
-      where: { id: commentId, board: { id: boardId } },
+      where: { id: commentId, board: { id: boardId }, user: { id: user.id } },
     });
     if (!comment) {
       throw new NotFoundException('Comment not found');
     }
-    const userCommentId = user.comment[0].id;
-    if (comment.id !== userCommentId) {
-      throw new NotAcceptableException();
-    }
+
     await this.commentsRepository
       .createQueryBuilder()
       .update(Comment)
@@ -68,16 +61,13 @@ export class CommentsService {
 
   async remove(user: Users, boardId: number, commentId: number): Promise<void> {
     const comment = await this.commentsRepository.findOne({
-      where: { id: commentId, board: { id: boardId } },
+      where: { id: commentId, board: { id: boardId }, user: { id: user.id } },
     });
 
     if (!comment) {
       throw new NotFoundException();
     }
-    const userCommentId = user.comment[0].id;
-    if (comment.id !== userCommentId) {
-      throw new NotAcceptableException();
-    }
+
     await this.commentsRepository.remove(comment);
   }
 }

@@ -1,6 +1,8 @@
 import { Board } from 'src/boards/entities/board.entity';
 import { Comment } from 'src/comments/entities/comment.entity';
 import { Likes } from 'src/likes/entities/like.entity';
+import { NoticeBoard } from 'src/noticeboards/entities/noticeboard.entity';
+import { Views } from 'src/views/entities/view.entity';
 import { OneToMany } from 'typeorm';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -29,4 +31,13 @@ export class Users {
 
   @OneToMany(() => Likes, (likes) => likes.user, { cascade: true, eager: true })
   likes: Likes[];
+
+  @OneToMany(() => Views, (views) => views.user, { cascade: true, eager: true })
+  views: Views[];
+
+  @OneToMany(() => NoticeBoard, (noticeboard) => noticeboard.user, {
+    cascade: true,
+    eager: true,
+  })
+  noticeboard: NoticeBoard;
 }

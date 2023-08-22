@@ -5,7 +5,7 @@ import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
 import { Users } from 'src/users/users.entity';
 @UseGuards(JwtAuthGuard)
-@Controller('likes')
+@Controller('api/likes')
 export class LikesController {
   constructor(private readonly likesService: LikesService) {}
 
