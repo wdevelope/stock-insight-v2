@@ -1,43 +1,36 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
-// import { EmailDto } from '../dto/email.dto';
+import { UsersRepository } from '../users.repository';
+import { KakaoLoginAuthDto } from 'src/auth/dto/kakao.dto';
 
 @Injectable()
 export class EmailService {
-  constructor(private readonly mailerService: MailerService) {}
+  constructor(
+    private readonly mailerService: MailerService,
+    private readonly usersRepository: UsersRepository,
+  ) {}
 
-  getHello(): string {
-    return 'Hello World!';
-  }
+  async authEmail(body: KakaoLoginAuthDto): Promise<void> {
+    const { email } = body;
 
-  public example(): void {
-    this.mailerService
+    const getRandomCode = (min, max) => {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min)) + min;
+    };
+
+    const randomCode = getRandomCode(111111, 999999);
+
+    await this.mailerService
       .sendMail({
-        to: 'user@gmail.com', // List of receivers email address
-        from: 'user@outlook.com', // Senders email address
-        subject: 'Testing Nest MailerModule ✔', // Subject line
-        text: 'welcome', // plaintext body
-        html: '<b>welcome</b>', // HTML body content
-      })
-      .then((success) => {
-        console.log(success);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  public example2(): void {
-    this.mailerService
-      .sendMail({
-        to: 'user@gmail.com', // List of receivers email address
-        from: 'user@outlook.com', // Senders email address
+        to: [email], // List of receivers email address
+        from: 'gwagbyeol@naver.com', // Senders email address
         subject: 'Testing Nest Mailermodule with template ✔',
         template: 'index', // The `.pug` or `.hbs` extension is appended automatically.
         context: {
           // Data to be sent to template engine.
-          code: 'cf1a3f828287',
-          username: 'john doe',
+          code: `The Authentication code is ${randomCode}`,
+          username: 'test email',
         },
       })
       .then((success) => {

@@ -19,6 +19,7 @@ import { SignUpDto } from './dto/signUp.dto';
 import { Response } from 'express';
 import { UpdateRequestDto } from './dto/updateRequest.dto';
 import { EmailService } from './email/email.service';
+import { KakaoLoginAuthDto } from 'src/auth/dto/kakao.dto';
 
 @Controller('api/users')
 export class UsersController {
@@ -71,14 +72,9 @@ export class UsersController {
     return await this.usersSevice.deleteUser(user.id);
   }
 
-  // 이메일 인증 해보는 중
-  @Get()
-  sendMail(): any {
-    return this.emailService.example();
-  }
-
-  @Get('template')
-  sendTemplate(): any {
-    return this.emailService.example2();
+  // 이메일 보내는것 까지 성공
+  @Get('/email')
+  sendTemplate(@Body() body: KakaoLoginAuthDto): any {
+    return this.emailService.authEmail(body);
   }
 }
