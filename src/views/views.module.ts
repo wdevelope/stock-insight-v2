@@ -6,7 +6,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { Views } from './entities/view.entity';
 import { BoardsModule } from 'src/boards/boards.module';
 import { BoardViewsService } from './boardviews.service';
-import { ThrottlerModule } from 'nestjs-throttler';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [

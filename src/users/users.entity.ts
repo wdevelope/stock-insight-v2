@@ -29,6 +29,9 @@ export class Users {
   @Column({ nullable: true })
   provider?: string;
 
+  @Column({ default: 'user' })
+  status: string;
+
   @OneToMany(() => Board, (board) => board.user, { eager: true })
   board: Board[];
 

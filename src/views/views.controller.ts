@@ -3,7 +3,7 @@ import { ViewsService } from './views.service';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { Users } from 'src/users/users.entity';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
-import { ThrottlerGuard } from 'nestjs-throttler';
+import { ThrottlerGuard } from '@nestjs/throttler';
 @UseGuards(JwtAuthGuard)
 @Controller('api/views')
 export class ViewsController {
