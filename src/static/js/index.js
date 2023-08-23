@@ -1,5 +1,33 @@
+// 🟠 쿠키없으면 돌려보냄
+document.addEventListener('DOMContentLoaded', () => {
+  const token = getCookie('Authorization');
+
+  if (!token) {
+    alert('로그인이 필요합니다.');
+    window.location.href = 'http://localhost:3000';
+  }
+});
+
 const token = getCookie('Authorization');
 
+// 🟠 쿠키 가져오기 함수
+function getCookie(cookieName) {
+  let name = cookieName + '=';
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return '';
+}
+
+// 🟠 유저 디테일
 async function fetchUserDetails() {
   try {
     const response = await fetch('http://localhost:3000/api/users', {
@@ -22,6 +50,7 @@ async function fetchUserDetails() {
   }
 }
 
+// 🟠 프로필 토글
 async function toggleProfile() {
   const userDetailsElem = document.getElementById('userDetails');
   if (
@@ -39,35 +68,17 @@ async function toggleProfile() {
   }
 }
 
-function goToProfile() {}
-
-// 로그아웃 함수
+// 🟠 로그아웃 함수
 function logout() {
   function deleteCookie(name) {
-    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/';
   }
   deleteCookie('Authorization');
   alert('로그아웃 완료');
   window.location.href = 'http://localhost:3000';
 }
 
-// 쿠키 가져오기 함수
-function getCookie(cookieName) {
-  let name = cookieName + '=';
-  let decodedCookie = decodeURIComponent(document.cookie);
-  let ca = decodedCookie.split(';');
-  for (let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return '';
-}
-
+// 🟠 유저 정보
 async function fetchUserInfo(token) {
   try {
     const response = await fetch('http://localhost:3000/api/users', {

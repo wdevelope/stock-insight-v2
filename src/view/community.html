@@ -16,7 +16,7 @@
     />
     <link rel="stylesheet" href="../static/css/index.css" />
   </head>
-  <body>
+  <body id="noticeBoardPage">
     <!-- 🔴 위쪽 Nav 🔴-->
     <nav class="navbar navbar-expand-lg fixed-top-custom">
       <div class="container-fluid">
@@ -157,13 +157,12 @@
         >
           <div class="d-flex justify-content-between align-items-center my-4">
             <h2>공지사항</h2>
-            <button
+            <a
               class="btn btn-primary"
-              data-bs-toggle="modal"
-              data-bs-target="#writeModal"
+              href="http://localhost:3000/view/writeBoard.html"
             >
               글쓰기
-            </button>
+            </a>
           </div>
           <div class="list-group mt-4">
             <a
@@ -194,13 +193,12 @@
         >
           <div class="d-flex justify-content-between align-items-center my-4">
             <h2>자유게시판</h2>
-            <button
+            <a
               class="btn btn-primary"
-              data-bs-toggle="modal"
-              data-bs-target="#writeModal"
+              href="http://localhost:3000/view/writeBoard.html"
             >
               글쓰기
-            </button>
+            </a>
           </div>
           <!-- 게시판 내용 들어가는곳 -->
           <div class="list-group mt-4"></div>
@@ -215,13 +213,12 @@
         >
           <div class="d-flex justify-content-between align-items-center my-4">
             <h2>문의</h2>
-            <button
+            <a
               class="btn btn-primary"
-              data-bs-toggle="modal"
-              data-bs-target="#writeModal"
+              href="http://localhost:3000/view/writeBoard.html"
             >
               글쓰기
-            </button>
+            </a>
           </div>
           <div class="list-group mt-4">
             <a href="#" class="list-group-item list-group-item-action">
@@ -241,64 +238,6 @@
         </div>
       </div>
     </main>
-
-    <!-- 🔴 모달 설정  🔴 -->
-    <!-- 글쓰기 모달 -->
-    <div
-      class="modal fade"
-      id="writeModal"
-      tabindex="-1"
-      aria-labelledby="writeModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="writeModalLabel">글쓰기</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <form>
-              <div class="mb-3">
-                <label for="postTitle" class="form-label">제목</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="postTitle"
-                  placeholder="제목을 입력하세요"
-                />
-              </div>
-              <div class="mb-3">
-                <label for="postContent" class="form-label">내용</label>
-                <textarea
-                  class="form-control"
-                  id="postContent"
-                  rows="5"
-                  placeholder="내용을 입력하세요"
-                ></textarea>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              닫기
-            </button>
-            <button type="button" class="btn btn-primary" onclick="savePost()">
-              저장
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- 🔴 푸터 🔴 -->
     <footer class="text-center mt-5">

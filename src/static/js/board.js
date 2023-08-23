@@ -98,7 +98,7 @@ async function createComment() {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/boards/${boardId}`,
+      `http://localhost:3000/api/boards/${boardId}/comments`,
       {
         method: 'POST',
         headers: {

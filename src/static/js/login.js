@@ -3,7 +3,7 @@ const ctx = canvas.getContext('2d');
 
 let width = (canvas.width = window.innerWidth);
 let height = (canvas.height = window.innerHeight);
-
+// 로그인 배경
 class Ellipse {
   constructor(delayAngle) {
     this.resetSizeAndPosition();
@@ -44,7 +44,7 @@ class Ellipse {
     this.angle += this.rotationSpeed;
   }
 }
-
+// 로그인 배경
 class RandomNumber {
   constructor() {
     this.resetPosition();
@@ -64,17 +64,17 @@ class RandomNumber {
     ctx.fillText(this.value, this.x, this.y);
   }
 }
-
+// 로그인 배경
 const ellipses = [];
 for (let i = 0; i < 70; i++) {
   ellipses.push(new Ellipse(i * ((2 * Math.PI) / 70)));
 }
-
+// 로그인 배경
 const numbers = [];
 for (let i = 0; i < 100; i++) {
   numbers.push(new RandomNumber());
 }
-
+// 로그인 배경
 function animate() {
   ctx.clearRect(0, 0, width, height);
 
@@ -90,7 +90,7 @@ function animate() {
 }
 
 animate();
-
+// 로그인 배경
 window.addEventListener('resize', () => {
   width = canvas.width = window.innerWidth;
   height = canvas.height = window.innerHeight;
@@ -210,7 +210,7 @@ async function signup() {
 //     email: email,
 //   };
 
-//   fetch('http://localhost:3000/users/sendVerification', {
+//   fetch('http://localhost:3000/users/mail', {
 //     method: 'POST',
 //     headers: {
 //       'Content-Type': 'application/json',
