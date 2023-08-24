@@ -9,9 +9,7 @@ export class AuthController {
 
   @Get('/login')
   @UseGuards(KakaoAuthGuard)
-  async loginKakao() {
-    console.log('카카오 로그인 신청');
-  }
+  async loginKakao() {}
 
   @Get('/login/callback')
   @UseGuards(KakaoAuthGuard)
