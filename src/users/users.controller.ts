@@ -7,6 +7,7 @@ import {
   Post,
   Res,
   UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { LoginDto } from 'src/auth/dto/login.dto';
@@ -29,33 +30,33 @@ export class UsersController {
     private readonly emailService: EmailService,
   ) {}
 
-  // POST. http://localhost:3000/users
+  // POST. http://localhost:3000/api/users
   @Post()
-  async signUp(@Body() body: SignUpDto) {
+  async signUp(@Body(ValidationPipe) body: SignUpDto) {
     return await this.usersSevice.signUp(body);
   }
 
-  // POST. http://localhost:3000/users/login
+  // POST. http://localhost:3000/api/users/login
   @Post('/login')
   logIn(@Body() body: LoginDto, @Res() res: Response) {
     return this.authService.jwtLogIn(body, res);
   }
 
-  // GET. http://localhost:3000/users
+  // GET. http://localhost:3000/api/users
   @UseGuards(JwtAuthGuard)
   @Get()
   getCurrentUser(@CurrentUser() user: Users) {
     return user;
   }
 
-  // POST. http://localhost:3000/users/check
+  // POST. http://localhost:3000/api/users/check
   @UseGuards(JwtAuthGuard)
   @Post('/check')
   userCheck(@CurrentUser() user: Users, @Body() body: UserCheckDto) {
     return this.authService.userCheck(user.id, body);
   }
 
-  // PATCH. http://localhost:3000/users
+  // PATCH. http://localhost:3000/api/users
   @UseGuards(JwtAuthGuard)
   @Patch()
   async updateCurrentUser(
@@ -65,16 +66,22 @@ export class UsersController {
     return await this.usersSevice.updateUser(user.id, body);
   }
 
-  // DELETE. http://localhost:3000/users
+  // DELETE. http://localhost:3000/api/users
   @UseGuards(JwtAuthGuard)
   @Delete()
   async deleteCurrentUser(@CurrentUser() user: Users) {
     return await this.usersSevice.deleteUser(user.id);
   }
 
-  // 이메일 보내는것 까지 성공
-  @Get('/email')
+  // 이메일 보내는것 까지 성공 http://localhost:3000/api/users/email
+  @Post('/email')
   sendTemplate(@Body() body: EmailDto): any {
     return this.emailService.authEmail(body);
+  }
+
+  // 이메일 인증 http://localhost:3000/api/users/verifyEmail
+  @Post('/verifyEmail')
+  async verifyEmail(@Body() body) {
+    return this.emailService.verifyEmail(body.email, body.randomCode);
   }
 }

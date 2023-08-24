@@ -11,11 +11,23 @@ import { LikesModule } from './likes/likes.module';
 import { ViewsModule } from './views/views.module';
 import { NoticeboardsModule } from './noticeboards/noticeboards.module';
 import { StockModule } from './stock/stock.module';
+import { CacheModule } from '@nestjs/cache-manager';
+import * as redisStore from 'cache-manager-redis-store';
+import type { ClientOpts } from 'redis';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: './.env' }),
     TypeOrmModule.forRoot(TypeOrmConfig),
+    CacheModule.register<ClientOpts>({
+      isGlobal: true,
+      store: redisStore,
+      host: process.env.HOST,
+      port: Number(process.env.REDIS_PORT),
+      password: process.env.PASSWORD,
+      ttl: 1800,
+    }),
     UsersModule,
     BoardsModule,
     CommentsModule,
@@ -23,6 +35,7 @@ import { StockModule } from './stock/stock.module';
     ViewsModule,
     NoticeboardsModule,
     StockModule,
+    EventsModule,
   ],
   controllers: [AppController],
   providers: [EmailService],

@@ -14,10 +14,9 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
     />
-    <link rel="stylesheet" href="/static/css/index.css" />
+    <link rel="stylesheet" href="../static/css/index.css" />
   </head>
-
-  <body>
+  <body id="noticeBoardPage">
     <!-- 🔴 위쪽 Nav 🔴-->
     <nav class="navbar navbar-expand-lg fixed-top-custom">
       <div class="container-fluid">
@@ -102,8 +101,46 @@
       </a>
     </nav>
 
-    <!-- 🔴 서치 메인 🔴 -->
-    <main></main>
+    <!-- 🔴 커뮤니티 메인  🔴 -->
+    <main>
+      <!-- 기본 Nav 메뉴 -->
+      <ul class="nav nav-pills mt-5">
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            href="http://localhost:3000/view/noticeBoard.html"
+            >공지사항</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="http://localhost:3000/view/freeBoard.html"
+            >자유게시판</a
+          >
+        </li>
+      </ul>
+
+      <!-- 게시판 내용 -->
+      <div class="tab-content" id="boardTabsContent">
+        <div
+          class="tab-pane fade show active"
+          id="notice"
+          role="tabpanel"
+          aria-labelledby="home-tab"
+        >
+          <div class="d-flex justify-content-between align-items-center my-4">
+            <h2>공지사항</h2>
+            <a
+              class="btn btn-primary"
+              href="http://localhost:3000/view/noticeWriteBoard.html"
+              data-board="notice"
+            >
+              글쓰기
+            </a>
+          </div>
+          <div class="list-group mt-4"></div>
+        </div>
+      </div>
+    </main>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.1/umd/popper.min.js"></script>
@@ -116,7 +153,7 @@
       src="https://kit.fontawesome.com/1a93e99cf8.js"
       crossorigin="anonymous"
     ></script>
-    <script src="/static/js/stock.js"></script>
     <script src="/static/js/index.js"></script>
+    <script src="/static/js/noticeBoard.js"></script>
   </body>
 </html>

@@ -5,6 +5,6 @@ export class CreateNoticeboardDto {
   title: string;
   @IsString()
   description: string;
-  @IsString()
+  // @IsString()
   image: string;
 }

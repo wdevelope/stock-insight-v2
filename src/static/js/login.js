@@ -3,7 +3,7 @@ const ctx = canvas.getContext('2d');
 
 let width = (canvas.width = window.innerWidth);
 let height = (canvas.height = window.innerHeight);
-
+// 로그인 배경
 class Ellipse {
   constructor(delayAngle) {
     this.resetSizeAndPosition();
@@ -44,7 +44,7 @@ class Ellipse {
     this.angle += this.rotationSpeed;
   }
 }
-
+// 로그인 배경
 class RandomNumber {
   constructor() {
     this.resetPosition();
@@ -64,17 +64,17 @@ class RandomNumber {
     ctx.fillText(this.value, this.x, this.y);
   }
 }
-
+// 로그인 배경
 const ellipses = [];
 for (let i = 0; i < 70; i++) {
   ellipses.push(new Ellipse(i * ((2 * Math.PI) / 70)));
 }
-
+// 로그인 배경
 const numbers = [];
 for (let i = 0; i < 100; i++) {
   numbers.push(new RandomNumber());
 }
-
+// 로그인 배경
 function animate() {
   ctx.clearRect(0, 0, width, height);
 
@@ -90,7 +90,7 @@ function animate() {
 }
 
 animate();
-
+// 로그인 배경
 window.addEventListener('resize', () => {
   width = canvas.width = window.innerWidth;
   height = canvas.height = window.innerHeight;
@@ -158,10 +158,17 @@ async function signup() {
   const nickname = document.getElementById('signupNickname').value;
   const password = document.getElementById('signupPassword').value;
   const passwordConfirm = document.getElementById('confirmPassword').value;
+  const verificationCode = document.getElementById('verificationCode').value; // 🟠 인증 코드 가져오기
 
   // 비밀번호 확인
   if (password !== passwordConfirm) {
     alert('비밀번호가 일치하지 않습니다.');
+    return;
+  }
+
+  // 🟠 인증 코드 확인
+  if (!verificationCode) {
+    alert('이메일 인증 코드를 입력해주세요.');
     return;
   }
 
@@ -198,34 +205,60 @@ async function signup() {
 }
 
 // 이메일 인증 함수
-// function sendVerificationCode() {
-//   const email = document.getElementById('signupEmail').value;
+function sendVerificationCode() {
+  const email = document.getElementById('signupEmail').value;
 
-//   if (!email) {
-//     alert('이메일을 입력하세요.');
-//     return;
-//   }
+  const data = {
+    email: email,
+  };
 
-//   const data = {
-//     email: email,
-//   };
+  fetch('http://localhost:3000/api/users/email', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => {
+      if (response.status === 201) {
+        alert('인증 코드를 이메일로 발송하였습니다.');
+      } else {
+        alert('인증 코드 발송에 실패하였습니다.');
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
 
-//   fetch('http://localhost:3000/users/sendVerification', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify(data),
-//   })
-//     .then((response) => response.json())
-//     .then((data) => {
-//       if (data.success) {
-//         alert('인증 코드를 이메일로 발송하였습니다.');
-//       } else {
-//         alert('인증 코드 발송에 실패하였습니다.');
-//       }
-//     })
-//     .catch((error) => {
-//       console.error('Error:', error);
-//     });
-// }
+// 이메일 인증 확인
+function checkVerificationCode() {
+  const email = document.getElementById('signupEmail').value;
+  const randomCode = parseInt(
+    document.getElementById('verificationCode').value,
+    10,
+  );
+
+  const data = {
+    email: email,
+    randomCode: randomCode,
+  };
+
+  fetch('http://localhost:3000/api/users/verifyEmail', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => {
+      if (response.status === 201) {
+        alert('이메일 인증이 성공적으로 완료되었습니다.');
+      } else {
+        alert('인증 코드가 올바르지 않습니다.');
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
