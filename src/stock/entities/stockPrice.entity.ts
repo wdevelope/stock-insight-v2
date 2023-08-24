@@ -1,0 +1,76 @@
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { Stock } from './stock.entity';
+
+@Entity()
+export class StockPrice {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  stck_prpr: string; //주식 현재가
+
+  @Column()
+  prdy_vrss: string; // 전일 대비
+
+  @Column()
+  prdy_vrss_sign: string; // 전일 대비 부호
+  //1(상한),2(상승),3(보합),4(하한),5(하락)
+
+  @Column()
+  prdy_ctrt: string; // 전일 대비율
+
+  @Column()
+  stck_oprc: string; //당일 시가
+
+  @Column()
+  stck_hgpr: string; //당일 고가
+
+  @Column()
+  stck_lwpr: string; //당일 저가
+
+  @Column()
+  stck_sdpr: string; //전일 종가
+
+  @Column()
+  acml_vol: string; //누적 거래량
+
+  @Column()
+  acml_tr_pbmn: string; //누적 거래대금
+
+  @Column()
+  hts_frgn_ehrt: string; //외국인 소진율
+
+  @Column()
+  hts_avls: string; // 시가총액
+
+  @Column()
+  per: string; // PER(주가수익비율)
+
+  @Column()
+  pbr: string; // PBR(주가순자산비율)
+
+  @Column()
+  w52_hgpr: string; // 52주 최고가
+
+  @Column()
+  w52_lwpr: string; // 52주 최저가
+
+  @Column()
+  whol_loan_rmnd_rate: string; // 융자 잔고 비율
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
+
+  @ManyToOne(() => Stock, (stock) => stock.stockPrices)
+  stock: Stock;
+}
