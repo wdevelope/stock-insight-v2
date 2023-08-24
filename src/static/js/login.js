@@ -165,6 +165,12 @@ async function signup() {
     return;
   }
 
+  // 닉네임 확인
+  if (!nickname) {
+    alert('닉네임을 적어주세요.');
+    return;
+  }
+
   const signupData = {
     email: email,
     nickname: nickname,
@@ -196,36 +202,3 @@ async function signup() {
     alert('회원가입 중 에러 발생');
   }
 }
-
-// 이메일 인증 함수
-// function sendVerificationCode() {
-//   const email = document.getElementById('signupEmail').value;
-
-//   if (!email) {
-//     alert('이메일을 입력하세요.');
-//     return;
-//   }
-
-//   const data = {
-//     email: email,
-//   };
-
-//   fetch('http://localhost:3000/users/sendVerification', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify(data),
-//   })
-//     .then((response) => response.json())
-//     .then((data) => {
-//       if (data.success) {
-//         alert('인증 코드를 이메일로 발송하였습니다.');
-//       } else {
-//         alert('인증 코드 발송에 실패하였습니다.');
-//       }
-//     })
-//     .catch((error) => {
-//       console.error('Error:', error);
-//     });
-// }
