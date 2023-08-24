@@ -15,6 +15,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 import * as redisStore from 'cache-manager-redis-store';
 import type { ClientOpts } from 'redis';
 import { EventsModule } from './events/events.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { EventsModule } from './events/events.module';
     NoticeboardsModule,
     StockModule,
     EventsModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [EmailService],
