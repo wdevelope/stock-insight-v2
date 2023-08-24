@@ -66,4 +66,8 @@ export class StockService {
   private sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
+
+  async getStockPrices(): Promise<StockPrice[]> {
+    return await this.stockPriceRepository.find();
+  }
 }

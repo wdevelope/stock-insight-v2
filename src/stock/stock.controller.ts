@@ -11,4 +11,9 @@ export class StockController {
     this.stockService.fetchDataAndSaveToDB();
     return '데이터 저장 성공!';
   }
+
+  @Get('prices')
+  async getStockPrices() {
+    return this.stockService.getStockPrices();
+  }
 }
