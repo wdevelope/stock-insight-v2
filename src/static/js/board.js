@@ -86,6 +86,30 @@ async function fetchPostDetails() {
   }
 }
 
+// ⚪ 게시글 삭제 함수
+// async function deletePost() {
+//   try {
+//     const response = await fetch(
+//       `http://localhost:3000/api/boards/${boardId}`,
+//       {
+//         method: 'DELETE',
+//         headers: {
+//           Authorization: token,
+//         },
+//       },
+//     );
+//     if (!response.ok) {
+//       throw new Error('Failed to delete the post');
+//     }
+
+//     alert('게시글이 삭제되었습니다.');
+//     location.reload();
+//   } catch (error) {
+//     alert('게시글 삭제에 실패했습니다.');
+//     console.error('Error deleting post:', error);
+//   }
+// }
+
 // ⚪ 댓글 생성
 async function createComment() {
   const commentBox = document.querySelector('textarea');
@@ -135,7 +159,6 @@ async function handleLikeClick() {
     if (response.status === 201) {
       // 좋아요 처리가 성공하면 게시글 상세 정보를 다시 불러옵니다.
       await fetchPostDetails();
-      console.log('좋아요');
     } else {
       alert('좋아요 처리에 실패했습니다.');
     }

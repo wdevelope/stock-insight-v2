@@ -1,5 +1,17 @@
 // 🟠 쿠키없으면 돌려보냄
 document.addEventListener('DOMContentLoaded', () => {
+  let currentURL = window.location.href;
+
+  let navLinks = document.querySelectorAll('.nav-link');
+
+  navLinks.forEach((link) => {
+    if (currentURL === link.href) {
+      link.classList.add('active');
+    } else {
+      link.classList.remove('active');
+    }
+  });
+
   const token = getCookie('Authorization');
 
   if (!token) {
@@ -98,3 +110,11 @@ async function fetchUserInfo(token) {
     console.error('Error fetching user info:', error);
   }
 }
+
+window.addEventListener('pageshow', (event) => {
+  if (event.persisted) {
+    window.location.reload();
+  }
+});
+
+document.addEventListener('DOMContentLoaded', function () {});

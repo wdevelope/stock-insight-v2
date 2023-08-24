@@ -16,7 +16,6 @@
     />
     <link rel="stylesheet" href="/static/css/index.css" />
   </head>
-
   <body>
     <!-- 🔴 위쪽 Nav 🔴-->
     <nav class="navbar navbar-expand-lg fixed-top-custom">
@@ -102,8 +101,48 @@
       </a>
     </nav>
 
-    <!-- 🔴 서치 메인 🔴 -->
-    <main></main>
+    <main>
+      <h2>글쓰기</h2>
+      <form>
+        <div class="mb-3">
+          <label for="postTitle" class="form-label">제목</label>
+          <input
+            type="text"
+            class="form-control"
+            id="postTitle"
+            placeholder="제목을 입력하세요"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="postCategory" class="form-label">카테고리 선택</label>
+          <select class="form-control" id="postCategory">
+            <option></option>
+            <option>자유게시판</option>
+            <option>문의</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="postContent" class="form-label">내용</label>
+          <textarea
+            class="form-control"
+            id="postContent"
+            rows="5"
+            placeholder="내용을 입력하세요"
+          ></textarea>
+        </div>
+        <button
+          type="button"
+          class="btn btn-primary"
+          onclick="saveNoticeBoard()"
+        >
+          저장
+        </button>
+      </form>
+    </main>
+
+    <footer class="text-center mt-5">
+      © 2023 Stock Platform. All rights reserved.
+    </footer>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.1/umd/popper.min.js"></script>
@@ -116,7 +155,7 @@
       src="https://kit.fontawesome.com/1a93e99cf8.js"
       crossorigin="anonymous"
     ></script>
-    <script src="/static/js/stock.js"></script>
     <script src="/static/js/index.js"></script>
+    <script src="/static/js/writeBoard.js"></script>
   </body>
 </html>
