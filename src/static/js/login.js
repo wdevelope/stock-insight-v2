@@ -165,6 +165,12 @@ async function signup() {
     return;
   }
 
+  // 닉네임 확인
+  if (!nickname) {
+    alert('닉네임을 적어주세요.');
+    return;
+  }
+
   const signupData = {
     email: email,
     nickname: nickname,
