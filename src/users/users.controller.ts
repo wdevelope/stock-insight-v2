@@ -7,6 +7,7 @@ import {
   Post,
   Res,
   UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { LoginDto } from 'src/auth/dto/login.dto';
@@ -31,7 +32,7 @@ export class UsersController {
 
   // POST. http://localhost:3000/api/users
   @Post()
-  async signUp(@Body() body: SignUpDto) {
+  async signUp(@Body(ValidationPipe) body: SignUpDto) {
     return await this.usersSevice.signUp(body);
   }
 
