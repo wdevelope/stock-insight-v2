@@ -1,85 +1,104 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { Board } from './entities/board.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { Users } from 'src/users/users.entity';
-import { Comment } from 'src/comments/entities/comment.entity';
-import { EventsGateway } from '../events/events.gateway';
-import { Server } from 'socket.io';
-import { channel } from 'diagnostics_channel';
+import { BoardsRepository } from './boards.repository';
+import { FindBoardDto } from './dto/find-board.dto';
 
 @Injectable()
 export class BoardsService {
-  constructor(
-    @InjectRepository(Board)
-    private boardsRepository: Repository<Board>,
-  ) {}
+  constructor(private boardsRepository: BoardsRepository) {}
+
+  // async find(): Promise<Board[]> {
+  //   const board = await this.boardsRepository.find();
+  //   if (!board) {
+  //     throw new NotFoundException('보드가 존재하지 않습니다.');
+  //   }
+  //   try {
+  //     return board;
+  //   } catch (error) {
+  //     throw new BadRequestException('SERVICE_ERROR');
+  //   }
+  // }
+
+  //아마도 비슷한 내용 찾으려면 인클루드 돌려야함
+  //한가지 코드로 findBoard, findUser, findTile+description 기능이 되는데 타이틀만 입력하면 안되고 디스크립션을 같이 입력해야 나옴
+  async find(findBoardDto: FindBoardDto): Promise<Board[]> {
+    const board = await this.boardsRepository.find({
+      where: {
+        title: findBoardDto.title,
+        description: findBoardDto.description,
+        user: { id: findBoardDto.userId },
+      },
+      // relations: ['user'], //유저 정보도 같이 보고싶으면
+    });
+    if (!board) {
+      throw new NotFoundException('보드가 존재하지 않습니다.');
+    }
+    try {
+      return board;
+    } catch (error) {
+      throw new BadRequestException('SERVICE_ERROR');
+    }
+  }
+
+  async findOne(boardId: number): Promise<Board> {
+    const board = await this.boardsRepository.findOne({
+      where: { id: boardId },
+    });
+    if (!board) {
+      throw new NotFoundException('보드가 존재하지 않습니다.');
+    }
+    try {
+      return board;
+    } catch (error) {
+      throw new BadRequestException('SERVICE_ERROR');
+    }
+  }
 
   async create(createBoardDto: CreateBoardDto, user: Users): Promise<void> {
-    await this.boardsRepository.save({
-      title: createBoardDto.title,
-      description: createBoardDto.description,
-      image: createBoardDto.image,
-      join: createBoardDto.join,
-      user: user,
-    });
-  }
-
-  async findAll(): Promise<Board[]> {
-    const board = await this.boardsRepository.find();
-    if (!board) {
-      throw new NotFoundException();
+    try {
+      await this.boardsRepository.save(createBoardDto, user);
+    } catch (error) {
+      throw new BadRequestException('SERVICE_ERROR');
     }
-    return board;
-  }
-
-  async findOne(id: number): Promise<Board> {
-    const board = await this.boardsRepository.findOne({ where: { id } });
-    if (!board) {
-      throw new NotFoundException();
-    }
-    return board;
   }
 
   async update(
     user: Users,
-    id: number,
+    boardId: number,
     updateBoardDto: UpdateBoardDto,
   ): Promise<void> {
     const existedBoard = await this.boardsRepository.findOne({
-      where: { id, user: { id: user.id } },
+      where: { id: boardId, user: { id: user.id } },
     });
     if (!existedBoard) {
-      throw new NotFoundException();
+      throw new NotFoundException('보드가 존재하지 않습니다.');
     }
-
-    await this.boardsRepository
-      .createQueryBuilder()
-      .update(Board)
-      .set({
-        title: updateBoardDto.title,
-        description: updateBoardDto.description,
-        image: updateBoardDto.image,
-        join: updateBoardDto.join,
-      })
-      .where('id=:id', { id })
-      .execute();
+    try {
+      await this.boardsRepository.update(updateBoardDto, boardId);
+    } catch (error) {
+      throw new BadRequestException('SERVICE_ERROR');
+    }
   }
 
-  // romove는 find해서 나온 값을 넣어줘야하고 delete는 그냥 id 값 바로 넣어두 됨 추가적으로 엔티티에서 cascade 설정시 remove 사용
-  async remove(user: Users, id: number): Promise<void> {
+  async remove(user: Users, boardId: number): Promise<void> {
     const existedBoard = await this.boardsRepository.findOne({
-      where: { id, user: { id: user.id } },
+      where: { id: boardId, user: { id: user.id } },
     });
     console.log(existedBoard);
     if (!existedBoard) {
-      throw new NotFoundException();
+      throw new NotFoundException('보드가 존재하지 않습니다.');
     }
-    await this.boardsRepository.manager.transaction(async (transaction) => {
-      await transaction.delete(Comment, { board: { id } });
-      await transaction.delete(Board, id);
-    });
+    try {
+      await this.boardsRepository.remove(existedBoard);
+    } catch (error) {
+      throw new BadRequestException('SERVICE_ERROR');
+    }
   }
 }

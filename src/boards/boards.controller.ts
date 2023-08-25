@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   ValidationPipe,
+  BadRequestException,
 } from '@nestjs/common';
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -16,6 +17,7 @@ import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
 import { Users } from 'src/users/users.entity';
+import { FindBoardDto } from './dto/find-board.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('api/boards')
@@ -27,30 +29,53 @@ export class BoardsController {
     @Body(ValidationPipe) createBoardDto: CreateBoardDto,
     @CurrentUser() user: Users,
   ): Promise<void> {
-    return this.boardsService.create(createBoardDto, user);
+    try {
+      return this.boardsService.create(createBoardDto, user);
+    } catch (error) {
+      throw new BadRequestException('CONTROLLER_ERROR');
+    }
   }
 
   @Get()
-  findAll(): Promise<Board[]> {
-    return this.boardsService.findAll();
+  findAll(@Body() findBoardDto: FindBoardDto): Promise<Board[]> {
+    try {
+      return this.boardsService.find(findBoardDto);
+    } catch (error) {
+      throw new BadRequestException('CONTROLLER_ERROR');
+    }
   }
 
-  @Get('/:id')
-  findOne(@Param('id') id: number): Promise<Board> {
-    return this.boardsService.findOne(id);
+  @Get('/:boardId')
+  findOne(@Param('boardId') boardId: number): Promise<Board> {
+    try {
+      return this.boardsService.findOne(boardId);
+    } catch (error) {
+      throw new BadRequestException('CONTROLLER_ERROR');
+    }
   }
 
-  @Patch('/:id')
+  @Patch('/:boardId')
   update(
     @CurrentUser() user: Users,
-    @Param('id') id: number,
+    @Param('boardId') boardId: number,
     @Body() updateBoardDto: UpdateBoardDto,
   ): Promise<void> {
-    return this.boardsService.update(user, id, updateBoardDto);
+    try {
+      return this.boardsService.update(user, boardId, updateBoardDto);
+    } catch (error) {
+      throw new BadRequestException('CONTROLLER_ERROR');
+    }
   }
 
-  @Delete('/:id')
-  remove(@CurrentUser() user: Users, @Param('id') id: number): Promise<void> {
-    return this.boardsService.remove(user, id);
+  @Delete('/:boardId')
+  remove(
+    @CurrentUser() user: Users,
+    @Param('boardId') boardId: number,
+  ): Promise<void> {
+    try {
+      return this.boardsService.remove(user, boardId);
+    } catch (error) {
+      throw new BadRequestException('CONTROLLER_ERROR');
+    }
   }
 }

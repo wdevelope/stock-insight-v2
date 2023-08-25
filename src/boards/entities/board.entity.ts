@@ -26,8 +26,8 @@ export class Board {
   @Column()
   image: string;
 
-  @Column()
-  join?: number;
+  @Column({ default: 0 })
+  likeCount: number;
 
   @CreateDateColumn()
   created_at: Date;
@@ -39,20 +39,17 @@ export class Board {
   user: Users;
 
   @OneToMany(() => Comment, (comment) => comment.board, {
-    // cascade: true,
-    eager: true,
+    cascade: true,
   })
   comment: Comment[];
 
   @OneToMany(() => Likes, (likes) => likes.board, {
-    eager: true,
     cascade: true,
   })
   likes: Likes[];
 
   @OneToMany(() => Views, (views) => views.board, {
     cascade: true,
-    eager: true,
   })
   views: Views;
 }

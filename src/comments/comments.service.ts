@@ -1,73 +1,74 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateCommentDto } from './dto/update-comment.dto';
-import { InjectRepository } from '@nestjs/typeorm';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Comment } from './entities/comment.entity';
-import { Repository } from 'typeorm';
 import { Board } from 'src/boards/entities/board.entity';
 import { Users } from 'src/users/users.entity';
+import { CommentsRepository } from './comments.repository';
+import { CommentDto } from './dto/comment.dto';
 
 @Injectable()
 export class CommentsService {
-  constructor(
-    @InjectRepository(Comment)
-    private commentsRepository: Repository<Comment>,
-  ) {}
+  constructor(private commentsRepository: CommentsRepository) {}
 
   async create(
     user: Users,
-    createCommentDto: CreateCommentDto,
-    boardId: Board,
+    commentDto: CommentDto,
+    board: Board,
   ): Promise<void> {
-    await this.commentsRepository.save({
-      comment: createCommentDto.comment,
-      board: boardId,
-      user: user,
-    });
+    const existedBoard = await this.commentsRepository.findBoard(board.id);
+    if (!existedBoard) {
+      throw new NotFoundException('게시물이 존재하지 않습니다.');
+    }
+    await this.commentsRepository.save(user, commentDto, board);
   }
 
   async findAllByBoard(boardId: number): Promise<Comment[]> {
-    const comment = await this.commentsRepository.findOne({
-      where: { board: { id: boardId } },
-    });
-    if (!comment) {
-      throw new NotFoundException('Comment not found');
+    const board = await this.commentsRepository.findBoard(boardId);
+    if (!board) {
+      throw new NotFoundException('게시물이 존재하지 않습니다.');
     }
-    return this.commentsRepository.find({ where: { board: { id: boardId } } });
+    try {
+      const comment = await this.commentsRepository.find({
+        where: { board: { id: boardId } },
+      });
+
+      return comment;
+    } catch (error) {
+      throw new BadRequestException('SERVICE_ERROR');
+    }
   }
 
   async update(
     user: Users,
     boardId: number,
     commentId: number,
-    updateCommentDto: UpdateCommentDto,
+    commentDto: CommentDto,
   ): Promise<void> {
     const comment = await this.commentsRepository.findOne({
       where: { id: commentId, board: { id: boardId }, user: { id: user.id } },
     });
     if (!comment) {
-      throw new NotFoundException('Comment not found');
+      throw new NotFoundException('댓글이 존재하지 않습니다.');
     }
-
-    await this.commentsRepository
-      .createQueryBuilder()
-      .update(Comment)
-      .set({
-        comment: updateCommentDto.comment,
-      })
-      .where('id=:id', { id: commentId })
-      .execute();
+    try {
+      await this.commentsRepository.update(commentDto, commentId);
+    } catch (error) {
+      throw new BadRequestException('SERVICE_ERROR');
+    }
   }
 
   async remove(user: Users, boardId: number, commentId: number): Promise<void> {
-    const comment = await this.commentsRepository.findOne({
+    const existedcomment = await this.commentsRepository.findOne({
       where: { id: commentId, board: { id: boardId }, user: { id: user.id } },
     });
 
-    if (!comment) {
-      throw new NotFoundException();
+    if (!existedcomment) {
+      throw new NotFoundException('댓글이 존재하지 않습니다.');
     }
 
-    await this.commentsRepository.remove(comment);
+    await this.commentsRepository.remove(existedcomment);
   }
 }
