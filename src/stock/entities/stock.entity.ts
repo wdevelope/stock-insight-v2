@@ -25,6 +25,8 @@ export class Stock {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @OneToMany(() => StockPrice, (stockPrice) => stockPrice.stock)
+  @OneToMany(() => StockPrice, (stockPrice) => stockPrice.stock, {
+    cascade: true,
+  })
   stockPrices: StockPrice[];
 }
