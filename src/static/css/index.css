@@ -10,6 +10,13 @@ main {
   padding-left: 260px;
 }
 
+.userInfoMain {
+  margin-top: 100px;
+  margin-right: 300px;
+  margin-left: 260px;
+  padding-left: 260px;
+}
+
 /* 메뉴 nav바 */
 .navbar {
   background-color: #01161e;
@@ -42,7 +49,6 @@ main {
 }
 
 .sidebar-link:hover {
-  color: rgb(255, 93, 93);
   text-decoration: none;
 }
 
@@ -61,21 +67,26 @@ main {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.user-image {
-  width: 100px;
-  height: 100px;
+#profileImage {
+  width: 200px;
+  height: auto;
   border-radius: 50%;
 }
 
-.user-info {
-  margin-top: 10px;
-}
-
-.user-details button {
-  display: block;
-  width: 100%;
+.custom-button {
+  padding: 8px 12px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  text-decoration: none; /* a태그의 밑줄 제거 */
+  display: inline-block;
   margin-top: 10px;
   border-radius: 10px;
+}
+
+.custom-button:hover {
+  background-color: #0056b3;
 }
 
 .board-container {

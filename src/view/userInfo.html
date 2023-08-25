@@ -15,7 +15,6 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
     />
     <link rel="stylesheet" href="/static/css/index.css" />
-    <link rel="stylesheet" href="/static/css/stock.css" />
   </head>
 
   <body>
@@ -113,34 +112,87 @@
       </a>
     </nav>
 
-    <!-- 🔴 메인 🔴 -->
-    <main>
-      <!-- 이미지 요청 -->
-      <form
-        enctype="multipart/form-data"
-        action="http://localhost:3000/upload"
-        method="post"
-        id="uploadForm"
-      >
-        <input type="file" name="file" />
-        <button type="submit">Upload</button>
-      </form>
+    <!-- 🔴 서치 메인 🔴 -->
+    <main class="userInfoMain">
+      <section class="user-details-section">
+        <!-- 프로필 이미지 영역 -->
+        <div class="text-center mb-4">
+          <img
+            id="mainProfileImage"
+            src="/static/photo/login.jpg"
+            alt="사용자의 프로필 이미지"
+            class="img-fluid rounded-circle profile-image"
+          />
 
-      <!-- 이미지 표시 -->
-      <img
-        id="uploadedImage"
-        src=""
-        alt="Uploaded Image"
-        style="max-width: 500px; display: none"
-      />
+          <!-- 이미지 첨부 -->
+          <div class="mt-2">
+            <input
+              type="file"
+              id="profileImageInput"
+              style="display: none"
+              onchange="uploadImageToServer();"
+            />
+            <button
+              class="btn btn-outline-primary"
+              onclick="document.getElementById('profileImageInput').click();"
+            >
+              이미지 첨부
+            </button>
+          </div>
+        </div>
 
-      <div>
-        <ul id="messages"></ul>
-      </div>
-      <div>
-        <input type="text" id="message" />
-        <button onclick="handleSubmitNewMessage()" Submit></button>
-      </div>
+        <!-- 유저 상세 정보 -->
+        <div class="mb-4">
+          <h4 class="mb-3">유저 정보</h4>
+          <div class="mb-2">
+            <strong>닉네임:</strong>
+            <span id="mainNickname">사용자닉네임</span>
+          </div>
+          <div class="mb-2">
+            <strong>이메일:</strong>
+            <span id="mainEmail">example@example.com</span>
+          </div>
+        </div>
+
+        <!-- 비밀번호 변경 영역 -->
+        <div class="mb-4">
+          <h4 class="mb-3">비밀번호 변경</h4>
+          <div class="mb-3">
+            <label for="currentPassword" class="form-label"
+              >현재 비밀번호</label
+            >
+            <input
+              type="password"
+              class="form-control form-control-sm"
+              id="currentPassword"
+              placeholder="현재 비밀번호 입력"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="newPassword" class="form-label">새 비밀번호</label>
+            <input
+              type="password"
+              class="form-control form-control-sm"
+              id="newPassword"
+              placeholder="새 비밀번호 입력"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="confirmNewPassword" class="form-label"
+              >새 비밀번호 확인</label
+            >
+            <input
+              type="password"
+              class="form-control form-control-sm"
+              id="confirmNewPassword"
+              placeholder="새 비밀번호 재입력"
+            />
+          </div>
+          <button class="btn btn-primary" onclick="changePassword()">
+            비밀번호 변경
+          </button>
+        </div>
+      </section>
     </main>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -154,9 +206,7 @@
       src="https://kit.fontawesome.com/1a93e99cf8.js"
       crossorigin="anonymous"
     ></script>
-    <script src="/static/js/stock.js"></script>
     <script src="/static/js/index.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
-    <script src="../socket-client/chat-socket.js"></script>
+    <script src="/static/js/userInfo.js"></script>
   </body>
 </html>

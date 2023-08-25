@@ -2,8 +2,10 @@ import {
   Controller,
   ParseFilePipe,
   Post,
+  Get,
   UploadedFile,
   UseInterceptors,
+  Param,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadService } from './upload.service';
@@ -26,5 +28,10 @@ export class UploadController {
     file: Express.Multer.File,
   ) {
     await this.uploadService.upload(file.originalname, file.buffer);
+  }
+
+  @Get('file-url/:fileName')
+  async getFileUrl(@Param('fileName') fileName: string) {
+    return await this.uploadService.getFileUrl(fileName);
   }
 }

@@ -20,7 +20,7 @@ async function fetchNews(pageNumber = 1) {
     if (response.status === 'ok' && response.articles.length > 0) {
       displayNews(response.articles);
     } else {
-      console.log('No news articles found for the given period.');
+      console.log('뉴스가 불러올게 없네');
     }
   } catch (error) {
     console.error(`뉴스를 가져오는 중 에러 발생: ${error}`);

@@ -65,21 +65,38 @@ async function fetchUserDetails() {
 // 🟠 프로필 토글
 async function toggleProfile() {
   const userDetailsElem = document.getElementById('userDetails');
+  const profileImageElem = document.getElementById('profileImage'); // 이미지 엘리먼트 참조
+
   if (
     userDetailsElem.style.display === 'none' ||
     !userDetailsElem.style.display
   ) {
     const data = await fetchUserDetails();
+
     if (data) {
       document.getElementById('nickname').textContent = data.nickname;
       document.getElementById('email').textContent = data.email;
+      // 이미지 URL을 가져오는 부분
+      if (data.imgUrl) {
+        const imageUrlResponse = await fetch(
+          `http://localhost:3000/upload/file-url/${data.imgUrl}`,
+        );
+        if (imageUrlResponse.ok) {
+          const imageUrl = await imageUrlResponse.text(); // URL 정보를 가져옵니다.
+          profileImageElem.src = imageUrl; // 이미지 설정
+        } else {
+          profileImageElem.src = '/static/photo/login.jpg'; // 기본 이미지 설정
+        }
+      } else {
+        profileImageElem.src = '/static/photo/login.jpg'; // 기본 이미지 설정
+      }
+
       userDetailsElem.style.display = 'block';
     }
   } else {
     userDetailsElem.style.display = 'none';
   }
 }
-
 // 🟠 로그아웃 함수
 function logout() {
   function deleteCookie(name) {
@@ -111,10 +128,9 @@ async function fetchUserInfo(token) {
   }
 }
 
+//뒤로가기
 window.addEventListener('pageshow', (event) => {
   if (event.persisted) {
-    window.location.reload();
+    location.reload();
   }
 });
-
-document.addEventListener('DOMContentLoaded', function () {});
