@@ -5,7 +5,6 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersRepository } from '../users/users.repository';
 import { UserCheckDto } from './dto/user.check.dto';
 import { Response } from 'express';
-// import { KakaoLoginAuthDto } from './dto/kakao.dto';
 import { Payload } from './jwt/jwt.payload';
 
 @Injectable()
