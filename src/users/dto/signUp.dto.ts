@@ -29,4 +29,6 @@ export class SignUpDto {
   nickname: string;
 
   status: string;
+
+  point: number;
 }
