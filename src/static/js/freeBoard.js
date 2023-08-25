@@ -65,7 +65,7 @@ function handleBoardItemClick(boardId) {
   fetch(`http://localhost:3000/api/views/${boardId}`, {
     method: 'POST',
     headers: {
-      Authorization: token, // 필요한 경우 인증 토큰 포함
+      Authorization: token,
       'Content-Type': 'application/json',
     },
   })

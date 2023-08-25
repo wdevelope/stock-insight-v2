@@ -1,0 +1,27 @@
+### ❗ s3 이미지 업로드
+POST http://localhost:3000/upload HTTP/1.1
+## 요청 본문 유형 (파일과 함께 다른 데이터를 포함한 폼 데이터를 전송할 때 사용)
+Content-Type: multipart/form-data; boundary=myboundary
+
+## 데이터 시작 경계
+--myboundary
+Content-Disposition: form-data; name="file"; filename="sample.jpg"
+Content-Type: image/jpeg
+
+< ./sample.jpg
+--myboundary--
+##데이터 끝
+
+
+### ❗ s3 이미지 가져오기
+GET http://localhost:3000/upload/file-url/sample.jpg HTTP/1.1
+
+
+
+### ❗ 카카오 로그인 시작
+GET http://localhost:3000/api/kakao/login HTTP/1.1
+
+
+
+### ❗ 카카오 로그인 콜백 (이 부분은 실제로 테스트해야 된다. auth code는 일회성이기 때문)
+GET http://localhost:3000/api/kakao/login/callback?code=YOUR_AUTHORIZATION_CODE_HERE HTTP/1.1

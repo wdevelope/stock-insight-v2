@@ -52,17 +52,26 @@
         </div>
         <!-- 회원 상세 정보 영역 -->
         <div class="user-details" id="userDetails">
-          <img src="" alt="User Image" class="user-image" />
+          <img
+            id="profileImage"
+            src="/static/photo/login.jpg"
+            alt="Profile Image"
+          />
           <div class="user-info">
             <div><strong>닉네임:</strong> <span id="nickname"></span></div>
             <div><strong>이메일:</strong> <span id="email"></span></div>
           </div>
-          <button onclick="goToProfile()">회원상세정보</button>
-          <button onclick="logout()">로그아웃</button>
+          <!-- 회원상세정보 버튼 -->
+          <a
+            href="http://localhost:3000/view/userInfo.html"
+            class="custom-button"
+            >회원상세정보</a
+          >
+          <!-- 로그아웃 버튼 -->
+          <button onclick="logout()" class="custom-button">로그아웃</button>
         </div>
       </div>
     </nav>
-
     <!-- 🔴 왼쪽 Nav 🔴 -->
     <nav
       class="d-flex flex-column align-items-start bg-light p-4 d-none d-lg-block left-nav-border"
