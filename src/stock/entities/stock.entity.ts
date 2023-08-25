@@ -19,6 +19,9 @@ export class Stock {
   @Column()
   rprs_mrkt_kor_name: string; // 대표 시장명
 
+  @Column()
+  updated_day: string; //업데이트 날짜
+
   @CreateDateColumn()
   created_at: Date;
 

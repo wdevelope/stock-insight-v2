@@ -45,8 +45,6 @@ export class StockService {
   }
 
   async stockNameSave() {
-    await this.stockRepository.delete({ rprs_mrkt_kor_name: 'KOSPI' });
-    await this.stockRepository.delete({ rprs_mrkt_kor_name: 'KOSDAQ' });
     await this.stockNameSaveMarket('ksq');
     await this.stockNameSaveMarket('stk');
   }
@@ -71,8 +69,9 @@ export class StockService {
         entity.id = OutBlock.ISU_SRT_CD;
         entity.prdt_abrv_name = OutBlock.ISU_ABBRV;
         entity.rprs_mrkt_kor_name = OutBlock.MKT_TP_NM;
+        entity.updated_day = today;
 
-        await this.stockRepository.save(entity);
+        await this.stockRepository.upsert(entity, ['id']);
         await this.sleep(5);
       }
     } catch (error) {
@@ -143,6 +142,7 @@ export class StockService {
   async fetchDataAndSaveToDB() {
     const allStock = await this.stockRepository.find();
     const stockCodes = allStock.map((data) => data.id);
+    // const ACCESS_TOKEN = await this.cacheManager.get(token);
 
     for (const stockCode of stockCodes) {
       const config = {
