@@ -4,8 +4,9 @@ import { LikesController } from './likes.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { Likes } from './entities/like.entity';
-import { BoardLikesService } from './boardlikes.service';
+import { LikesRepository } from './likes.repository';
 import { BoardsModule } from '../boards/boards.module';
+import { BoardsRepository } from 'src/boards/boards.repository';
 
 @Module({
   imports: [
@@ -18,6 +19,6 @@ import { BoardsModule } from '../boards/boards.module';
   ],
   exports: [TypeOrmModule],
   controllers: [LikesController],
-  providers: [LikesService, BoardLikesService],
+  providers: [LikesService, LikesRepository, BoardsRepository],
 })
 export class LikesModule {}

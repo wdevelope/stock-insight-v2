@@ -23,12 +23,9 @@ export class Comment {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ManyToOne(() => Board, (board) => board.comment, {
-    eager: false,
-    // onDelete: 'CASCADE',
-  })
+  @ManyToOne(() => Board, (board) => board.comment, {})
   board: Board;
 
-  @ManyToOne(() => Users, (user) => user.comment, { eager: false })
+  @ManyToOne(() => Users, (user) => user.comment)
   user: Users;
 }

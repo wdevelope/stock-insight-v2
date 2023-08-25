@@ -1,9 +1,17 @@
-import { Controller, Param, Post, Get } from '@nestjs/common';
+import {
+  Controller,
+  Param,
+  Post,
+  Get,
+  BadRequestException,
+  Body,
+} from '@nestjs/common';
 import { LikesService } from './likes.service';
 import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
 import { Users } from 'src/users/users.entity';
+import { UpdateBoardDto } from 'src/boards/dto/update-board.dto';
 @UseGuards(JwtAuthGuard)
 @Controller('api/likes')
 export class LikesController {
@@ -12,13 +20,22 @@ export class LikesController {
   @Post('/:boardId')
   createOrDelete(
     @CurrentUser() user: Users,
-    @Param('boardId') board: number,
+    @Param('boardId') boardId: number,
+    @Body() updateBoardDto: UpdateBoardDto,
   ): Promise<void> {
-    return this.likesService.createOrDelete(user, board);
+    try {
+      return this.likesService.createOrDelete(user, boardId, updateBoardDto);
+    } catch (error) {
+      throw new BadRequestException('CONTROLLER_ERROR');
+    }
   }
 
   @Get('/:boardId')
   likeTotalCnt(@Param('boardId') board: number): Promise<number> {
-    return this.likesService.likeTotalCnt(board);
+    try {
+      return this.likesService.likeTotalCnt(board);
+    } catch (error) {
+      throw new BadRequestException('CONTROLLER_ERROR');
+    }
   }
 }
