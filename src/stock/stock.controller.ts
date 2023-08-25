@@ -1,4 +1,4 @@
-import { Controller, Get, HttpCode } from '@nestjs/common';
+import { Controller, Get, HttpCode, Post } from '@nestjs/common';
 import { StockService } from './stock.service';
 
 @Controller('stock')
@@ -15,5 +15,10 @@ export class StockController {
   @Get('prices')
   async getStockPrices() {
     return this.stockService.getStockPrices();
+  }
+
+  @Post('token')
+  async tokenCreate() {
+    return this.stockService.tokenCreate();
   }
 }
