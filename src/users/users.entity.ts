@@ -32,6 +32,12 @@ export class Users {
   @Column({ default: 'user' })
   status: string;
 
+  @Column({ default: 100 })
+  point: number;
+
+  @Column()
+  answer: boolean;
+
   @OneToMany(() => Board, (board) => board.user, { eager: true })
   board: Board[];
 

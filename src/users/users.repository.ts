@@ -3,7 +3,8 @@ import { Users } from './users.entity';
 import { DataSource, Repository } from 'typeorm';
 import { UserCreateDto } from './dto/user.create.dto';
 import { UserUpdateDto } from './dto/user.update.dto';
-import { KakaoLoginAuthDto } from '../auth/dto/kakao.dto';
+import { PointDto } from './dto/point.dto';
+import { StatusDto } from './dto/status.dto';
 
 @Injectable()
 export class UsersRepository extends Repository<Users> {
@@ -24,7 +25,7 @@ export class UsersRepository extends Repository<Users> {
   async findUserByIdWithoutPassword(id: number): Promise<Users | null> {
     const user = await this.findOne({
       where: { id },
-      select: ['id', 'email', 'nickname', 'imgUrl'],
+      select: ['id', 'email', 'nickname', 'imgUrl', 'point', 'status'],
     });
     return user;
   }
@@ -46,9 +47,9 @@ export class UsersRepository extends Repository<Users> {
     return result;
   }
 
-  async createKakao(user: KakaoLoginAuthDto): Promise<Users> {
-    const newUser = this.create(user);
-    return await this.save(newUser);
+  async updatePoint(user: Users, data: PointDto): Promise<object> {
+    const result = await this.update({ id: user.id }, data);
+    return result;
   }
 
   async findUserByThirdPartyId(
@@ -70,5 +71,10 @@ export class UsersRepository extends Repository<Users> {
     const savedUser = await this.save(newUser);
 
     return savedUser;
+  }
+
+  async updateUserStatus(user: Users, data: StatusDto): Promise<object> {
+    const result = await this.update({ id: user.id }, data);
+    return result;
   }
 }

@@ -26,7 +26,7 @@ import { EventsModule } from './events/events.module';
       host: process.env.HOST,
       port: Number(process.env.REDIS_PORT),
       password: process.env.PASSWORD,
-      ttl: 1800,
+      ttl: 180,
     }),
     UsersModule,
     BoardsModule,

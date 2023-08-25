@@ -3,8 +3,10 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   Patch,
   Post,
+  Query,
   Res,
   UseGuards,
   ValidationPipe,
@@ -21,11 +23,12 @@ import { Response } from 'express';
 import { UpdateRequestDto } from './dto/updateRequest.dto';
 import { EmailService } from './email/email.service';
 import { EmailDto } from './dto/email.dto';
+import { PointDto } from './dto/point.dto';
 
 @Controller('api/users')
 export class UsersController {
   constructor(
-    private readonly usersSevice: UsersService,
+    private readonly usersService: UsersService,
     private readonly authService: AuthService,
     private readonly emailService: EmailService,
   ) {}
@@ -33,7 +36,7 @@ export class UsersController {
   // POST. http://localhost:3000/api/users
   @Post()
   async signUp(@Body(ValidationPipe) body: SignUpDto) {
-    return await this.usersSevice.signUp(body);
+    return await this.usersService.signUp(body);
   }
 
   // POST. http://localhost:3000/api/users/login
@@ -56,21 +59,22 @@ export class UsersController {
     return this.authService.userCheck(user.id, body);
   }
 
-  // PATCH. http://localhost:3000/api/users
+  // PATCH. http://localhost:3000/api/users/:id
   @UseGuards(JwtAuthGuard)
-  @Patch()
+  @Patch('/:id')
   async updateCurrentUser(
+    @Param('id') id: number,
     @CurrentUser() user: Users,
     @Body() body: Partial<UpdateRequestDto>,
   ) {
-    return await this.usersSevice.updateUser(user.id, body);
+    return await this.usersService.updateUser(id, body);
   }
 
-  // DELETE. http://localhost:3000/api/users
+  // DELETE. http://localhost:3000/api/users/:id
   @UseGuards(JwtAuthGuard)
-  @Delete()
-  async deleteCurrentUser(@CurrentUser() user: Users) {
-    return await this.usersSevice.deleteUser(user.id);
+  @Delete('/:id')
+  async deleteCurrentUser(@Param('id') id: number, @CurrentUser() user: Users) {
+    return await this.usersService.deleteUser(id);
   }
 
   // 이메일 보내는것 까지 성공 http://localhost:3000/api/users/email
@@ -83,5 +87,27 @@ export class UsersController {
   @Post('/verifyEmail')
   async verifyEmail(@Body() body) {
     return this.emailService.verifyEmail(body.email, body.randomCode);
+  }
+
+  // 유저 퀴즈 http://localhost:3000/api/users/quiz/:id
+  @Patch('/quiz/:id')
+  async userPoint(
+    @Param('id') id: number,
+    @CurrentUser() user: Users,
+    @Body() body: PointDto,
+  ) {
+    return await this.usersService.updatePoint(id, body);
+  }
+
+  // 유저 스텟 변동 http://localhost:3000/api/users/status/:id
+  @Patch('/status/:id')
+  async userStatus(@Param('id') id: number, @CurrentUser() user: Users) {
+    return await this.usersService.updateUserStatus(id);
+  }
+
+  //페이지네이션 http://localhost:3000/api/users/page(?page=1)쿼리부분
+  @Get('/page')
+  async all(@Query('page') page: number = 1): Promise<Users[]> {
+    return await this.usersService.paginate(page);
   }
 }
