@@ -1,15 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import axios from 'axios';
 import { StockPrice } from './entities/stockPrice.entity';
 // import { Cron, SchedulerRegistry } from '@nestjs/schedule';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class StockService {
   constructor(
     @InjectRepository(StockPrice)
     private stockPriceRepository: Repository<StockPrice>, // private schedulerRegistry: SchedulerRegistry,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   // @Cron('0 */10 9-16 * * 1-5', {
@@ -69,5 +72,31 @@ export class StockService {
 
   async getStockPrices(): Promise<StockPrice[]> {
     return await this.stockPriceRepository.find();
+  }
+
+  async tokenCreate() {
+    const data = JSON.stringify({
+      grant_type: 'client_credentials',
+      appkey: process.env.APPKEY,
+      appsecret: process.env.APPSECRET,
+    });
+    const config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://openapi.koreainvestment.com:9443/oauth2/tokenP',
+      headers: {
+        'content-type': 'application/json',
+      },
+      data: data,
+    };
+    axios
+      .request(config)
+      .then((response) => {
+        const token = 'token';
+        this.cacheManager.set(token, `Bearer ${response.data.access_token}`);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 }
