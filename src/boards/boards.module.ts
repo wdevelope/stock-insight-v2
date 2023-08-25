@@ -4,7 +4,7 @@ import { BoardsController } from './boards.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Board } from './entities/board.entity';
 import { JwtModule } from '@nestjs/jwt';
-import { CommentsModule } from 'src/comments/comments.module';
+import { BoardsRepository } from './boards.repository';
 
 @Module({
   imports: [
@@ -13,10 +13,9 @@ import { CommentsModule } from 'src/comments/comments.module';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: process.env.DATABASE_EXPIRESIN },
     }),
-    CommentsModule,
   ],
   exports: [TypeOrmModule, BoardsService],
   controllers: [BoardsController],
-  providers: [BoardsService],
+  providers: [BoardsService, BoardsRepository],
 })
 export class BoardsModule {}

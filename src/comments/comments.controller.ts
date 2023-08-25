@@ -10,14 +10,13 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { CommentsService } from './comments.service';
-import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateCommentDto } from './dto/update-comment.dto';
 import { Board } from 'src/boards/entities/board.entity';
 import { Comment } from './entities/comment.entity';
 import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
 import { Users } from 'src/users/users.entity';
+import { CommentDto } from './dto/comment.dto';
 @UseGuards(JwtAuthGuard)
 @Controller('api/boards')
 export class CommentsController {
@@ -26,10 +25,14 @@ export class CommentsController {
   @Post('/:boardId/comments')
   create(
     @CurrentUser() user: Users,
-    @Param('boardId') boardId: Board,
-    @Body(ValidationPipe) createCommentDto: CreateCommentDto,
+    @Param('boardId') board: Board,
+    @Body(ValidationPipe) commentDto: CommentDto,
   ) {
-    return this.commentsService.create(user, createCommentDto, boardId);
+    try {
+      return this.commentsService.create(user, commentDto, board);
+    } catch (error) {
+      throw new BadRequestException('CONTROLLER_ERROR');
+    }
   }
 
   @Get('/:boardId/comments')
@@ -42,17 +45,13 @@ export class CommentsController {
     @CurrentUser() user: Users,
     @Param('boardId') boardId: number,
     @Param('commentId') commentId: number,
-    @Body(ValidationPipe) updateCommentDto: UpdateCommentDto,
+    @Body(ValidationPipe) commentDto: CommentDto,
   ) {
-    if (!updateCommentDto.comment) {
-      throw new BadRequestException();
+    try {
+      return this.commentsService.update(user, boardId, commentId, commentDto);
+    } catch (error) {
+      throw new BadRequestException('CONTROLLER_ERROR');
     }
-    return this.commentsService.update(
-      user,
-      boardId,
-      commentId,
-      updateCommentDto,
-    );
   }
 
   @Delete('/:boardId/comments/:commentId')
@@ -61,6 +60,10 @@ export class CommentsController {
     @Param('boardId') boardId: number,
     @Param('commentId') commentId: number,
   ) {
-    return this.commentsService.remove(user, boardId, commentId);
+    try {
+      return this.commentsService.remove(user, boardId, commentId);
+    } catch (error) {
+      throw new BadRequestException('CONTROLLER_ERROR');
+    }
   }
 }

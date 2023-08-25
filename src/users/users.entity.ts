@@ -3,7 +3,12 @@ import { Comment } from 'src/comments/entities/comment.entity';
 import { Likes } from 'src/likes/entities/like.entity';
 import { NoticeBoard } from 'src/noticeboards/entities/noticeboard.entity';
 import { Views } from 'src/views/entities/view.entity';
-import { OneToMany } from 'typeorm';
+import {
+  CreateDateColumn,
+  DeleteDateColumn,
+  OneToMany,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -37,6 +42,15 @@ export class Users {
 
   @Column()
   answer: boolean;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date | null;
 
   @OneToMany(() => Board, (board) => board.user, { eager: true })
   board: Board[];

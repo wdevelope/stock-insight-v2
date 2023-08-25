@@ -4,9 +4,13 @@ import { CommentsController } from './comments.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Comment } from './entities/comment.entity';
 import { JwtModule } from '@nestjs/jwt';
+import { CommentsRepository } from './comments.repository';
+import { BoardsModule } from 'src/boards/boards.module';
+import { BoardsRepository } from 'src/boards/boards.repository';
 
 @Module({
   imports: [
+    BoardsModule,
     TypeOrmModule.forFeature([Comment]),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
@@ -15,6 +19,6 @@ import { JwtModule } from '@nestjs/jwt';
   ],
   exports: [TypeOrmModule],
   controllers: [CommentsController],
-  providers: [CommentsService],
+  providers: [CommentsService, CommentsRepository, BoardsRepository],
 })
 export class CommentsModule {}
