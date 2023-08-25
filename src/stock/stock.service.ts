@@ -1,10 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import axios from 'axios';
 import { StockPrice } from './entities/stockPrice.entity';
 import { Stock } from './entities/stock.entity';
-// import { Cron } from '@nestjs/schedule';
+// import { Cron, SchedulerRegistry } from '@nestjs/schedule';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class StockService {
@@ -13,6 +15,7 @@ export class StockService {
     private stockPriceRepository: Repository<StockPrice>,
     @InjectRepository(Stock)
     private stockRepository: Repository<Stock>, // private schedulerRegistry: SchedulerRegistry,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async tokenCreate() {
@@ -21,7 +24,6 @@ export class StockService {
       appkey: process.env.APPKEY,
       appsecret: process.env.APPSECRET,
     });
-
     const config = {
       method: 'post',
       maxBodyLength: Infinity,
@@ -31,16 +33,17 @@ export class StockService {
       },
       data: data,
     };
-
     axios
       .request(config)
       .then((response) => {
-        console.log(JSON.stringify(response.data));
+        const token = 'token';
+        this.cacheManager.set(token, `Bearer ${response.data.access_token}`);
       })
       .catch((error) => {
         console.log(error);
       });
   }
+
   async stockNameSave() {
     await this.stockRepository.delete({ rprs_mrkt_kor_name: 'KOSPI' });
     await this.stockRepository.delete({ rprs_mrkt_kor_name: 'KOSDAQ' });
