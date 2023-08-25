@@ -13,7 +13,7 @@ export class UsersRepository extends Repository<Users> {
   }
 
   async findUserByEmail(email: string): Promise<Users | null> {
-    const user = await this.findOne({ where: { email } });
+    const user = await this.findOne({ where: { email, deletedAt: null } });
     return user;
   }
 
@@ -24,7 +24,7 @@ export class UsersRepository extends Repository<Users> {
 
   async findUserByIdWithoutPassword(id: number): Promise<Users | null> {
     const user = await this.findOne({
-      where: { id },
+      where: { id, deletedAt: null },
       select: ['id', 'email', 'nickname', 'imgUrl', 'point', 'status'],
     });
     return user;
@@ -32,7 +32,7 @@ export class UsersRepository extends Repository<Users> {
 
   async findUserById(id: number): Promise<Users | null> {
     const user = await this.findOne({
-      where: { id },
+      where: { id, deletedAt: null },
     });
     return user;
   }
@@ -43,7 +43,7 @@ export class UsersRepository extends Repository<Users> {
   }
 
   async deleteUser(id: number): Promise<object> {
-    const result = await this.delete({ id: id });
+    const result = await this.softDelete({ id: id });
     return result;
   }
 
