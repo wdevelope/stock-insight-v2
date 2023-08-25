@@ -78,6 +78,6 @@ export class StockPrice {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ManyToOne(() => Stock, (stock) => stock.stockPrices)
+  @ManyToOne(() => Stock, (stock) => stock.stockPrices, { onDelete: 'CASCADE' })
   stock: Stock;
 }

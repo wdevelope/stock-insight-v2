@@ -5,7 +5,7 @@ import { StockService } from './stock.service';
 export class StockController {
   constructor(private readonly stockService: StockService) {}
 
-  @Get('fetchAndSave')
+  @Get('pricesave')
   @HttpCode(200)
   fetchAndSaveData(): string {
     this.stockService.fetchDataAndSaveToDB();
@@ -15,6 +15,13 @@ export class StockController {
   @Get('prices')
   async getStockPrices() {
     return this.stockService.getStockPrices();
+  }
+
+  @Get('namesave')
+  @HttpCode(200)
+  stockNameSave(): string {
+    this.stockService.stockNameSave();
+    return '데이터 저장 성공!';
   }
 
   @Post('token')

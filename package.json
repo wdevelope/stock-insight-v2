@@ -43,6 +43,7 @@
     "class-validator": "^0.14.0",
     "cookie-parser": "^1.4.6",
     "d3": "^7.8.5",
+    "cron": "^2.4.1",
     "handlebars": "^4.7.8",
     "lodash": "^4.17.21",
     "mysql": "^2.18.1",
