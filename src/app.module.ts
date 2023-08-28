@@ -16,6 +16,7 @@ import * as redisStore from 'cache-manager-redis-store';
 import type { ClientOpts } from 'redis';
 import { EventsModule } from './events/events.module';
 import { UploadModule } from './upload/upload.module';
+import { QuizModule } from './quiz/quiz.module';
 
 @Module({
   imports: [
@@ -27,7 +28,6 @@ import { UploadModule } from './upload/upload.module';
       host: process.env.HOST,
       port: Number(process.env.REDIS_PORT),
       password: process.env.PASSWORD,
-      ttl: 180,
     }),
     UsersModule,
     BoardsModule,
@@ -38,6 +38,7 @@ import { UploadModule } from './upload/upload.module';
     StockModule,
     EventsModule,
     UploadModule,
+    QuizModule,
   ],
   controllers: [AppController],
   providers: [EmailService],
