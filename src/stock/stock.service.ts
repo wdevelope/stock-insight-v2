@@ -4,9 +4,10 @@ import { Repository } from 'typeorm';
 import axios from 'axios';
 import { StockPrice } from './entities/stockPrice.entity';
 import { Stock } from './entities/stock.entity';
-// import { Cron, SchedulerRegistry } from '@nestjs/schedule';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import { CronJob } from 'cron';
+import { SchedulerRegistry } from '@nestjs/schedule';
 
 @Injectable()
 export class StockService {
@@ -14,47 +15,31 @@ export class StockService {
     @InjectRepository(StockPrice)
     private stockPriceRepository: Repository<StockPrice>,
     @InjectRepository(Stock)
-    private stockRepository: Repository<Stock>, // private schedulerRegistry: SchedulerRegistry,
+    private stockRepository: Repository<Stock>,
+    private schedulerRegistry: SchedulerRegistry,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
-
-  async tokenCreate() {
-    const data = JSON.stringify({
-      grant_type: 'client_credentials',
-      appkey: process.env.APPKEY,
-      appsecret: process.env.APPSECRET,
-    });
-    const config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: 'https://openapi.koreainvestment.com:9443/oauth2/tokenP',
-      headers: {
-        'content-type': 'application/json',
-      },
-      data: data,
-    };
-    axios
-      .request(config)
-      .then((response) => {
-        const token = 'token';
-        this.cacheManager.set(token, `Bearer ${response.data.access_token}`);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
 
   async stockNameSave() {
     await this.stockNameSaveMarket('ksq');
     await this.stockNameSaveMarket('stk');
   }
   private async stockNameSaveMarket(market: string) {
-    const today = new Date().toISOString().substring(0, 10).replace(/-/g, '');
-    const yesterday = +today - 1;
+    const currentTime = new Date();
+    currentTime.setHours(currentTime.getHours() + 9);
+    const today = currentTime.toISOString().substring(0, 10).replace(/-/g, '');
+    const dayWeek = new Date().getDay();
+    let enterDay = +today - 1;
+    if (dayWeek >= 0 && dayWeek <= 1) {
+      enterDay = +today - 3;
+    } else if (dayWeek === 6) {
+      enterDay = +today - 2;
+    }
+
     const config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `http://data-dbg.krx.co.kr/svc/apis/sto/${market}_isu_base_info?basDd=${yesterday}`,
+      url: `http://data-dbg.krx.co.kr/svc/apis/sto/${market}_isu_base_info?basDd=${enterDay}`,
       headers: {
         AUTH_KEY: process.env.AUTH_KEY,
       },
@@ -78,71 +63,34 @@ export class StockService {
       console.error(error);
     }
   }
+  async startStockNameSave() {
+    const job = new CronJob(
+      '0 50 8 * * 1-5',
+      () => {
+        console.log('start');
+        this.stockNameSave();
+      },
+      null,
+      false,
+      'Asia/Seoul',
+    );
+    await this.schedulerRegistry.addCronJob('stockNameSave', job);
+    job.start();
+  }
+  async stopStockNameSave() {
+    const job = await this.schedulerRegistry.getCronJob('stockNameSave');
+    job.stop();
+  }
 
-  // @Cron('0 */10 9-16 * * 1-5', {
-  //   name: 'stock',
-  //   timeZone: 'Asia/Seoul',
-  // })
-  // @Cron('*/20 * * * * *', { name: 'stockSave' })
-  // async fetchDataAndSaveToDB() {
-  //   // const stockCodes = process.env.STOCKCODES.split(',');
-  //   const stockCode = '005930';
-
-  //   // for (const stockCode of stockCodes) {
-  //   const config = {
-  //     method: 'get',
-  //     maxBodyLength: Infinity,
-  //     url: `https://openapi.koreainvestment.com:9443/uapi/domestic-stock/v1/quotations/inquire-price?fid_cond_mrkt_div_code=J&fid_input_iscd=${stockCode}`,
-  //     headers: {
-  //       'content-type': 'application/json',
-  //       authorization: process.env.ACCESS_TOKEN,
-  //       appkey: process.env.APPKEY,
-  //       appsecret: process.env.APPSECRET,
-  //       tr_id: 'FHKST01010100',
-  //     },
-  //   };
-
-  //   try {
-  //     const response = await axios.request(config);
-  //     const { output } = response.data;
-  //     console.log(output);
-  //     const entity = new StockPrice();
-  //     const st = await this.stockRepository.findOne({
-  //       where: { id: '005930' },
-  //     });
-  //     entity.stck_prpr = output.stck_prpr;
-  //     entity.prdy_vrss = output.prdy_vrss;
-  //     entity.prdy_vrss_sign = output.prdy_vrss_sign;
-  //     entity.prdy_ctrt = output.prdy_ctrt;
-  //     entity.stck_oprc = output.stck_oprc;
-  //     entity.stck_hgpr = output.stck_hgpr;
-  //     entity.stck_lwpr = output.stck_lwpr;
-  //     entity.stck_sdpr = output.stck_sdpr;
-  //     entity.acml_vol = output.acml_vol;
-  //     entity.acml_tr_pbmn = output.acml_tr_pbmn;
-  //     entity.hts_frgn_ehrt = output.hts_frgn_ehrt;
-  //     entity.hts_avls = output.hts_avls;
-  //     entity.per = output.per;
-  //     entity.pbr = output.pbr;
-  //     entity.w52_hgpr = output.w52_hgpr;
-  //     entity.w52_lwpr = output.w52_lwpr;
-  //     entity.whol_loan_rmnd_rate = output.whol_loan_rmnd_rate;
-  //     entity.stock = st;
-
-  //     console.log(entity);
-
-  //     await this.stockPriceRepository.save(entity);
-  //     await this.sleep(100);
-  //   } catch (error) {
-  //     console.error(`Error processing stock ${stockCode}: ${error.message}`);
-  //   }
-  //   // }
-  // }
-  // @Cron('*/20 * * * * *', { name: 'stockSave' })
-  async fetchDataAndSaveToDB() {
+  async stockPriceSave() {
     const allStock = await this.stockRepository.find();
     const stockCodes = allStock.map((data) => data.id);
-    // const ACCESS_TOKEN = await this.cacheManager.get(token);
+    let ACCESS_TOKEN = await this.cacheManager.get('token');
+    if (!ACCESS_TOKEN) {
+      await this.tokenCreate();
+      await this.sleep(200);
+      ACCESS_TOKEN = await this.cacheManager.get('token');
+    }
 
     for (const stockCode of stockCodes) {
       const config = {
@@ -151,7 +99,7 @@ export class StockService {
         url: `https://openapi.koreainvestment.com:9443/uapi/domestic-stock/v1/quotations/inquire-price?fid_cond_mrkt_div_code=J&fid_input_iscd=${stockCode}`,
         headers: {
           'content-type': 'application/json',
-          authorization: process.env.ACCESS_TOKEN,
+          authorization: String(ACCESS_TOKEN),
           appkey: process.env.APPKEY,
           appsecret: process.env.APPSECRET,
           tr_id: 'FHKST01010100',
@@ -183,17 +131,63 @@ export class StockService {
           iscd_stat_cls_code: output.iscd_stat_cls_code,
           stock: { id: stockCode },
         });
-        await this.sleep(100);
+        await this.sleep(60);
       } catch (error) {
         console.error(`Error processing stock ${stockCode}: ${error.message}`);
       }
     }
   }
-  private sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
+  private async tokenCreate() {
+    const data = JSON.stringify({
+      grant_type: 'client_credentials',
+      appkey: process.env.APPKEY,
+      appsecret: process.env.APPSECRET,
+    });
+    const config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://openapi.koreainvestment.com:9443/oauth2/tokenP',
+      headers: {
+        'content-type': 'application/json',
+      },
+      data: data,
+    };
+    axios
+      .request(config)
+      .then((response) => {
+        const token = 'token';
+        this.cacheManager.set(token, `Bearer ${response.data.access_token}`, {
+          ttl: 64800,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  async startStockPriceSave() {
+    const job = new CronJob(
+      '0 */10 9-16 * * 1-5',
+      () => {
+        console.log('start');
+        this.stockPriceSave();
+      },
+      null,
+      false,
+      'Asia/Seoul',
+    );
+    await this.schedulerRegistry.addCronJob('stockPriceSave', job);
+    job.start();
+  }
+  async stopStockPriceSave() {
+    const job = await this.schedulerRegistry.getCronJob('stockPriceSave');
+    job.stop();
   }
 
   async getStockPrices(): Promise<StockPrice[]> {
     return await this.stockPriceRepository.find();
+  }
+
+  private sleep(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
