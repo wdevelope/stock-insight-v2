@@ -4,6 +4,7 @@ import { NoticeboardsController } from './noticeboards.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { NoticeBoard } from './entities/noticeboard.entity';
 import { JwtModule } from '@nestjs/jwt';
+import { NoticeBoardsRepository } from './noticeboards.repository';
 
 @Module({
   imports: [
@@ -14,6 +15,6 @@ import { JwtModule } from '@nestjs/jwt';
     }),
   ],
   controllers: [NoticeboardsController],
-  providers: [NoticeboardsService],
+  providers: [NoticeboardsService, NoticeBoardsRepository],
 })
 export class NoticeboardsModule {}

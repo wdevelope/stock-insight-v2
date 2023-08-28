@@ -1,83 +1,88 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateNoticeboardDto } from './dto/create-noticeboard.dto';
 import { UpdateNoticeboardDto } from './dto/update-noticeboard.dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import { NoticeBoard } from './entities/noticeboard.entity';
-import { Repository } from 'typeorm';
 import { Users } from 'src/users/users.entity';
+import { NoticeBoardsRepository } from './noticeboards.repository';
 
 @Injectable()
 export class NoticeboardsService {
-  constructor(
-    @InjectRepository(NoticeBoard)
-    private noticeBoardRepository: Repository<NoticeBoard>,
-  ) {}
-  async create(
-    createNoticeboardDto: CreateNoticeboardDto,
-    user: Users,
-  ): Promise<void> {
-    await this.noticeBoardRepository.save({
-      title: createNoticeboardDto.title,
-      description: createNoticeboardDto.description,
-      image: createNoticeboardDto.image,
-      user: user,
-    });
-  }
+  constructor(private noticeBoardRepository: NoticeBoardsRepository) {}
 
-  async findAll(): Promise<NoticeBoard[]> {
+  async find(): Promise<NoticeBoard[]> {
     const noticeBoard = await this.noticeBoardRepository.find();
     if (!noticeBoard) {
-      throw new NotFoundException();
+      throw new NotFoundException('공지사항 게시물이 존재하지 않습니다.');
     }
-    return noticeBoard;
+    try {
+      return noticeBoard;
+    } catch (error) {
+      throw new BadRequestException('SERVICE_ERROR');
+    }
   }
 
-  async findOne(id: number): Promise<NoticeBoard> {
-    const noticeBoard = await this.noticeBoardRepository.findOne({
-      where: { id },
+  async findOne(noticeBoardId: number): Promise<NoticeBoard> {
+    const existedNoticeBoard = await this.noticeBoardRepository.findOne({
+      where: { id: noticeBoardId },
     });
-    if (!noticeBoard) {
-      throw new NotFoundException();
+    if (!existedNoticeBoard) {
+      throw new NotFoundException('보드가 존재하지 않습니다.');
     }
-    return noticeBoard;
+    try {
+      return existedNoticeBoard;
+    } catch (error) {
+      throw new BadRequestException('SERVICE_ERROR');
+    }
+  }
+
+  async create(
+    createNoticeBoardDto: CreateNoticeboardDto,
+    user: Users,
+  ): Promise<void> {
+    try {
+      await this.noticeBoardRepository.save(createNoticeBoardDto, user);
+    } catch (error) {
+      throw new BadRequestException('SERVICE_ERROR');
+    }
   }
 
   async update(
     user: Users,
-    id: number,
-    updateNoticeboardDto: UpdateNoticeboardDto,
+    noticeBoardId: number,
+    updateNoticeBoardDto: UpdateNoticeboardDto,
   ): Promise<void> {
     const existedNoticeBoard = await this.noticeBoardRepository.findOne({
-      where: { id, user: { id: user.id } },
+      where: { id: noticeBoardId, user: { id: user.id } },
     });
     if (!existedNoticeBoard) {
-      throw new NotFoundException();
+      throw new NotFoundException('보드가 존재하지 않습니다.');
     }
-
-    await this.noticeBoardRepository
-      .createQueryBuilder()
-      .update(NoticeBoard)
-      .set({
-        title: updateNoticeboardDto.title,
-        description: updateNoticeboardDto.description,
-        image: updateNoticeboardDto.image,
-      })
-      .where('id=:id', { id })
-      .execute();
+    try {
+      await this.noticeBoardRepository.update(
+        updateNoticeBoardDto,
+        noticeBoardId,
+      );
+    } catch (error) {
+      throw new BadRequestException('SERVICE_ERROR');
+    }
   }
 
-  async remove(user: Users, id: number): Promise<void> {
+  async remove(user: Users, noticeBoardId: number): Promise<void> {
     const existedNoticeBoard = await this.noticeBoardRepository.findOne({
-      where: { id, user: { id: user.id } },
+      where: { id: noticeBoardId, user: { id: user.id } },
     });
+    console.log(existedNoticeBoard);
     if (!existedNoticeBoard) {
-      throw new NotFoundException();
+      throw new NotFoundException('보드가 존재하지 않습니다.');
     }
-
-    await this.noticeBoardRepository.manager.transaction(
-      async (transaction) => {
-        await transaction.delete(NoticeBoard, id);
-      },
-    );
+    try {
+      await this.noticeBoardRepository.remove(existedNoticeBoard);
+    } catch (error) {
+      throw new BadRequestException('SERVICE_ERROR');
+    }
   }
 }
