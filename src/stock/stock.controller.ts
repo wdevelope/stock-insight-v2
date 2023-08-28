@@ -1,7 +1,8 @@
-import { Controller, Get, HttpCode, Post } from '@nestjs/common';
+import { Controller, Get, HttpCode, Param, Post, Query } from '@nestjs/common';
 import { StockService } from './stock.service';
+import { Stock } from './entities/stock.entity';
 
-@Controller('stock')
+@Controller('api/stocks')
 export class StockController {
   constructor(private readonly stockService: StockService) {}
 
@@ -47,8 +48,14 @@ export class StockController {
     return '스케쥴 종료!';
   }
 
-  @Get('prices')
-  async getStockPrices() {
-    return this.stockService.getStockPrices();
+  @Get('price/:id')
+  async getStockPrice(@Param('id') id: string): Promise<Stock> {
+    return this.stockService.getStockPrice(id);
+  }
+
+  //http://localhost:3000/api/stocks/(?page=1)
+  @Get('/')
+  async all(@Query('page') page: number = 1): Promise<Stock[]> {
+    return await this.stockService.getStockPage(page);
   }
 }
