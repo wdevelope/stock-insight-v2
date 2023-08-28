@@ -1,5 +1,5 @@
 let currentPage = 1;
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 14;
 
 async function fetchNews(pageNumber = 1) {
   const API_KEY = 'b66e7dd9acba4b4ba841ef0e6634a6f6'; // NewsAPI의 API 키
@@ -20,7 +20,7 @@ async function fetchNews(pageNumber = 1) {
     if (response.status === 'ok' && response.articles.length > 0) {
       displayNews(response.articles);
     } else {
-      console.log('뉴스가 불러올게 없네');
+      console.log('no news');
     }
   } catch (error) {
     console.error(`뉴스를 가져오는 중 에러 발생: ${error}`);
@@ -37,7 +37,7 @@ function displayNews(articles) {
 
   const mostViewedNews = $('.col-lg-4 ul');
   mostViewedNews.empty(); // 기존 뉴스 지우기
-  articles.slice(1, 4).forEach((article) => {
+  articles.slice(1, 7).forEach((article) => {
     mostViewedNews.append(`
                             <li class="mb-3">
                                 <img src="${article.urlToImage}" alt="${article.title}" class="img-fluid" style="width: 120px">
@@ -49,7 +49,7 @@ function displayNews(articles) {
   // 최신 주식 뉴스 섹션에 뉴스 추가
   const stockNewsSection = $('#stock-news-section');
   stockNewsSection.empty(); // 기존 뉴스 지우기
-  articles.slice(4, 9).forEach((article) => {
+  articles.slice(7, 10).forEach((article) => {
     stockNewsSection.append(`
                                 <div class="col-md-4 mb-4">
                                     <img src="${article.urlToImage}" alt="${article.title}" class="img-fluid">

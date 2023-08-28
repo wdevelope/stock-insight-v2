@@ -1,9 +1,9 @@
 window.onload = function () {
-  fetchAndRenderNoticePosts();
+  RenderNoticePosts();
 };
 
 // 🟡 공지사항 게시글 랜더링 함수
-async function fetchAndRenderNoticePosts() {
+async function RenderNoticePosts() {
   if (!token) {
     console.warn('Authorization token is missing');
     return;
@@ -22,18 +22,17 @@ async function fetchAndRenderNoticePosts() {
 
     const data = await response.json();
     data.sort((a, b) => {
-      return new Date(b.updated_at) - new Date(a.updated_at);
+      return new Date(b.created_at) - new Date(a.created_at);
     });
-
     const boardElement = document.querySelector('#notice .list-group');
     let postHTML = '';
 
     data.forEach((post) => {
-      const postDate = post.updated_at.split('T')[0];
+      const postDate = post.created_at.split('T')[0];
       // const likesCount = post.likes.length;
 
       postHTML += `
-                    <a href="http://localhost:3000/view/board.html?postId=${post.id}" class="list-group-item list-group-item-action">
+                    <a href="http://localhost:3000/view/board.html?noticeBoardId=${post.id}" class="list-group-item list-group-item-action">
                       <div class="d-flex justify-content-between align-items-center">
                         <div>
                           <span>[공지]</span>
@@ -42,7 +41,8 @@ async function fetchAndRenderNoticePosts() {
                         <div>
                           <small class="me-2">닉네임</small>
                           <span>${postDate}</span>
-                          <i class="fas fa-thumbs-up ms-4"></i> 
+                          <i class="fas fa-eye ms-4"></i> 
+                          <i class="fas fa-thumbs-up ms-4"></i>
                         </div>
                       </div>
                     </a>

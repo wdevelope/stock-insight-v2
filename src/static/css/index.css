@@ -68,9 +68,13 @@ main {
 }
 
 #profileImage {
-  width: 200px;
+  width: 150px;
   height: auto;
   border-radius: 50%;
+}
+
+#mainProfileImage {
+  width: 400px;
 }
 
 .custom-button {
@@ -89,6 +93,13 @@ main {
   background-color: #0056b3;
 }
 
+/* 메인 css */
 .board-container {
   display: none;
+}
+
+.putdelbutton {
+  display: none;
+  z-index: 1;
+  border-radius: 4px;
 }

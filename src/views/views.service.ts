@@ -19,6 +19,7 @@ export class ViewsService {
     const viewFind = await this.viewsRepository.findOne({
       where: { user: { id: userId }, board: { id: boardId } },
     });
+
     try {
       if (viewFind === null) {
         await this.viewsRepository.create(user, boardId);
@@ -40,6 +41,7 @@ export class ViewsService {
         (sum, view) => sum + view.count,
         0,
       );
+      // console.log(totalViewCount);
       return totalViewCount;
     } catch (error) {
       throw new BadRequestException('SERVICE_ERROR');

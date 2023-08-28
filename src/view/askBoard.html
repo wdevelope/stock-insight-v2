@@ -14,11 +14,9 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
     />
-    <link rel="stylesheet" href="/static/css/index.css" />
-    <link rel="stylesheet" href="/static/css/stock.css" />
+    <link rel="stylesheet" href="../static/css/index.css" />
   </head>
-
-  <body>
+  <body id="noticeBoardPage">
     <!-- 🔴 위쪽 Nav 🔴-->
     <nav class="navbar navbar-expand-lg fixed-top-custom">
       <div class="container-fluid">
@@ -113,14 +111,72 @@
       </a>
     </nav>
 
-    <!-- 🔴 메인 🔴 -->
+    <!-- 🔴 커뮤니티 메인  🔴 -->
     <main>
-      <div>
-        <ul id="messages"></ul>
+      <!-- 기본 Nav 메뉴 -->
+      <ul class="nav nav-pills mt-5">
+        <li class="nav-item">
+          <a class="nav-link" href="http://localhost:3000/view/noticeBoard.html"
+            >공지사항</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="http://localhost:3000/view/freeBoard.html"
+            >자유게시판</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="http://localhost:3000/view/askBoard.html"
+            >문의</a
+          >
+        </li>
+      </ul>
+
+      <!-- 게시판 내용 -->
+      <div class="tab-content" id="boardTabsContent">
+        <!-- 자유게시판 -->
+        <div
+          class="tab-pane fade show active"
+          id="notice"
+          role="tabpanel"
+          aria-labelledby="home-tab"
+        >
+          <div class="d-flex justify-content-between align-items-center my-4">
+            <h2>문의사항</h2>
+            <a
+              class="btn btn-primary"
+              href="http://localhost:3000/view/askWriteBoard.html"
+              data-board="notice"
+            >
+              글쓰기
+            </a>
+          </div>
+          <div class="list-group mt-4"></div>
+        </div>
       </div>
-      <div>
-        <input type="text" id="message" />
-        <button onclick="handleSubmitNewMessage()" Submit></button>
+      <!-- 검색 부분 -->
+      <div class="search-section mt-5">
+        <div class="d-flex justify-content-center align-items-center">
+          <!-- 검색 옵션 선택 -->
+          <select class="form-select" id="searchOption" style="width: auto">
+            <option value="titleContent">제목+내용</option>
+            <option value="nickname">닉네임</option>
+          </select>
+
+          <!-- 검색어 입력창 -->
+          <input
+            type="text"
+            class="form-control"
+            id="searchInput"
+            placeholder="검색어를 입력하세요..."
+            style="margin-left: 10px; width: auto"
+          />
+
+          <!-- 검색 버튼 -->
+          <button class="btn btn-primary" style="margin-left: 10px">
+            검색
+          </button>
+        </div>
       </div>
     </main>
 
@@ -135,9 +191,7 @@
       src="https://kit.fontawesome.com/1a93e99cf8.js"
       crossorigin="anonymous"
     ></script>
-    <script src="/static/js/stock.js"></script>
     <script src="/static/js/index.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
-    <script src="../socket-client/chat-socket.js"></script>
+    <script src="/static/js/askBoard.js"></script>
   </body>
 </html>

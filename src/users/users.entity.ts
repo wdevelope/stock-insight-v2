@@ -2,6 +2,7 @@ import { Board } from 'src/boards/entities/board.entity';
 import { Comment } from 'src/comments/entities/comment.entity';
 import { Likes } from 'src/likes/entities/like.entity';
 import { NoticeBoard } from 'src/noticeboards/entities/noticeboard.entity';
+import { Askboard } from 'src/askboards/entities/askboard.entity';
 import { Views } from 'src/views/entities/view.entity';
 import {
   CreateDateColumn,
@@ -69,4 +70,10 @@ export class Users {
     eager: true,
   })
   noticeboard: NoticeBoard;
+
+  @OneToMany(() => Askboard, (askboard) => askboard.user, {
+    cascade: true,
+    eager: true,
+  })
+  askboard: Askboard;
 }

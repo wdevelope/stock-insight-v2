@@ -112,14 +112,14 @@
       </a>
     </nav>
 
-    <!-- 🔴 서치 메인 🔴 -->
+    <!-- 🔴 유저 상세 메인 🔴 -->
     <main class="userInfoMain">
       <section class="user-details-section">
         <!-- 프로필 이미지 영역 -->
         <div class="text-center mb-4">
           <img
             id="mainProfileImage"
-            src="/static/photo/login.jpg"
+            src="https://ifh.cc/g/P5Wo5H.png"
             alt="사용자의 프로필 이미지"
             class="img-fluid rounded-circle profile-image"
           />
@@ -142,20 +142,24 @@
         </div>
 
         <!-- 유저 상세 정보 -->
-        <div class="mb-4">
-          <h4 class="mb-3">유저 정보</h4>
-          <div class="mb-2">
+        <div class="mb-4 h2">
+          <h4 class="mb-3"><i class="fa-solid fa-user"></i> 유저 정보</h4>
+          <div class="mb-2 h5">
             <strong>닉네임:</strong>
             <span id="mainNickname">사용자닉네임</span>
           </div>
-          <div class="mb-2">
+          <div class="mb-2 h5">
             <strong>이메일:</strong>
             <span id="mainEmail">example@example.com</span>
+          </div>
+          <div class="mb-2 h5">
+            <strong>포인트:</strong>
+            <span id="mainPoint"></span>
           </div>
         </div>
 
         <!-- 비밀번호 변경 영역 -->
-        <div class="mb-4">
+        <!-- <div class="mb-4">
           <h4 class="mb-3">비밀번호 변경</h4>
           <div class="mb-3">
             <label for="currentPassword" class="form-label"
@@ -191,7 +195,7 @@
           <button class="btn btn-primary" onclick="changePassword()">
             비밀번호 변경
           </button>
-        </div>
+        </div> -->
       </section>
     </main>
 
