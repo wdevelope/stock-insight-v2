@@ -16,6 +16,7 @@ import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
 import { Users } from 'src/users/users.entity';
+import { AdminGuard } from 'src/askboards/jwt/admin.guard';
 
 @UseGuards(JwtAuthGuard)
 @Controller('api/askboards')
@@ -39,6 +40,7 @@ export class AskboardsController {
 
   // 문의 게시글 상세 조회
   @Get('/:id')
+  @UseGuards(AdminGuard)
   async findOne(@Param('id') id: number) {
     return await this.askboardsService.findOne(+id);
   }

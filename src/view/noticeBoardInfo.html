@@ -16,7 +16,6 @@
     />
     <link rel="stylesheet" href="/static/css/index.css" />
   </head>
-
   <body>
     <!-- 🔴 위쪽 Nav 🔴-->
     <nav class="navbar navbar-expand-lg fixed-top-custom">
@@ -120,90 +119,18 @@
       </a>
     </nav>
 
-    <!-- 🔴 유저 상세 메인 🔴 -->
-    <main class="userInfoMain">
-      <section class="user-details-section">
-        <!-- 프로필 이미지 영역 -->
-        <div class="text-center mb-4">
-          <img
-            id="mainProfileImage"
-            src="https://ifh.cc/g/P5Wo5H.png"
-            alt="사용자의 프로필 이미지"
-            class="img-fluid rounded-circle profile-image"
-          />
+    <!-- 🔴보드 메인 내용🔴 -->
+    <main class="board-container">
+      <!-- 게시글 본문 -->
+      <header class="post-content mb-4"></header>
 
-          <!-- 이미지 첨부 -->
-          <div class="mt-2">
-            <input
-              type="file"
-              id="profileImageInput"
-              style="display: none"
-              onchange="uploadImageToServer();"
-            />
-            <button
-              class="btn btn-outline-primary"
-              onclick="document.getElementById('profileImageInput').click();"
-            >
-              이미지 첨부
-            </button>
-          </div>
-        </div>
+      <!-- 좋아요 및 기타 버튼 -->
+      <section class="post-actions d-flex justify-content-start mb-4"></section>
 
-        <!-- 유저 상세 정보 -->
-        <div class="mb-4 h2">
-          <h4 class="mb-3"><i class="fa-solid fa-user"></i> 유저 정보</h4>
-          <div class="mb-2 h5">
-            <strong>닉네임:</strong>
-            <span id="mainNickname">사용자닉네임</span>
-          </div>
-          <div class="mb-2 h5">
-            <strong>이메일:</strong>
-            <span id="mainEmail">example@example.com</span>
-          </div>
-          <div class="mb-2 h5">
-            <strong>포인트:</strong>
-            <span id="mainPoint"></span>
-          </div>
-        </div>
-
-        <!-- 비밀번호 변경 영역 -->
-        <!-- <div class="mb-4">
-          <h4 class="mb-3">비밀번호 변경</h4>
-          <div class="mb-3">
-            <label for="currentPassword" class="form-label"
-              >현재 비밀번호</label
-            >
-            <input
-              type="password"
-              class="form-control form-control-sm"
-              id="currentPassword"
-              placeholder="현재 비밀번호 입력"
-            />
-          </div>
-          <div class="mb-3">
-            <label for="newPassword" class="form-label">새 비밀번호</label>
-            <input
-              type="password"
-              class="form-control form-control-sm"
-              id="newPassword"
-              placeholder="새 비밀번호 입력"
-            />
-          </div>
-          <div class="mb-3">
-            <label for="confirmNewPassword" class="form-label"
-              >새 비밀번호 확인</label
-            >
-            <input
-              type="password"
-              class="form-control form-control-sm"
-              id="confirmNewPassword"
-              placeholder="새 비밀번호 재입력"
-            />
-          </div>
-          <button class="btn btn-primary" onclick="changePassword()">
-            비밀번호 변경
-          </button>
-        </div> -->
+      <!-- 댓글 섹션 -->
+      <section class="comments-section mb-4">
+        <!-- 댓글 목록 -->
+        <div class="list-group"></div>
       </section>
     </main>
 
@@ -219,6 +146,6 @@
       crossorigin="anonymous"
     ></script>
     <script src="/static/js/index.js"></script>
-    <script src="/static/js/userInfo.js"></script>
+    <script src="/static/js/noticeBoardInfo.js"></script>
   </body>
 </html>
