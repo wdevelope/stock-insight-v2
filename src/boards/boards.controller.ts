@@ -8,6 +8,7 @@ import {
   Delete,
   ValidationPipe,
   BadRequestException,
+  Query,
 } from '@nestjs/common';
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
