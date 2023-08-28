@@ -23,9 +23,9 @@ export class Views {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ManyToOne(() => Users, (user) => user.views, { eager: false })
+  @ManyToOne(() => Users, (user) => user.views, { onDelete: 'CASCADE' })
   user: Users;
 
-  @ManyToOne(() => Board, (board) => board.views, { eager: false })
+  @ManyToOne(() => Board, (board) => board.views, { onDelete: 'CASCADE' })
   board: Board;
 }
