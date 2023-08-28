@@ -19,13 +19,7 @@ export class ViewsService {
     const viewFind = await this.viewsRepository.findOne({
       where: { user: { id: userId }, board: { id: boardId } },
     });
-<<<<<<< HEAD
-    if (viewFind === null) {
-      await this.boardViewsService.create(user, boardId);
-    } else {
-      await this.boardViewsService.update(viewFind.id, viewFind.count);
-      // console.log(viewFind.count);
-=======
+
     try {
       if (viewFind === null) {
         await this.viewsRepository.create(user, boardId);
@@ -34,7 +28,6 @@ export class ViewsService {
       }
     } catch (error) {
       throw new BadRequestException('SERVICE_ERROR');
->>>>>>> 6b4d74e858a8a34be3442005685c86ddf7330ed9
     }
   }
   async viewTotalCnt(boardId: number): Promise<number> {
@@ -48,10 +41,7 @@ export class ViewsService {
         (sum, view) => sum + view.count,
         0,
       );
-<<<<<<< HEAD
       // console.log(totalViewCount);
-=======
->>>>>>> 6b4d74e858a8a34be3442005685c86ddf7330ed9
       return totalViewCount;
     } catch (error) {
       throw new BadRequestException('SERVICE_ERROR');
