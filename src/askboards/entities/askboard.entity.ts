@@ -1,21 +1,24 @@
-import { Board } from 'src/boards/entities/board.entity';
 import { Users } from 'src/users/users.entity';
 import {
   Column,
   CreateDateColumn,
+  UpdateDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 @Entity()
-export class Views {
+export class Askboard {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  count: number;
+  title: string;
+
+  @Column()
+  description: string;
 
   @CreateDateColumn()
   created_at: Date;
@@ -23,9 +26,7 @@ export class Views {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ManyToOne(() => Users, (user) => user.views, { onDelete: 'CASCADE' })
+  @Exclude()
+  @ManyToOne(() => Users, (user) => user.askboard)
   user: Users;
-
-  @ManyToOne(() => Board, (board) => board.views, { onDelete: 'CASCADE' })
-  board: Board;
 }

@@ -16,6 +16,7 @@ import * as redisStore from 'cache-manager-redis-store';
 import type { ClientOpts } from 'redis';
 import { EventsModule } from './events/events.module';
 import { UploadModule } from './upload/upload.module';
+import { AskboardsModule } from './askboards/askboards.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { UploadModule } from './upload/upload.module';
     StockModule,
     EventsModule,
     UploadModule,
+    AskboardsModule,
   ],
   controllers: [AppController],
   providers: [EmailService],

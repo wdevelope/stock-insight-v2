@@ -65,30 +65,23 @@ async function fetchUserDetails() {
 // 🟠 프로필 토글
 async function toggleProfile() {
   const userDetailsElem = document.getElementById('userDetails');
-  const profileImageElem = document.getElementById('profileImage'); // 이미지 엘리먼트 참조
+  const profileImageElem = document.getElementById('profileImage');
 
   if (
     userDetailsElem.style.display === 'none' ||
     !userDetailsElem.style.display
   ) {
     const data = await fetchUserDetails();
-
     if (data) {
       document.getElementById('nickname').textContent = data.nickname;
       document.getElementById('email').textContent = data.email;
-      // 이미지 URL을 가져오는 부분
+
+      // 이미지 URL을 이미지 엘리먼트의 src 속성에 설정합니다.
       if (data.imgUrl) {
-        const imageUrlResponse = await fetch(
-          `http://localhost:3000/upload/file-url/${data.imgUrl}`,
-        );
-        if (imageUrlResponse.ok) {
-          const imageUrl = await imageUrlResponse.text(); // URL 정보를 가져옵니다.
-          profileImageElem.src = imageUrl; // 이미지 설정
-        } else {
-          profileImageElem.src = '/static/photo/login.jpg'; // 기본 이미지 설정
-        }
+        profileImageElem.src = data.imgUrl;
       } else {
-        profileImageElem.src = '/static/photo/login.jpg'; // 기본 이미지 설정
+        // 만약 imgUrl 데이터가 없다면, 기본 이미지로 설정합니다.
+        profileImageElem.src = 'https://ifh.cc/g/P5Wo5H.png';
       }
 
       userDetailsElem.style.display = 'block';
@@ -97,6 +90,7 @@ async function toggleProfile() {
     userDetailsElem.style.display = 'none';
   }
 }
+
 // 🟠 로그아웃 함수
 function logout() {
   function deleteCookie(name) {
@@ -105,27 +99,6 @@ function logout() {
   deleteCookie('Authorization');
   alert('로그아웃 완료');
   window.location.href = 'http://localhost:3000';
-}
-
-// 🟠 유저 정보
-async function fetchUserInfo(token) {
-  try {
-    const response = await fetch('http://localhost:3000/api/users', {
-      headers: {
-        Authorization: token,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch user info');
-    }
-
-    const data = await response.json();
-
-    return data.nickname; // 사용자의 닉네임을 반환합니다.
-  } catch (error) {
-    console.error('Error fetching user info:', error);
-  }
 }
 
 //뒤로가기

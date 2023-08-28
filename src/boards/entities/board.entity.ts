@@ -40,6 +40,7 @@ export class Board {
 
   @OneToMany(() => Comment, (comment) => comment.board, {
     cascade: true,
+    eager: true,
   })
   comment: Comment[];
 
@@ -51,5 +52,5 @@ export class Board {
   @OneToMany(() => Views, (views) => views.board, {
     cascade: true,
   })
-  views: Views;
+  views: Views[];
 }

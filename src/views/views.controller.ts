@@ -1,4 +1,11 @@
-import { Controller, Param, Post, Get, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Param,
+  Post,
+  Get,
+  UseGuards,
+  BadRequestException,
+} from '@nestjs/common';
 import { ViewsService } from './views.service';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { Users } from 'src/users/users.entity';
@@ -14,11 +21,19 @@ export class ViewsController {
     @CurrentUser() user: Users,
     @Param('boardId') boardId: number,
   ): Promise<void> {
-    return this.viewsService.createOrAdd(user, boardId);
+    try {
+      return this.viewsService.createOrAdd(user, boardId);
+    } catch (error) {
+      throw new BadRequestException('CONTROLLER_ERROR');
+    }
   }
 
   @Get('/:boardId')
   likeTotalCnt(@Param('boardId') boardId: number): Promise<number> {
-    return this.viewsService.viewTotalCnt(boardId);
+    try {
+      return this.viewsService.viewTotalCnt(boardId);
+    } catch (error) {
+      throw new BadRequestException('CONTROLLER_ERROR');
+    }
   }
 }

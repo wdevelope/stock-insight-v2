@@ -17,12 +17,12 @@ async function fetchAndRenderPosts() {
     });
 
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error('fetch res 에러');
     }
 
     const data = await response.json();
     data.sort((a, b) => {
-      return new Date(b.updated_at) - new Date(a.updated_at);
+      return new Date(b.created_at) - new Date(a.created_at);
     });
 
     const boardElement = document.querySelector('#notice .list-group');
@@ -30,12 +30,12 @@ async function fetchAndRenderPosts() {
 
     data.forEach((post) => {
       const postDate = post.updated_at.split('T')[0];
-      const likesCount = post.likes.length;
+      const likesCount = post.likeCount;
       const viewsCount =
         post.views && post.views.length > 0 ? post.views[0].count : 0;
 
       postHTML += `
-                    <a href="http://localhost:3000/view/board.html?postId=${post.id}" class="list-group-item list-group-item-action"                  
+                    <a href="http://localhost:3000/view/Board.html?freeBoardId=${post.id}" class="list-group-item list-group-item-action"                  
                     onclick="handleBoardItemClick(${post.id})">
                       <div class="d-flex justify-content-between align-items-center">
                         <div>

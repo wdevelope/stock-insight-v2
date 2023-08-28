@@ -1,11 +1,8 @@
 import { IsString } from 'class-validator';
 
-export class CreateBoardDto {
+export class CreateAskboardDto {
   @IsString()
   title: string;
   @IsString()
   description: string;
-  // @IsString()
-  image: string;
-  likeCount?: number;
 }

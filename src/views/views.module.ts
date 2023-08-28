@@ -5,8 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { Views } from './entities/view.entity';
 import { BoardsModule } from 'src/boards/boards.module';
-import { BoardViewsService } from './boardviews.service';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { ViewsRepository } from './views.repository';
 
 @Module({
   imports: [
@@ -22,6 +22,6 @@ import { ThrottlerModule } from '@nestjs/throttler';
     }),
   ],
   controllers: [ViewsController],
-  providers: [ViewsService, BoardViewsService],
+  providers: [ViewsService, ViewsRepository],
 })
 export class ViewsModule {}

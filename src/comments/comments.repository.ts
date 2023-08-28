@@ -2,10 +2,10 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { Comment } from './entities/comment.entity';
 import { FindOneOptions, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BoardsRepository } from 'src/boards/boards.repository';
 import { Users } from 'src/users/users.entity';
 import { Board } from 'src/boards/entities/board.entity';
 import { CommentDto } from './dto/comment.dto';
+import { BoardsRepository } from 'src/boards/boards.repository';
 
 @Injectable()
 export class CommentsRepository {
