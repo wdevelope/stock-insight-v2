@@ -48,8 +48,14 @@ main {
   font-size: 19px;
 }
 
-.sidebar-link:hover {
-  text-decoration: none;
+.sidebar:hover {
+  background-color: #01161e; /* 배경색 변경 */
+  color: white;
+  transition: all 0.1s; /* 부드러운 전환 효과 */
+}
+
+.sidebar:active {
+  background-color: #01161e; /* 클릭 시 원하는 배경색으로 변경 */
 }
 
 /* 유저 정보  */
@@ -102,4 +108,14 @@ main {
   display: none;
   z-index: 1;
   border-radius: 4px;
+}
+/* 페이지 네이션 */
+.page-item .page-link {
+  color: black;
+}
+.page-link {
+  color: rgb(0, 0, 0);
+}
+.page-item:hover .page-link {
+  background-color: transparent;
 }

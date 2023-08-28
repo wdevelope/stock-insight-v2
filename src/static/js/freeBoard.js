@@ -28,14 +28,13 @@ async function fetchAndRenderPosts() {
     const boardElement = document.querySelector('#notice .list-group');
     let postHTML = '';
 
-    data.forEach((post) => {
+    for (const post of data) {
       const postDate = post.updated_at.split('T')[0];
       const likesCount = post.likeCount;
-      const viewsCount =
-        post.views && post.views.length > 0 ? post.views[0].count : 0;
+      const viewsCount = await viewsRender(post.id);
 
       postHTML += `
-                    <a href="http://localhost:3000/view/Board.html?freeBoardId=${post.id}" class="list-group-item list-group-item-action"                  
+                    <a href="http://localhost:3000/view/freeBoardInfo.html?freeBoardId=${post.id}" class="list-group-item list-group-item-action"                  
                     onclick="handleBoardItemClick(${post.id})">
                       <div class="d-flex justify-content-between align-items-center">
                         <div>
@@ -51,7 +50,7 @@ async function fetchAndRenderPosts() {
                       </div>
                     </a>
                   `;
-    });
+    }
 
     boardElement.innerHTML = postHTML;
   } catch (error) {
@@ -59,14 +58,35 @@ async function fetchAndRenderPosts() {
   }
 }
 
+// 🟠 조회수 불러오기
+async function viewsRender(boardId) {
+  try {
+    const response = await fetch(`http://localhost:3000/api/views/${boardId}`, {
+      method: 'GET',
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    if (!response.ok) {
+      console.error('Failed to fetch view count for boardId:', boardId);
+      return 0;
+    }
+
+    const viewsCount = await response.json();
+    return viewsCount;
+  } catch (error) {
+    console.error('Error fetching views count for boardId:', boardId, error);
+    return 0;
+  }
+}
+
 // 🟠 게시판 항목 클릭 이벤트 핸들러
 function handleBoardItemClick(boardId) {
-  // 게시글 조회수 증가시키기 위해 서버에 POST 요청 보내기
   fetch(`http://localhost:3000/api/views/${boardId}`, {
     method: 'POST',
     headers: {
       Authorization: token,
-      'Content-Type': 'application/json',
     },
   })
     .then((response) => {

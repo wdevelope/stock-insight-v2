@@ -2,7 +2,7 @@ window.onload = function () {
   RenderAskPosts();
 };
 
-// 🟠 자유게시판 글 랜더링 함수
+// 🟠 문의게시판 글 랜더링 함수
 async function RenderAskPosts() {
   if (!token) {
     console.warn('Authorization token is missing');
@@ -30,11 +30,9 @@ async function RenderAskPosts() {
 
     data.forEach((post) => {
       const postDate = post.created_at.split('T')[0];
-      const viewsCount =
-        post.views && post.views.length > 0 ? post.views[0].count : 0;
 
       postHTML += `
-                      <a href="http://localhost:3000/view/Board.html?askBoardId=${post.id}" class="list-group-item list-group-item-action"                  
+                      <a href="http://localhost:3000/view/askBoardInfo.html?askBoardId=${post.id}" class="list-group-item list-group-item-action"                  
                       onclick="handleBoardItemClick(${post.id})">
                         <div class="d-flex justify-content-between align-items-center">
                           <div>
@@ -44,8 +42,7 @@ async function RenderAskPosts() {
                           <div>
                             <small class="me-2">${post.user.nickname}</small>
                             <span>${postDate}</span>
-                            <i class="fas fa-eye ms-4"></i> ${viewsCount}
-                            <i class="fas fa-thumbs-up ms-4"></i> 0
+                 
                           </div>
                         </div>
                       </a>

@@ -1,3 +1,23 @@
+const token = getCookie('Authorization');
+
+function getURLParameter(name) {
+  return (
+    decodeURIComponent(
+      (new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(
+        location.search,
+      ) || [, ''])[1].replace(/\+/g, '%20'),
+    ) || null
+  );
+}
+
+// 쿼리에서 boardId 가져옴
+const freeBoardId = getURLParameter('freeBoardId');
+const noticeBoardId = getURLParameter('noticeBoardId');
+const askBoardId = getURLParameter('askBoardId');
+const freeEditBoardId = getURLParameter('freeEditBoardId');
+// const noticeBoardId = getURLParameter('noticeBoardId');
+// const askBoardId = getURLParameter('askBoardId');
+
 // 🟠 쿠키없으면 돌려보냄
 document.addEventListener('DOMContentLoaded', () => {
   let currentURL = window.location.href;
@@ -19,8 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.href = 'http://localhost:3000';
   }
 });
-
-const token = getCookie('Authorization');
 
 // 🟠 쿠키 가져오기 함수
 function getCookie(cookieName) {
@@ -88,6 +106,19 @@ async function toggleProfile() {
     }
   } else {
     userDetailsElem.style.display = 'none';
+  }
+}
+
+// 🟠  수정,삭제 버튼 토글 기능
+function toggleControlButtons() {
+  const controlButtons = document.querySelector('.putdelbutton');
+  if (
+    controlButtons.style.display === 'none' ||
+    !controlButtons.style.display
+  ) {
+    controlButtons.style.display = 'block';
+  } else {
+    controlButtons.style.display = 'none';
   }
 }
 

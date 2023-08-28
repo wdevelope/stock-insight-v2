@@ -108,6 +108,14 @@
       >
         <i class="fas fa-users me-2" aria-hidden="true"></i> Community
       </a>
+      <a
+        href="http://localhost:3000/view/chatting.html"
+        class="d-flex align-items-center my-3 sidebar"
+        role="button"
+        aria-label="chatting"
+      >
+        <i class="fa-regular fa-comment me-2"></i> chatting
+      </a>
     </nav>
 
     <!-- 🔴 메인 🔴 -->
@@ -141,12 +149,26 @@
         <div class="row" id="stock-news-section"></div>
       </section>
 
-      <div class="text-center mt-5">
-        <!-- 가운데 정렬을 위한 text-center 클래스 추가 -->
-        <button class="btn btn-primary mx-2 prev-page">이전</button>
+      <!-- 페이지네이션 -->
+      <div class="text-center mt-5 mb-5">
+        <button class="btn mx-2 prev-page"><<</button>
         <!-- 큰 버튼을 위한 btn-lg 클래스, 간격을 위한 mx-2 클래스 -->
-        <span class="current-page">1</span>
-        <button class="btn btn-primary mx-2 next-page">다음</button>
+        <button class="btn btn-outline-primary mx-1 page-button" data-page="1">
+          1
+        </button>
+        <button class="btn btn-outline-primary mx-1 page-button" data-page="2">
+          2
+        </button>
+        <button class="btn btn-outline-primary mx-1 page-button" data-page="3">
+          3
+        </button>
+        <button class="btn btn-outline-primary mx-1 page-button" data-page="4">
+          4
+        </button>
+        <button class="btn btn-outline-primary mx-1 page-button" data-page="5">
+          5
+        </button>
+        <button class="btn mx-2 next-page">>></button>
       </div>
     </main>
 

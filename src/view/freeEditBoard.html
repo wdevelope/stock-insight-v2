@@ -111,22 +111,31 @@
       </a>
     </nav>
 
-    <!-- 🔴보드 메인 내용🔴 -->
-    <main class="board-container">
-      <!-- 게시글 헤더 -->
-      <header class="post-header mb-4"></header>
-
-      <!-- 게시글 본문 -->
-      <section class="post-content mb-5"></section>
-
-      <!-- 좋아요 및 기타 버튼 -->
-      <section class="post-actions d-flex justify-content-start mb-4"></section>
-
-      <!-- 댓글 섹션 -->
-      <section class="comments-section mb-4">
-        <!-- 댓글 목록 -->
-        <div class="list-group"></div>
-      </section>
+    <!-- 🔴자유게시판 수정 내용🔴 -->
+    <main>
+      <div class="edit-board-container">
+        <div class="form-group">
+          <label for="titleInput">제목</label>
+          <input
+            type="text"
+            class="form-control"
+            id="titleInput"
+            placeholder="제목을 입력하세요"
+          />
+        </div>
+        <div class="form-group">
+          <label for="descriptionInput">내용</label>
+          <textarea
+            class="form-control"
+            id="descriptionInput"
+            rows="5"
+            placeholder="내용을 입력하세요"
+          ></textarea>
+        </div>
+        <button class="btn btn-primary mt-3" onclick="submitEdit()">
+          수정하기
+        </button>
+      </div>
     </main>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -141,6 +150,7 @@
       crossorigin="anonymous"
     ></script>
     <script src="/static/js/index.js"></script>
-    <script src="/static/js/board.js"></script>
+    <script src="/static/js/freeBoardInfo.js"></script>
+    <script src="/static/js/editBoardInfo.js"></script>
   </body>
 </html>
