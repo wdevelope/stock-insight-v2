@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import axios from 'axios';
 import { StockPrice } from './entities/stockPrice.entity';
 import { Stock } from './entities/stock.entity';
@@ -23,6 +23,16 @@ export class StockService {
   async stockNameSave() {
     await this.stockNameSaveMarket('ksq');
     await this.stockNameSaveMarket('stk');
+
+    const currentTime = new Date();
+    currentTime.setHours(currentTime.getHours() + 9);
+    const today = currentTime.toISOString().substring(0, 10).replace(/-/g, '');
+
+    const deleteResult = await this.stockRepository.delete({
+      updated_day: Not(today),
+    });
+
+    console.log(`Deleted ${deleteResult.affected} rows.`);
   }
   private async stockNameSaveMarket(market: string) {
     const currentTime = new Date();
@@ -65,7 +75,7 @@ export class StockService {
   }
   async startStockNameSave() {
     const job = new CronJob(
-      '0 50 8 * * 1-5',
+      '0 55 8 * * 1-5',
       () => {
         console.log('start');
         this.stockNameSave();
@@ -183,11 +193,55 @@ export class StockService {
     job.stop();
   }
 
-  async getStockPrices(): Promise<StockPrice[]> {
-    return await this.stockPriceRepository.find();
-  }
-
   private sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  async getStockPrice(id: string): Promise<any> {
+    const stock = await this.stockRepository.findOne({
+      where: { id: id },
+      relations: ['stockPrices'],
+      order: { stockPrices: { created_at: 'DESC' } },
+    });
+    stock.stockPrices.splice(1);
+
+    return stock;
+  }
+
+  async getStockPage(page: number = 1): Promise<any> {
+    const take = 30;
+
+    const [stocks, total] = await this.stockRepository.findAndCount({
+      take,
+      skip: (page - 1) * take,
+      relations: ['stockPrices'],
+    });
+
+    return {
+      data: stocks.map((stock) => {
+        const latestPrice = stock.stockPrices.reduce((latest, price) => {
+          if (!latest || price.created_at > latest.created_at) {
+            return price;
+          }
+          return latest;
+        }, null);
+
+        return {
+          id: stock.id,
+          prdt_abrv_name: stock.prdt_abrv_name,
+          rprs_mrkt_kor_name: stock.rprs_mrkt_kor_name,
+          stck_prpr: latestPrice.stck_prpr,
+          prdy_vrss: latestPrice.prdy_vrss,
+          prdy_vrss_sign: latestPrice.prdy_vrss_sign,
+          prdy_ctrt: latestPrice.prdy_ctrt,
+          hts_avls: latestPrice.hts_avls,
+        };
+      }),
+      meta: {
+        total,
+        page,
+        last_page: Math.ceil(total / take),
+      },
+    };
   }
 }
