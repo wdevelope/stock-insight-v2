@@ -30,7 +30,7 @@ export class BoardViewsService {
   }
 
   async update(viewId: number, cnt: number): Promise<void> {
-    console.log(viewId);
+    // console.log(viewId);
     await this.boardViewsRepository
       .createQueryBuilder()
       .update(Views)

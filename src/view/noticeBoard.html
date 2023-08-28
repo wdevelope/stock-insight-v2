@@ -125,6 +125,11 @@
             >자유게시판</a
           >
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="http://localhost:3000/view/askBoard.html"
+            >문의</a
+          >
+        </li>
       </ul>
 
       <!-- 게시판 내용 -->
@@ -146,6 +151,30 @@
             </a>
           </div>
           <div class="list-group mt-4"></div>
+        </div>
+      </div>
+      <!-- 검색 부분 -->
+      <div class="search-section mt-5">
+        <div class="d-flex justify-content-center align-items-center">
+          <!-- 검색 옵션 선택 -->
+          <select class="form-select" id="searchOption" style="width: auto">
+            <option value="titleContent">제목+내용</option>
+            <option value="nickname">닉네임</option>
+          </select>
+
+          <!-- 검색어 입력창 -->
+          <input
+            type="text"
+            class="form-control"
+            id="searchInput"
+            placeholder="검색어를 입력하세요..."
+            style="margin-left: 10px; width: auto"
+          />
+
+          <!-- 검색 버튼 -->
+          <button class="btn btn-primary" style="margin-left: 10px">
+            검색
+          </button>
         </div>
       </div>
     </main>

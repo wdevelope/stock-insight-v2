@@ -19,7 +19,7 @@ export class ViewsService {
       await this.boardViewsService.create(user, boardId);
     } else {
       await this.boardViewsService.update(viewFind.id, viewFind.count);
-      console.log(viewFind.count);
+      // console.log(viewFind.count);
     }
   }
   async viewTotalCnt(boardId: number): Promise<number> {
@@ -33,7 +33,7 @@ export class ViewsService {
         (acc, view) => acc + view.count,
         0,
       );
-      console.log(totalViewCount);
+      // console.log(totalViewCount);
       return totalViewCount;
     }
   }
