@@ -206,15 +206,19 @@ export class StockService {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  async getStockPrice(id: string): Promise<Stock> {
+  async getStockPrice(id: string): Promise<any> {
     const stock = await this.stockRepository.findOne({
       where: { id: id },
       relations: ['stockPrices'],
       order: { stockPrices: { created_at: 'DESC' } },
     });
+    const prices = stock.stockPrices.map((StockPrice) => ({
+      price: StockPrice.stck_prpr,
+      time: StockPrice.created_at,
+    }));
     stock.stockPrices.splice(1);
 
-    return stock;
+    return { stock, prices };
   }
 
   async getStockPage(page: number = 1): Promise<any> {
