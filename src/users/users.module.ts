@@ -39,6 +39,6 @@ import { EmailService } from './email/email.service';
   ],
   controllers: [UsersController],
   providers: [UsersService, UsersRepository, EmailService],
-  exports: [UsersService, UsersRepository, EmailService],
+  exports: [UsersService, UsersRepository, EmailService, TypeOrmModule],
 })
 export class UsersModule {}

@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>주식 플랫폼</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/static/css/index.css" />
+  </head>
+  <body>
+    <!-- 🔴 위쪽 Nav 🔴-->
+    <nav class="navbar navbar-expand-lg fixed-top-custom">
+      <div class="container-fluid">
+        <!-- 햄버거 메뉴 버튼 추가 -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#sidebarMenu"
+          aria-controls="sidebarMenu"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <a
+          class="navbar-brand text-light"
+          href="http://localhost:3000/view/index.html"
+        >
+          <i class="fa-brands fa-stack-overflow"> 증시의 지평선</i>
+        </a>
+        <!-- 알림,회원 -->
+        <div class="d-flex ms-auto">
+          <!-- 알림 -->
+          <button class="btn btn-outline-light me-2">
+            <i class="fas fa-bell fa-2x"></i>
+          </button>
+          <!-- 회원 -->
+          <button class="btn btn-outline-light" onclick="toggleProfile()">
+            <i class="fas fa-user fa-2x"></i>
+          </button>
+        </div>
+        <!-- 회원 상세 정보 영역 -->
+        <div class="user-details" id="userDetails">
+          <img
+            id="profileImage"
+            src="/static/photo/login.jpg"
+            alt="Profile Image"
+          />
+          <div class="user-info">
+            <div><strong>닉네임:</strong> <span id="nickname"></span></div>
+            <div><strong>이메일:</strong> <span id="email"></span></div>
+          </div>
+          <!-- 회원상세정보 버튼 -->
+          <a
+            href="http://localhost:3000/view/userInfo.html"
+            class="custom-button"
+            >회원상세정보</a
+          >
+          <!-- 로그아웃 버튼 -->
+          <button onclick="logout()" class="custom-button">로그아웃</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- 🔴 왼쪽 Nav 🔴 -->
+    <nav
+      class="d-flex flex-column align-items-start bg-light p-4 d-none d-lg-block left-nav-border"
+    >
+      <a
+        href="http://localhost:3000/view/search.html"
+        class="d-flex align-items-center my-3 sidebar"
+        role="button"
+        aria-label="search"
+      >
+        <i class="fa-solid fa-magnifying-glass me-2" aria-hidden="true"></i>
+        search
+      </a>
+      <a
+        href="http://localhost:3000/view/news.html"
+        class="d-flex align-items-center my-3 sidebar"
+        role="button"
+        aria-label="Economy"
+      >
+        <i class="fa-regular fa-newspaper me-2"></i> news
+      </a>
+      <a
+        href="http://localhost:3000/view/stocks.html"
+        class="d-flex align-items-center my-3 sidebar"
+        role="button"
+        aria-label="Analysis"
+      >
+        <i class="fas fa-chart-bar me-2" aria-hidden="true"></i> stocks
+      </a>
+      <a
+        href="http://localhost:3000/view/noticeBoard.html"
+        class="d-flex align-items-center my-3 sidebar"
+        role="button"
+        aria-label="Community"
+      >
+        <i class="fas fa-users me-2" aria-hidden="true"></i> Community
+      </a>
+      <a
+        href="http://localhost:3000/view/chatting.html"
+        class="d-flex align-items-center my-3 sidebar"
+        role="button"
+        aria-label="chatting"
+      >
+        <i class="fa-regular fa-comment me-2"></i> chatting
+      </a>
+    </nav>
+
+    <main>
+      <h2>글쓰기</h2>
+      <form>
+        <div class="mb-3">
+          <label for="postTitle" class="form-label">제목</label>
+          <input
+            type="text"
+            class="form-control"
+            id="postTitle"
+            placeholder="제목을 입력하세요"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="postCategory" class="form-label">카테고리 선택</label>
+          <select class="form-control" id="postCategory">
+            <option></option>
+            <option>자유게시판</option>
+            <option>문의</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="postContent" class="form-label">내용</label>
+          <textarea
+            class="form-control"
+            id="postContent"
+            rows="5"
+            placeholder="내용을 입력하세요"
+          ></textarea>
+        </div>
+        <button
+          type="button"
+          class="btn btn-primary"
+          onclick="saveAskBoardReply()"
+        >
+          저장
+        </button>
+      </form>
+    </main>
+
+    <footer class="text-center mt-5">
+      © 2023 Stock Platform. All rights reserved.
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.1/umd/popper.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://kit.fontawesome.com/1a93e99cf8.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/static/js/index.js"></script>
+    <script src="/static/js/writeBoard.js"></script>
+  </body>
+</html>

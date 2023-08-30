@@ -1,73 +1,116 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# 🔥 "증시의 지평선" 주식 정보와 커뮤니티의 만남 🔥
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+<br>
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+[<img src="./src/static/photo/home.png" width=100%>](https://)
 
-## Description
+<br>
+ 
+`증시의 지평선`은 주식 투자에 관심 있는 모든 이들을 위한 정보 플랫폼입니다.
+<br><br>
+여기서는 다양한 주식 관련 정보를 얻을 수 있을 뿐만 아니라, <br><br> 자신의 의견과 분석을 다른 투자자들과 공유할 수 있는 커뮤니티 공간도 제공합니다.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+<br>
+<br>
 
-## Installation
+## 📌 목차
 
-```bash
-$ npm install
+- [시연 영상](#)
+- [주요 기능](#)
+- [설계](#)
+- [사이트 둘러보기](#)
+- [서비스 아키텍쳐](#)
+- [프로젝트 구조](#)
+- [팀원 소개](#)
+
+<br>
+<br>
+
+## 📽️ 시연 영상
+
+> 아래 이미지를 클릭하면 시연 영상을 시청할 수 있습니다.
+
+<br>
+
+## 💡 주요 기능
+
+<details>
+  <summary>실시간 주식 정보 조회 : 주요 지수, 개별 종목의 실시간 가격 및 차트 제공.</summary>
+   <br>
+  <img src="./src/static/photo/home.png" width=100%>
+</details>
+<br>
+<details>
+  <summary>사용자 커뮤니티 : 주식 투자에 대한 의견, 전략, 분석을 공유하고 토론할 수 있는 공간.</summary>
+   <br>
+  <img src="./src/static/photo/community.png" width=100%>
+</details>
+<br>
+<details>
+  <summary>자료실 : 투자 관련 기사, 리포트, 데이터 등의 자료를 업로드 및 다운로드 할 수 있습니다.</summary>
+    <br>
+  <img src="./src/static/photo/news.png" width=100%>
+</details>
+
+<br>
+
+## ⚒️ 설계
+
+<details>
+  <summary>ERD</summary>  
+  <br>
+  <img src="./src/static/photo/ERD.png" width=100%>
+</details>
+<br>
+<details>
+  <summary>API 설계</summary>  
+  <br>
+</details>
+
+<br>
+
+## 👀 사이트 둘러보기
+
+[사이트로 이동하기](https://www)
+
+[![시연영상](./docs/시연영상썸네일.jpg)](https://)
+
+<br>
+
+<br>
+
+## ⚙️ 서비스 아키텍처
+
+<br>
+
+## 🗂 프로젝트 구조
+
+<details>
+  <summary><b>Back-End (Nest.js) front-End (javascript) </b></summary>
+  
+```html
+📦src
+ ┣ 📂              
+ ┣ 📂                
+ ┣ 📂                  
+ ┣ 📂           
+ ┣ 📂
+ ┃ ┣ 📂            
+ ┃ ┣ 📂              
+ ┃ ┣ 📂              
+ ┃ ┗ 📂               
+ ┣ 📂         
+ ┣ 📂                 
+ ┣ 📂                
+ ┣ 📂              
+ ┣ 📂              
+ ┣ 📂               
+ ┣ 📜app.controller.ts
+ ┣ 📜app.module.ts
+ ┣ 📜app.service.ts
+ ┗ 📜main.ts
 ```
+</details>
+<br>
 
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+## 👨‍👨‍👧‍👦 팀원 소개

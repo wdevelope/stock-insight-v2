@@ -17,7 +17,7 @@ main {
   padding-left: 260px;
 }
 
-/* 메뉴 nav바 */
+/* ⭐ 메뉴 nav바 */
 .navbar {
   background-color: #01161e;
 }
@@ -48,11 +48,22 @@ main {
   font-size: 19px;
 }
 
-.sidebar-link:hover {
-  text-decoration: none;
+.sidebar:hover {
+  background-color: #01161e; /* 배경색 변경 */
+  color: white;
+  transition: all 0.1s; /* 부드러운 전환 효과 */
 }
 
-/* 유저 정보  */
+.sidebar:active {
+  background-color: #01161e; /* 클릭 시 원하는 배경색으로 변경 */
+}
+
+ul.nav .nav-item .nav-link.active {
+  background-color: rgb(4, 26, 66);
+  color: white;
+}
+
+/* ⭐ 유저 정보  */
 .user-details {
   display: none;
   position: absolute;
@@ -68,9 +79,13 @@ main {
 }
 
 #profileImage {
-  width: 200px;
+  width: 150px;
   height: auto;
   border-radius: 50%;
+}
+
+#mainProfileImage {
+  width: 400px;
 }
 
 .custom-button {
@@ -89,6 +104,23 @@ main {
   background-color: #0056b3;
 }
 
+/* ⭐ 메인 css */
 .board-container {
   display: none;
+}
+
+.putdelbutton {
+  display: none;
+  z-index: 1;
+  border-radius: 4px;
+}
+/* 페이지 네이션 */
+.page-item .page-link {
+  color: black;
+}
+.page-link {
+  color: rgb(0, 0, 0);
+}
+.page-item:hover .page-link {
+  background-color: transparent;
 }

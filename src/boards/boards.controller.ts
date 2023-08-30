@@ -8,6 +8,7 @@ import {
   Delete,
   ValidationPipe,
   BadRequestException,
+  Query,
 } from '@nestjs/common';
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -18,13 +19,28 @@ import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
 import { Users } from 'src/users/users.entity';
 import { FindBoardDto } from './dto/find-board.dto';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
+@ApiTags('boards')
 @Controller('api/boards')
 export class BoardsController {
   constructor(private readonly boardsService: BoardsService) {}
 
   @Post()
+  @ApiOperation({ summary: '새로운 게시물을 생성하였습니다.' })
+  @ApiResponse({
+    status: 201,
+    description: '성공적으로 게시물을 생성하였습니다.',
+  })
+  @ApiBadRequestResponse({ description: '게시물 생성에 실패하였습니다.' })
   create(
     @Body(ValidationPipe) createBoardDto: CreateBoardDto,
     @CurrentUser() user: Users,
@@ -37,12 +53,20 @@ export class BoardsController {
   }
 
   @Get()
-  findAll(@Body() findBoardDto: FindBoardDto): Promise<Board[]> {
+  findAll(): Promise<Board[]> {
     try {
-      return this.boardsService.find(findBoardDto);
+      return this.boardsService.find();
     } catch (error) {
-      throw new BadRequestException('CONTROLLER_ERROR');
+      throw new BadRequestException('CONTROLLE_ERROR');
     }
+  }
+  // 쿼리로 페이지, 페이지사이즈 값을 받아야함
+  @Get('find')
+  findBoardBy(
+    @Query('page') page: number = 1,
+    @Body() findBoardDto: FindBoardDto,
+  ): Promise<Board[]> {
+    return this.boardsService.getBoardsByUserId(page, findBoardDto);
   }
 
   @Get('/:boardId')

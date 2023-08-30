@@ -2,6 +2,7 @@ import { Board } from 'src/boards/entities/board.entity';
 import { Comment } from 'src/comments/entities/comment.entity';
 import { Likes } from 'src/likes/entities/like.entity';
 import { NoticeBoard } from 'src/noticeboards/entities/noticeboard.entity';
+import { Askboard } from 'src/askboards/entities/askboard.entity';
 import { Views } from 'src/views/entities/view.entity';
 import { Quiz } from 'src/quiz/quiz.entity';
 import {
@@ -71,6 +72,14 @@ export class Users {
   })
   noticeboard: NoticeBoard;
 
+<<<<<<< HEAD
   @OneToMany(() => Quiz, (quiz) => quiz.user, { eager: true })
   quiz: Quiz[];
+=======
+  @OneToMany(() => Askboard, (askboard) => askboard.user, {
+    cascade: true,
+    eager: true,
+  })
+  askboard: Askboard;
+>>>>>>> 56d3495949c28e4986ab3c3204d9aec0dde8ccb3
 }

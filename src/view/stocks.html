@@ -38,7 +38,7 @@
           class="navbar-brand text-light"
           href="http://localhost:3000/view/index.html"
         >
-          <i class="fa-brands fa-stack-overflow"> lol lol</i>
+          <i class="fa-brands fa-stack-overflow"> 증시의 지평선</i>
         </a>
         <!-- 알림,회원 -->
         <div class="d-flex ms-auto">
@@ -111,35 +111,81 @@
       >
         <i class="fas fa-users me-2" aria-hidden="true"></i> Community
       </a>
+      <a
+        href="http://localhost:3000/view/chatting.html"
+        class="d-flex align-items-center my-3 sidebar"
+        role="button"
+        aria-label="chatting"
+      >
+        <i class="fa-regular fa-comment me-2"></i> chatting
+      </a>
     </nav>
 
     <!-- 🔴 메인 🔴 -->
     <main>
-      <!-- 이미지 요청 -->
-      <form
-        enctype="multipart/form-data"
-        action="http://localhost:3000/upload"
-        method="post"
-        id="uploadForm"
-      >
-        <input type="file" name="file" />
-        <button type="submit">Upload</button>
-      </form>
+      <!-- 주식 Nav 메뉴 -->
+      <nav>
+        <ul class="nav nav-pills mt-5 stockNav">
+          <li class="nav-item">
+            <a class="nav-link" href="http://localhost:3000/view/stocks.html"
+              >전체종목</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              href="http://localhost:3000/view/stocksLike.html"
+              >즐겨찾기</a
+            >
+          </li>
+        </ul>
+      </nav>
+      <!-- 검색창 -->
+      <div class="search-section mt-5">
+        <div class="d-flex justify-content-center align-items-left">
+          <!-- 검색어 입력창 -->
+          <input
+            type="text"
+            class="form-control"
+            id="searchInput"
+            placeholder="주식명을 입력하세요.."
+            style="margin-left: 10px; width: auto"
+          />
 
-      <!-- 이미지 표시 -->
-      <img
-        id="uploadedImage"
-        src=""
-        alt="Uploaded Image"
-        style="max-width: 500px; display: none"
-      />
-
-      <div>
-        <ul id="messages"></ul>
+          <!-- 검색 버튼 -->
+          <button class="btn btn-primary" style="margin-left: 10px">
+            검색
+          </button>
+        </div>
       </div>
-      <div>
-        <input type="text" id="message" />
-        <button onclick="handleSubmitNewMessage()" Submit></button>
+      <!-- 주식 메인 페이지 -->
+      <div id="totalStocks">
+        <i class="fa-solid fa-list"></i> 전체 종목 수:
+        <span id="stockCount">0</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>종목코드</th>
+            <th>종목명</th>
+            <th>시장명</th>
+            <th>주식 가격</th>
+          </tr>
+        </thead>
+        <tbody id="stockTable">
+          <!-- 여기에 주식 데이터 들어감 -->
+        </tbody>
+      </table>
+
+      <div id="pagination">
+        <button onclick="prevGroup()"><<</button>
+        <!-- 페이지네이션 버튼들 -->
+        <button onclick="fetchStocks(1)">1</button>
+        <button onclick="fetchStocks(2)">2</button>
+        <button onclick="fetchStocks(3)">3</button>
+        <button onclick="fetchStocks(4)">4</button>
+        <button onclick="fetchStocks(5)">5</button>
+        <button onclick="nextGroup()">>></button>
       </div>
     </main>
 
@@ -154,9 +200,9 @@
       src="https://kit.fontawesome.com/1a93e99cf8.js"
       crossorigin="anonymous"
     ></script>
-    <script src="/static/js/stock.js"></script>
-    <script src="/static/js/index.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script src="../socket-client/chat-socket.js"></script>
+    <script src="/static/js/index.js"></script>
+    <script src="/static/js/stock.js"></script>
   </body>
 </html>

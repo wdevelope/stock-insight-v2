@@ -1,62 +1,67 @@
-// 페이지가 로드되면 실행되는 함수
-window.onload = function () {
-  fetch('http://localhost:3000/upload/file-url/sample.jpg') // sample.jpg는 업로드한 이미지의 파일 이름으로 변경
-    .then((response) => response.text()) // 응답의 텍스트 (이미지 URL) 가져오기
-    .then((url) => {
-      const imgElement = document.getElementById('uploadedImage');
-      imgElement.src = url; // <img> 태그의 src 속성 설정
-      imgElement.style.display = 'block'; // 이미지 표시
-    })
-    .catch((error) => {
-      console.error('Error fetching image URL:', error);
+let currentPage = 1;
+let currentGroup = 1;
+
+function updateStockCount(total) {
+  const stockCountElement = document.getElementById('stockCount');
+  stockCountElement.textContent = total;
+}
+
+// stock price
+function navigateToStockDetail(id) {
+  window.location.href = `stocksInfo.html?id=${id}`;
+}
+
+// stock 렌더링
+const fetchStocks = async (page) => {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/stocks/?page=${page}`,
+    );
+    const data = await response.json();
+    const stocks = data.data;
+
+    const tableBody = document.getElementById('stockTable');
+    tableBody.innerHTML = ''; // clear current table data
+
+    stocks.forEach((stock) => {
+      const row = tableBody.insertRow();
+      row.insertCell().textContent = stock.id;
+      row.insertCell().textContent = stock.prdt_abrv_name;
+      row.insertCell().textContent = stock.rprs_mrkt_kor_name;
+      // 주식 가격은 천의 자리마다 쉼표로 구분하여 표시
+      const formattedPrice = Number(stock.stck_prpr).toLocaleString();
+      row.insertCell().textContent = formattedPrice;
+
+      updateStockCount(data.meta.total);
+      // 클릭 이벤트
+      row.addEventListener('click', () => navigateToStockDetail(stock.id));
     });
+
+    currentPage = page;
+  } catch (error) {
+    console.error('Error fetching stocks:', error);
+  }
 };
 
-document.getElementById('uploadForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  const formData = new FormData(e.target);
-  try {
-    const response = await fetch('http://localhost:3000/upload', {
-      method: 'POST',
-      body: formData,
-    });
-
-    if (response.ok) {
-      console.log('Successfully uploaded the file to S3');
-    } else {
-      console.error('Error uploading the file', await response.text());
-    }
-  } catch (error) {
-    console.error('Error:', error);
+// 페이지 네이션 다음페이지
+const nextGroup = () => {
+  currentGroup++;
+  for (let i = 0; i < 5; i++) {
+    document.getElementById('pagination').children[i + 1].innerText =
+      i + 1 + 5 * (currentGroup - 1);
   }
-});
+};
 
-// const svg = d3
-//   .select('body')
-//   .append('svg')
-//   .attr('width', width)
-//   .attr('height', height);
+// 페이지 네이션 이전페이지
+const prevGroup = () => {
+  if (currentGroup > 1) {
+    currentGroup--;
+    for (let i = 0; i < 5; i++) {
+      document.getElementById('pagination').children[i + 1].innerText =
+        i + 1 + 5 * (currentGroup - 1);
+    }
+  }
+};
 
-// const xScale = d3
-//   .scaleTime()
-//   .domain([new Date(data[0].date), new Date(data[data.length - 1].date)])
-//   .range([0, width]);
-
-// const yScale = d3
-//   .scaleLinear()
-//   .domain([0, d3.max(data, (d) => d.price)])
-//   .range([height, 0]);
-
-// const line = d3
-//   .line()
-//   .x((d) => xScale(new Date(d.date)))
-//   .y((d) => yScale(d.price));
-
-// svg
-//   .append('path')
-//   .datum(data)
-//   .attr('fill', 'none')
-//   .attr('stroke', 'steelblue')
-//   .attr('stroke-width', 1.5)
-//   .attr('d', line);
+// 초기 데이터 로드
+fetchStocks(1);

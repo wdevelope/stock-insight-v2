@@ -1,0 +1,45 @@
+/* ⭐ 컨트롤 버튼 스타일 */
+.controls {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.controls button {
+  padding: 10px 20px;
+  font-size: 1em;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.controls button:hover {
+  background-color: #0056b3;
+}
+
+/* ⭐ 주식 정보 스타일 */
+.stock-data {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.stock-item {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  margin-top: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.stock-item p {
+  flex-basis: calc(33.33% - 10px); /* 3개의 항목이 한 줄에 나타나도록 설정 */
+  margin: 5px 0;
+}
