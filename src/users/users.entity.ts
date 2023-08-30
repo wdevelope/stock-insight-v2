@@ -43,9 +43,6 @@ export class Users {
   @Column({ default: 100 })
   point: number;
 
-  @Column()
-  answer: boolean;
-
   @CreateDateColumn()
   createdAt: Date;
 

@@ -2,26 +2,70 @@ import { Injectable } from '@nestjs/common';
 import { CreateQuizDto } from './dto/create-quiz.dto';
 import { QuizRepository } from './quiz.repository';
 import { Users } from '../users/users.entity';
-import { UsersRepository } from 'src/users/users.repository';
-import { Stock } from 'src/stock/entities/stock.entity';
+import { StockPrice } from '../stock/entities/stockPrice.entity';
+import { Stock } from '../stock/entities/stock.entity';
+import { UpdateQuizDto } from './dto/update-quiz.dto';
+import { StockService } from 'src/stock/stock.service';
 
 @Injectable()
 export class QuizService {
   constructor(
     private readonly quizRepository: QuizRepository,
-    private readonly usersRepository: UsersRepository,
+    private readonly stockService: StockService,
   ) {}
 
   async createQuiz(user: Users, data: CreateQuizDto) {
-    // const { upANDdown, stockName } = body;
-    // const quizUser = await this.usersRepository.findOne({ where: { id } });
-    // console.log(quizUser);
-    return await this.quizRepository.createQuiz(user, data);
+    await this.quizRepository.createQuiz(user, data);
 
-    // return {
-    //   statusCode: 201,
-    //   message: '퀴즈제출 성공',
-    // };
+    return {
+      statusCode: 201,
+      message: '퀴즈제출 성공',
+    };
+  }
+
+  async updateQuiz(id: number, data: UpdateQuizDto): Promise<any> {
+    const quizUser = await this.quizRepository.findOne({
+      where: { id },
+    });
+    const searchStock = await this.stockService.searchStock(quizUser.stockName);
+    // console.log('이름으로 찾기', searchStock[0].id);
+    const searchStockNumber = await this.stockService.getStockPrice(
+      searchStock[0].id,
+    );
+    // console.log('코드명으로 찾기', searchStockNumber);
+    const stockAnswer = searchStockNumber.stockPrices[0].prdy_vrss_sign;
+    let upANDdownAnswer: string;
+    if (stockAnswer === '1') {
+      upANDdownAnswer = 'up';
+    }
+    if (stockAnswer === '2') {
+      upANDdownAnswer = 'up';
+    }
+    if (stockAnswer === '3') {
+      upANDdownAnswer = 'keep';
+    }
+    if (stockAnswer === '4') {
+      upANDdownAnswer = 'down';
+    }
+    if (stockAnswer === '5') {
+      upANDdownAnswer = 'down';
+    }
+
+    let newAnswer: boolean;
+    if (quizUser.upANDdown === upANDdownAnswer) {
+      newAnswer = true;
+    } else {
+      newAnswer = false;
+    }
+
+    await this.quizRepository.updateQuiz(quizUser, {
+      answer: newAnswer,
+    });
+
+    return {
+      statusCode: 201,
+      message: '성공',
+    };
   }
 
   //페이지네이션

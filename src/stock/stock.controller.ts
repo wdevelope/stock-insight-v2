@@ -8,7 +8,6 @@ import {
   Query,
 } from '@nestjs/common';
 import { StockService } from './stock.service';
-import { Stock } from './entities/stock.entity';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
@@ -62,17 +61,17 @@ export class StockController {
   }
 
   @Get('price/:id')
-  async getStockPrice(@Param('id') id: string): Promise<Stock> {
+  async getStockPrice(@Param('id') id: string): Promise<any> {
     return this.stockService.getStockPrice(id);
   }
   //http://localhost:3000/api/stocks/(?page=1)
   @Get('/')
-  async getStockPage(@Query('page') page: number = 1): Promise<Stock[]> {
+  async getStockPage(@Query('page') page: number = 1): Promise<any> {
     return await this.stockService.getStockPage(page);
   }
   //http://localhost:3000/api/stocks/search/(?query=검색어)
   @Get('search')
-  async searchStock(@Query('query') query: string): Promise<Stock[]> {
+  async searchStock(@Query('query') query: string): Promise<any> {
     return await this.stockService.searchStock(query);
   }
 
