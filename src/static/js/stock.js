@@ -16,13 +16,13 @@ stockSearchInput.addEventListener('keydown', (event) => {
     searchStock();
   }
 });
-
-stockSearchInput.addEventListener('input', debounce(handleInput, 300));
+// 디바운스 1초
+stockSearchInput.addEventListener('input', debounce(handleInput, 1000));
 
 // 입력 이벤트 핸들러: 자동완성 기능
 async function handleInput(event) {
   const query = event.target.value;
-  if (query.length < 3) {
+  if (query.length < 2) {
     autocompleteContainer.innerHTML = '';
     return;
   }
@@ -38,7 +38,7 @@ function createAutocompleteContainer() {
   return container;
 }
 
-// 주식 이름으로 API 호출하여 검색
+// 주식 이름으로 API 호출하여 검색 (디바운스 적용되는 api)
 async function fetchStocksByQuery(query) {
   try {
     const response = await fetch(

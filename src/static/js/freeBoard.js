@@ -52,7 +52,7 @@ async function renderSearchResults(data) {
   for (const post of data) {
     const postDate = post.updated_at.split('T')[0];
     const likesCount = post.likeCount;
-    const viewsCount = await viewsRender(post.id);
+    const viewsCount = post.viewCount;
     console.log('검색 결과:', post);
     postHTML += `
                   <a href="http://localhost:3000/view/freeBoardInfo.html?freeBoardId=${post.id}" class="list-group-item list-group-item-action"                  
@@ -95,6 +95,7 @@ async function fetchAndRenderPosts() {
     }
 
     const data = await response.json();
+    console.log(data);
     data.sort((a, b) => {
       return new Date(b.created_at) - new Date(a.created_at);
     });
@@ -105,7 +106,7 @@ async function fetchAndRenderPosts() {
     for (const post of data) {
       const postDate = post.updated_at.split('T')[0];
       const likesCount = post.likeCount;
-      const viewsCount = await viewsRender(post.id);
+      const viewsCount = post.viewCount;
       console.log('자유게시판 렌더링 테스트:', post);
       postHTML += `
                     <a href="http://localhost:3000/view/freeBoardInfo.html?freeBoardId=${post.id}" class="list-group-item list-group-item-action"                  
@@ -133,33 +134,34 @@ async function fetchAndRenderPosts() {
 }
 
 // 🟠 조회수 불러오기
-async function viewsRender(boardId) {
-  try {
-    const response = await fetch(`http://localhost:3000/api/views/${boardId}`, {
-      method: 'GET',
-      headers: {
-        Authorization: token,
-      },
-    });
+// async function viewsRender(boardId) {
+//   try {
+//     const response = await fetch(`http://localhost:3000/api/views/${boardId}`, {
+//       method: 'GET',
+//       headers: {
+//         Authorization: token,
+//       },
+//     });
 
-    if (!response.ok) {
-      console.error('Failed to fetch view count for boardId:', boardId);
-      return 0;
-    }
+//     if (!response.ok) {
+//       console.error('Failed to fetch view count for boardId:', boardId);
+//       return 0;
+//     }
 
-    const viewsCount = await response.json();
-    return viewsCount;
-  } catch (error) {
-    console.error('Error fetching views count for boardId:', boardId, error);
-    return 0;
-  }
-}
+//     const viewsCount = await response.json();
+//     return viewsCount;
+//   } catch (error) {
+//     console.error('Error fetching views count for boardId:', boardId, error);
+//     return 0;
+//   }
+// }
 
 // 🟠 게시판 항목 클릭 이벤트 핸들러
 function handleBoardItemClick(boardId) {
   fetch(`http://localhost:3000/api/views/${boardId}`, {
     method: 'POST',
     headers: {
+      'Content-Type': 'application/json',
       Authorization: token,
     },
   })
