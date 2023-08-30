@@ -17,12 +17,20 @@ import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
 import { Users } from 'src/users/users.entity';
 import { CommentDto } from './dto/comment.dto';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 @UseGuards(JwtAuthGuard)
+@ApiBearerAuth('JWT-auth')
+@ApiTags('comments')
 @Controller('api/boards')
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
   @Post('/:boardId/comments')
+  @ApiOperation({
+    summary: '댓글 생성 API.',
+    description: '댓글을 생성한다.',
+  })
+  @ApiBody({ type: [CommentDto] })
   create(
     @CurrentUser() user: Users,
     @Param('boardId') board: Board,
@@ -36,11 +44,20 @@ export class CommentsController {
   }
 
   @Get('/:boardId/comments')
+  @ApiOperation({
+    summary: '댓글 조회(boardId) API.',
+    description: '댓글을 조회(boardId) 한다.',
+  })
   findAllByBoard(@Param('boardId') boardId: number): Promise<Comment[]> {
     return this.commentsService.findAllByBoard(boardId);
   }
 
   @Patch('/:boardId/comments/:commentId')
+  @ApiOperation({
+    summary: '댓글 수정 API.',
+    description: '댓글을 수정한다.',
+  })
+  @ApiBody({ type: [CommentDto] })
   update(
     @CurrentUser() user: Users,
     @Param('boardId') boardId: number,
@@ -55,6 +72,10 @@ export class CommentsController {
   }
 
   @Delete('/:boardId/comments/:commentId')
+  @ApiOperation({
+    summary: '댓글 삭제 API.',
+    description: '댓글을 삭제한다.',
+  })
   remove(
     @CurrentUser() user: Users,
     @Param('boardId') boardId: number,

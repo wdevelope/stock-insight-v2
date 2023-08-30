@@ -111,4 +111,24 @@ export class BoardsService {
       throw new BadRequestException('SERVICE_ERROR');
     }
   }
+
+  async paginate(page: number = 1): Promise<any> {
+    const take = 2; // 페이지 상에서 보일 개수(LIMIT)
+
+    const [boards, total] =
+      await this.boardsRepository.findAndCountWithPagination(page, take);
+
+    return {
+      data: boards.map((board) => {
+        const { ...data } = board;
+
+        return data;
+      }),
+      meta: {
+        total,
+        page,
+        last_page: Math.ceil(total / take),
+      },
+    };
+  }
 }

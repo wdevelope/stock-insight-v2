@@ -88,8 +88,8 @@ export class UsersService {
   }
   // answer가 true 면 point 를 얻고, false 면 point 를 잃는다.
   async updatePoint(id: number, body: PointDto) {
-    const { answer } = body;
     const user = await this.usersRepository.findOne({ where: { id } });
+    const answer = user.quiz[0].answer;
 
     let newPoint: number;
     if (!answer) {
@@ -103,7 +103,6 @@ export class UsersService {
     }
 
     await this.usersRepository.updatePoint(user, {
-      answer: answer,
       point: newPoint,
     });
 

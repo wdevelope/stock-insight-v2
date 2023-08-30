@@ -5,26 +5,36 @@ import {
 } from '@nestjs/common';
 import { ViewsRepository } from './views.repository';
 import { Users } from 'src/users/users.entity';
+import { UpdateBoardDto } from 'src/boards/dto/update-board.dto';
 
 @Injectable()
 export class ViewsService {
   constructor(private viewsRepository: ViewsRepository) {}
 
-  async createOrAdd(user: Users, boardId: number): Promise<void> {
-    const boardFind = await this.viewsRepository.findBoard(boardId);
-    if (!boardFind) {
+  async createOrAdd(
+    user: Users,
+    boardId: number,
+    updateBoardDto: UpdateBoardDto,
+  ): Promise<void> {
+    const existedBoard = await this.viewsRepository.findBoard(boardId);
+    if (!existedBoard) {
       throw new NotFoundException('게시물이 존재하지 않습니다.');
     }
-    const userId = user.id;
-    const viewFind = await this.viewsRepository.findOne({
+    const userId: number = user.id;
+    const existedView = await this.viewsRepository.findOne({
       where: { user: { id: userId }, board: { id: boardId } },
     });
 
     try {
-      if (viewFind === null) {
+      const viewscount = existedBoard.viewCount;
+      const cnt = 0;
+      if (existedView === null) {
+        updateBoardDto.viewCount = cnt + 1;
         await this.viewsRepository.create(user, boardId);
+        await this.viewsRepository.update(boardId, updateBoardDto);
       } else {
-        await this.viewsRepository.update(viewFind.id, viewFind.count);
+        updateBoardDto.likeCount = viewscount + 1;
+        await this.viewsRepository.update(boardId, updateBoardDto);
       }
     } catch (error) {
       throw new BadRequestException('SERVICE_ERROR');
@@ -37,12 +47,7 @@ export class ViewsService {
       throw new NotFoundException();
     }
     try {
-      const totalViewCount = existedViews.reduce(
-        (sum, view) => sum + view.count,
-        0,
-      );
-      // console.log(totalViewCount);
-      return totalViewCount;
+      return;
     } catch (error) {
       throw new BadRequestException('SERVICE_ERROR');
     }

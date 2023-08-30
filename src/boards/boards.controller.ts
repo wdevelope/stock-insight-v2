@@ -19,28 +19,21 @@ import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
 import { Users } from 'src/users/users.entity';
 import { FindBoardDto } from './dto/find-board.dto';
-import {
-  ApiBadRequestResponse,
-  ApiBearerAuth,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @UseGuards(JwtAuthGuard)
-@ApiBearerAuth()
+@ApiBearerAuth('JWT-auth')
 @ApiTags('boards')
 @Controller('api/boards')
 export class BoardsController {
   constructor(private readonly boardsService: BoardsService) {}
 
   @Post()
-  @ApiOperation({ summary: '새로운 게시물을 생성하였습니다.' })
-  @ApiResponse({
-    status: 201,
-    description: '성공적으로 게시물을 생성하였습니다.',
+  @ApiOperation({
+    summary: '게시물 생성 API.',
+    description: '게시물을 생성한다.',
   })
-  @ApiBadRequestResponse({ description: '게시물 생성에 실패하였습니다.' })
+  @ApiBody({ type: [CreateBoardDto] })
   create(
     @Body(ValidationPipe) createBoardDto: CreateBoardDto,
     @CurrentUser() user: Users,
@@ -53,6 +46,10 @@ export class BoardsController {
   }
 
   @Get()
+  @ApiOperation({
+    summary: '게시물 조회 API.',
+    description: '게시물을 조회한다.',
+  })
   findAll(): Promise<Board[]> {
     try {
       return this.boardsService.find();
@@ -62,6 +59,11 @@ export class BoardsController {
   }
   // 쿼리로 페이지, 페이지사이즈 값을 받아야함
   @Get('find')
+  @ApiOperation({
+    summary: '게시물 조회 API(title & description).',
+    description: '게시물을 조건(title & description) 조회한다.',
+  })
+  @ApiBody({ type: [FindBoardDto] })
   findBoardBy(
     @Query('page') page: number = 1,
     @Query('title') title: string,
@@ -72,6 +74,10 @@ export class BoardsController {
   }
 
   @Get('/:boardId')
+  @ApiOperation({
+    summary: '게시물 상세조회 API.',
+    description: '게시물을 상세 조회한다.',
+  })
   findOne(@Param('boardId') boardId: number): Promise<Board> {
     try {
       return this.boardsService.findOne(boardId);
@@ -81,6 +87,11 @@ export class BoardsController {
   }
 
   @Patch('/:boardId')
+  @ApiOperation({
+    summary: '게시물 수정 API.',
+    description: '게시물을 수정한다.',
+  })
+  @ApiBody({ type: [UpdateBoardDto] })
   update(
     @CurrentUser() user: Users,
     @Param('boardId') boardId: number,
@@ -94,6 +105,10 @@ export class BoardsController {
   }
 
   @Delete('/:boardId')
+  @ApiOperation({
+    summary: '게시물 삭제 API.',
+    description: '게시물을 삭제한다.',
+  })
   remove(
     @CurrentUser() user: Users,
     @Param('boardId') boardId: number,
@@ -103,5 +118,10 @@ export class BoardsController {
     } catch (error) {
       throw new BadRequestException('CONTROLLER_ERROR');
     }
+  }
+  //페이지 네이션
+  @Get('/page')
+  async all(@Query('page') page: number = 1): Promise<Board[]> {
+    return await this.boardsService.paginate(page);
   }
 }

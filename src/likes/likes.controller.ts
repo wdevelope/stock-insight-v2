@@ -12,12 +12,20 @@ import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
 import { Users } from 'src/users/users.entity';
 import { UpdateBoardDto } from 'src/boards/dto/update-board.dto';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 @UseGuards(JwtAuthGuard)
+@ApiBearerAuth('JWT-auth')
+@ApiTags('likes')
 @Controller('api/likes')
 export class LikesController {
   constructor(private readonly likesService: LikesService) {}
 
   @Post('/:boardId')
+  @ApiOperation({
+    summary: '좋아요 생성 API.',
+    description: '좋아요를 생성한다.',
+  })
+  @ApiBody({ type: [UpdateBoardDto] })
   createOrDelete(
     @CurrentUser() user: Users,
     @Param('boardId') boardId: number,
@@ -31,6 +39,10 @@ export class LikesController {
   }
 
   @Get('/:boardId')
+  @ApiOperation({
+    summary: '좋아요 조회 API.',
+    description: '좋아요를 조회한다.',
+  })
   likeTotalCnt(@Param('boardId') board: number): Promise<number> {
     try {
       return this.likesService.likeTotalCnt(board);

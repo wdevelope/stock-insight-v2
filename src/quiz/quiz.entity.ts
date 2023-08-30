@@ -19,6 +19,9 @@ export class Quiz {
   @Column() // 주식이름
   stockName: string;
 
+  @Column()
+  answer: boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 

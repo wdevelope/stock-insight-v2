@@ -1,7 +1,7 @@
 import { Board } from 'src/boards/entities/board.entity';
 import { Users } from 'src/users/users.entity';
+import { ApiProperty } from '@nestjs/swagger';
 import {
-  Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
@@ -11,15 +11,14 @@ import {
 
 @Entity()
 export class Views {
+  @ApiProperty({ description: '조회수 아이디' })
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  count: number;
-
+  @ApiProperty({ description: '조회수 생성 시간' })
   @CreateDateColumn()
   created_at: Date;
-
+  @ApiProperty({ description: '조회수 수정 시간' })
   @UpdateDateColumn()
   updated_at: Date;
 

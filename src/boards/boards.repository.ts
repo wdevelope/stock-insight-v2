@@ -78,4 +78,14 @@ export class BoardsRepository {
       throw new BadRequestException('REPOSITORY_ERROR');
     }
   }
+
+  async findAndCountWithPagination(
+    page: number,
+    take: number,
+  ): Promise<[Board[], number]> {
+    return this.boardsRepository.findAndCount({
+      take,
+      skip: (page - 1) * take,
+    });
+  }
 }
