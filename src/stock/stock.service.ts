@@ -229,7 +229,6 @@ export class StockService {
       skip: (page - 1) * take,
       relations: ['stockPrices'],
     });
-
     return {
       data: stocks.map((stock) => {
         const latestPrice = stock.stockPrices.reduce((latest, price) => {

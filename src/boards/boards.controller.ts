@@ -66,13 +66,11 @@ export class BoardsController {
   @ApiBody({ type: [FindBoardDto] })
   findBoardBy(
     @Query('page') page: number = 1,
-    @Body() findBoardDto: FindBoardDto,
+    @Query('title') title: string,
+    @Query('description') description: string,
   ): Promise<Board[]> {
-    try {
-      return this.boardsService.getBoardsByUserId(page, findBoardDto);
-    } catch (error) {
-      throw new BadRequestException('CONTROLLER_ERROR');
-    }
+    const findBoardDto = { title, description };
+    return this.boardsService.getBoardsByUserId(page, findBoardDto);
   }
 
   @Get('/:boardId')

@@ -142,21 +142,27 @@
       </nav>
       <!-- 검색창 -->
       <div class="search-section mt-5">
-        <div class="d-flex justify-content-center align-items-left">
+        <div class="d-flex align-items-center">
           <!-- 검색어 입력창 -->
           <input
             type="text"
             class="form-control"
-            id="searchInput"
+            id="stockSearchInput"
             placeholder="주식명을 입력하세요.."
             style="margin-left: 10px; width: auto"
           />
 
           <!-- 검색 버튼 -->
-          <button class="btn btn-primary" style="margin-left: 10px">
+          <button
+            class="btn btn-primary"
+            style="margin-left: 10px"
+            onclick="searchStock()"
+          >
             검색
           </button>
         </div>
+        <!-- 자동완성 컨테이너 -->
+        <div id="autocompleteContainer"></div>
       </div>
       <!-- 주식 메인 페이지 -->
       <div id="totalStocks">
