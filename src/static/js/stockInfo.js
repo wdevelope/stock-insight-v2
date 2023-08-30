@@ -57,6 +57,7 @@ async function fetchStockDetail() {
 function renderStockDetail(data) {
   const stockInfo = data.stockPrices[0];
 
+  document.getElementById('stock-name').textContent = `${data.prdt_abrv_name}`;
   // Header 부분 정보 업데이트
   document.getElementById('stockId').textContent = `종목코드: ${data.id}`;
   document.getElementById(

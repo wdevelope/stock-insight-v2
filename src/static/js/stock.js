@@ -1,7 +1,8 @@
+// 현재 페이지와 그룹
 let currentPage = 1;
 let currentGroup = 1;
 
-// DOM Elements
+// DOM 요소들
 const stockSearchInput = document.getElementById('stockSearchInput');
 const autocompleteContainer =
   document.getElementById('autocompleteContainer') ||
@@ -9,7 +10,7 @@ const autocompleteContainer =
 const stockCountElement = document.getElementById('stockCount');
 const tableBody = document.getElementById('stockTable');
 
-// Events
+// 이벤트 핸들러
 stockSearchInput.addEventListener('keydown', (event) => {
   if (event.key === 'Enter') {
     searchStock();
@@ -18,7 +19,7 @@ stockSearchInput.addEventListener('keydown', (event) => {
 
 stockSearchInput.addEventListener('input', debounce(handleInput, 300));
 
-// Event Handlers
+// 이벤트 핸들러
 async function handleInput(event) {
   const query = event.target.value;
   if (query.length < 3) {
@@ -29,14 +30,14 @@ async function handleInput(event) {
   renderAutocompleteResults(stocks);
 }
 
-// Functions
+// 함수들
 function createAutocompleteContainer() {
   const container = document.createElement('div');
   container.id = 'autocompleteContainer';
   document.body.appendChild(container);
   return container;
 }
-
+// 주식 이름으로 검색하는 API 호출
 async function fetchStocksByQuery(query) {
   try {
     const response = await fetch(
@@ -58,6 +59,7 @@ async function fetchStocksByQuery(query) {
   }
 }
 
+// 페이지 번호로 주식 정보를 가져오는 API 호출
 async function fetchStocks(page) {
   try {
     const response = await fetch(
@@ -71,6 +73,7 @@ async function fetchStocks(page) {
   }
 }
 
+// 자동 완성 결과 렌더링
 function renderAutocompleteResults(stocks) {
   autocompleteContainer.innerHTML = '';
   stocks.forEach((stock) => {
@@ -85,6 +88,7 @@ function renderAutocompleteResults(stocks) {
   });
 }
 
+// 주식 정보 테이블 렌더링
 function renderStocks(stocks) {
   tableBody.innerHTML = '';
   stocks.forEach((stock) => {
