@@ -16,8 +16,12 @@ import * as redisStore from 'cache-manager-redis-store';
 import type { ClientOpts } from 'redis';
 import { EventsModule } from './events/events.module';
 import { UploadModule } from './upload/upload.module';
+<<<<<<< HEAD
+import { QuizModule } from './quiz/quiz.module';
+=======
 import { AskboardsModule } from './askboards/askboards.module';
 import { SearchModule } from './search/search.module';
+>>>>>>> 56d3495949c28e4986ab3c3204d9aec0dde8ccb3
 
 @Module({
   imports: [
@@ -29,7 +33,6 @@ import { SearchModule } from './search/search.module';
       host: process.env.HOST,
       port: Number(process.env.REDIS_PORT),
       password: process.env.PASSWORD,
-      ttl: 180,
     }),
     UsersModule,
     BoardsModule,
@@ -40,8 +43,12 @@ import { SearchModule } from './search/search.module';
     StockModule,
     EventsModule,
     UploadModule,
+<<<<<<< HEAD
+    QuizModule,
+=======
     AskboardsModule,
     SearchModule,
+>>>>>>> 56d3495949c28e4986ab3c3204d9aec0dde8ccb3
   ],
   controllers: [AppController],
   providers: [EmailService],
