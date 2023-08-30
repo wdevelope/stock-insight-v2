@@ -15,7 +15,9 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
     />
     <link rel="stylesheet" href="/static/css/index.css" />
+    <link rel="stylesheet" href="/static/css/stockInfo.css" />
   </head>
+
   <body>
     <!-- 🔴 위쪽 Nav 🔴-->
     <nav class="navbar navbar-expand-lg fixed-top-custom">
@@ -71,7 +73,6 @@
         </div>
       </div>
     </nav>
-
     <!-- 🔴 왼쪽 Nav 🔴 -->
     <nav
       class="d-flex flex-column align-items-start bg-light p-4 d-none d-lg-block left-nav-border"
@@ -119,44 +120,31 @@
       </a>
     </nav>
 
+    <!-- 🔴 주식 상세 메인 🔴 -->
     <main>
-      <h2>글쓰기</h2>
-      <form>
-        <div class="mb-3">
-          <label for="postTitle" class="form-label">제목</label>
-          <input
-            type="text"
-            class="form-control"
-            id="postTitle"
-            placeholder="제목을 입력하세요"
-          />
+      <div class="stock-detail-container">
+        <h1>종목명</h1>
+        <div class="stock-header">
+          <div class="stock-title">
+            <h2 id="stockId">종목코드: -</h2>
+            <p id="stockPrice">주식 가격: -</p>
+            <p id="priceDifference">전일 대비: -</p>
+          </div>
+          <div class="stock-highlights">
+            <p id="highPrice">고가: -</p>
+            <p id="lowPrice">저가: -</p>
+            <p id="volume">거래량: -</p>
+            <p id="volumePrice">거래대금: -</p>
+          </div>
         </div>
-        <div class="mb-3">
-          <label for="postCategory" class="form-label">카테고리 선택</label>
-          <select class="form-control" id="postCategory">
-            <option></option>
-            <option>자유게시판</option>
-            <option>문의</option>
-          </select>
+        <div class="stock-main-content">
+          <div class="stock-chart">
+            <svg id="stockChart" width="600" height="400"></svg>
+          </div>
+          <div class="stock-info" id="stockInfo"></div>
         </div>
-        <div class="mb-3">
-          <label for="postContent" class="form-label">내용</label>
-          <textarea
-            class="form-control"
-            id="postContent"
-            rows="5"
-            placeholder="내용을 입력하세요"
-          ></textarea>
-        </div>
-        <button type="button" class="btn btn-primary" onclick="saveAskBoard()">
-          저장
-        </button>
-      </form>
+      </div>
     </main>
-
-    <footer class="text-center mt-5">
-      © 2023 Stock Platform. All rights reserved.
-    </footer>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.1/umd/popper.min.js"></script>
@@ -169,7 +157,9 @@
       src="https://kit.fontawesome.com/1a93e99cf8.js"
       crossorigin="anonymous"
     ></script>
+    <!-- d3 차트 -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="/static/js/index.js"></script>
-    <script src="/static/js/writeBoard.js"></script>
+    <script src="/static/js/stockInfo.js"></script>
   </body>
 </html>
