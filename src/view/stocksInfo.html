@@ -123,6 +123,9 @@
     <!-- 🔴 주식 상세 메인 🔴 -->
     <main>
       <div class="stock-detail-container">
+        <button id="favoriteButton" class="star-btn">
+          <i class="far fa-star"> 즐겨찾기</i>
+        </button>
         <h1>종목명</h1>
         <div class="stock-header">
           <div class="stock-title">
@@ -139,7 +142,7 @@
         </div>
         <div class="stock-main-content">
           <div class="stock-chart">
-            <svg id="stockChart" width="600" height="400"></svg>
+            <canvas id="myChart"></canvas>
           </div>
           <div class="stock-info" id="stockInfo"></div>
         </div>
@@ -157,8 +160,9 @@
       src="https://kit.fontawesome.com/1a93e99cf8.js"
       crossorigin="anonymous"
     ></script>
-    <!-- d3 차트 -->
-    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script src="/static/js/index.js"></script>
     <script src="/static/js/stockInfo.js"></script>
   </body>

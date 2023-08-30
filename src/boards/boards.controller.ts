@@ -64,8 +64,10 @@ export class BoardsController {
   @Get('find')
   findBoardBy(
     @Query('page') page: number = 1,
-    @Body() findBoardDto: FindBoardDto,
+    @Query('title') title: string,
+    @Query('description') description: string,
   ): Promise<Board[]> {
+    const findBoardDto = { title, description };
     return this.boardsService.getBoardsByUserId(page, findBoardDto);
   }
 

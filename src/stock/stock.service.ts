@@ -255,12 +255,13 @@ export class StockService {
   }
 
   async searchStock(query: string): Promise<Stock[]> {
-    return this.stockRepository.find({
+    const stocks = this.stockRepository.find({
       where: [
         { id: Like(`%${query}%`) },
         { prdt_abrv_name: Like(`%${query}%`) },
       ],
     });
+    return stocks;
   }
 
   async addMyStock(user: Users, stockId: string): Promise<void> {

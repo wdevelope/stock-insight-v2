@@ -1,12 +1,31 @@
 document.addEventListener('DOMContentLoaded', () => {
   fetchStockDetail();
 });
+
 // 가격 천의단위로 구분
 function formatNumberWithCommas(x) {
   const num = parseFloat(x); // 문자열 숫자로 변환
   return num.toLocaleString('ko-KR');
 }
 
+const favoriteButton = document.getElementById('favoriteButton');
+
+// 🟤 즐겨찾기 버튼 리스너
+favoriteButton.addEventListener('click', async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const stockId = urlParams.get('id');
+  if (!stockId) {
+    console.error('No stock ID provided.');
+    return;
+  }
+
+  const response = await addFavoriteStock(stockId);
+  if (response && response.status === 201) {
+    favoriteButton.classList.add('filled'); // 별 색깔 채우기
+  }
+});
+
+// 🟤 주식 상세 정보를 가져오는 함수
 async function fetchStockDetail() {
   const urlParams = new URLSearchParams(window.location.search);
   const id = urlParams.get('id');
@@ -22,7 +41,6 @@ async function fetchStockDetail() {
     );
     const data = await response.json();
     console.log(data);
-
     renderStockDetail(data);
 
     const chartData = data.stockPrices.map((item) => ({
@@ -35,6 +53,7 @@ async function fetchStockDetail() {
   }
 }
 
+// 🟤 주식 상세 정보를 화면에 표시하는 함수
 function renderStockDetail(data) {
   const stockInfo = data.stockPrices[0];
 
@@ -79,70 +98,54 @@ function renderStockDetail(data) {
 
   stockInfoContainer.innerHTML = otherInfoHTML;
 }
+// 🟤 주식을 즐겨찾기에 추가하는 함수
+async function addFavoriteStock(stockId) {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/stocks/mystock/${stockId}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token,
+        },
+      },
+    );
 
-function drawChart(data) {
-  const svg = d3.select('#stockChart');
-  const margin = { top: 20, right: 20, bottom: 30, left: 50 };
-  const width = +svg.attr('width') - margin.left - margin.right;
-  const height = +svg.attr('height') - margin.top - margin.bottom;
-
-  const x = d3.scaleTime().range([0, width]);
-  const y = d3.scaleLinear().rangeRound([height, 0]);
-
-  const line = d3
-    .line()
-    .x((d) => x(d.date))
-    .y((d) => y(d.stck_prpr))
-    .curve(d3.curveMonotoneX);
-
-  // Create a group to contain all chart content
-  const chartGroup = svg
-    .append('g')
-    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-
-  x.domain(d3.extent(data, (d) => d.date));
-  y.domain(d3.extent(data, (d) => d.stck_prpr));
-
-  // Add the X Axis
-  chartGroup
-    .append('g')
-    .attr('transform', 'translate(0,' + height + ')')
-    .call(d3.axisBottom(x))
-    .append('text')
-    .attr('fill', '#000')
-    .attr('y', 6)
-    .attr('dy', '0.71em')
-    .attr('text-anchor', 'end')
-    .text('Date');
-
-  // Add the Y Axis
-  chartGroup
-    .append('g')
-    .call(d3.axisLeft(y))
-    .append('text')
-    .attr('fill', '#000')
-    .attr('transform', 'rotate(-90)')
-    .attr('y', -50) // Adjusted the position to make sure the label is fully visible
-    .attr('dy', '0.71em')
-    .attr('text-anchor', 'end')
-    .text('Price');
-
-  // Add the line
-  chartGroup
-    .append('path')
-    .datum(data)
-    .attr('fill', 'none')
-    .attr('stroke', 'steelblue')
-    .attr('stroke-linejoin', 'round')
-    .attr('stroke-linecap', 'round')
-    .attr('stroke-width', 1.5)
-    .attr('d', line);
+    if (response.status === 201) {
+      alert('즐겨찾기에 추가되었습니다!');
+      return response;
+    } else if (response.status === 409) {
+      alert('이 주식은 이미 즐겨찾기에 추가되어 있습니다.');
+    } else {
+      alert('즐겨찾기 추가에 실패했습니다.');
+    }
+  } catch (error) {
+    console.error('Error adding favorite stock:', error);
+  }
 }
 
-const sampleData = [
-  { date: new Date(2023, 7, 1), stck_prpr: 100 },
-  { date: new Date(2023, 7, 2), stck_prpr: 105 },
-  { date: new Date(2023, 7, 3), stck_prpr: 103 },
-];
+// 🟤 주식 차트를 그리는 함수
 
-drawChart(sampleData);
+const ctx = document.getElementById('myChart');
+
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    datasets: [
+      {
+        label: '# of Votes',
+        data: [12, 19, 3, 5, 2, 3],
+        borderWidth: 1,
+      },
+    ],
+  },
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+  },
+});
