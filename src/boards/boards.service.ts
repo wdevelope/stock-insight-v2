@@ -8,14 +8,39 @@ import { UpdateBoardDto } from './dto/update-board.dto';
 import { Board } from './entities/board.entity';
 import { Users } from 'src/users/users.entity';
 import { BoardsRepository } from './boards.repository';
+import { BoardSearchService } from 'src/search/search.service';
 import { FindBoardDto } from './dto/find-board.dto';
 
 @Injectable()
 export class BoardsService {
-  constructor(private boardsRepository: BoardsRepository) {}
+  constructor(
+    private boardsRepository: BoardsRepository,
+    private readonly boardSearchService: BoardSearchService,
+  ) {}
 
-  // async find(): Promise<Board[]> {
-  //   const board = await this.boardsRepository.find();
+  async find(): Promise<Board[]> {
+    return await this.boardsRepository.find();
+  }
+
+  async getBoardsByUserId(
+    page: number,
+    findBoardDto: FindBoardDto,
+  ): Promise<Board[]> {
+    // 보드 검색 서비스를 이용하여 유저 아이디로 보드를 검색합니다.
+    return this.boardSearchService.searchByTitleAndDescription(
+      page,
+      findBoardDto,
+    );
+  }
+  // async findBy(findBoardDto: FindBoardDto): Promise<Board[]> {
+  //   const board = await this.boardsRepository.findBy({
+  //     where: {
+  //       title: findBoardDto.title,
+  //       description: findBoardDto.description,
+  //       user: { id: findBoardDto.userId },
+  //     },
+  //     // relations: ['user'], //유저 정보도 같이 보고싶으면
+  //   });
   //   if (!board) {
   //     throw new NotFoundException('보드가 존재하지 않습니다.');
   //   }
@@ -25,27 +50,6 @@ export class BoardsService {
   //     throw new BadRequestException('SERVICE_ERROR');
   //   }
   // }
-
-  //아마도 비슷한 내용 찾으려면 인클루드 돌려야함
-  //한가지 코드로 findBoard, findUser, findTile+description 기능이 되는데 타이틀만 입력하면 안되고 디스크립션을 같이 입력해야 나옴
-  async find(findBoardDto: FindBoardDto): Promise<Board[]> {
-    const board = await this.boardsRepository.find({
-      where: {
-        title: findBoardDto.title,
-        description: findBoardDto.description,
-        user: { id: findBoardDto.userId },
-      },
-      // relations: ['user'], //유저 정보도 같이 보고싶으면
-    });
-    if (!board) {
-      throw new NotFoundException('보드가 존재하지 않습니다.');
-    }
-    try {
-      return board;
-    } catch (error) {
-      throw new BadRequestException('SERVICE_ERROR');
-    }
-  }
 
   async findOne(boardId: number): Promise<Board> {
     const board = await this.boardsRepository.findOne({
@@ -64,7 +68,13 @@ export class BoardsService {
   async create(createBoardDto: CreateBoardDto, user: Users): Promise<void> {
     try {
       await this.boardsRepository.save(createBoardDto, user);
+      const createdBoard = await this.boardsRepository.findOne({
+        where: { title: createBoardDto.title },
+      });
+
+      await this.boardSearchService.indexBoard(createdBoard);
     } catch (error) {
+      console.log(error);
       throw new BadRequestException('SERVICE_ERROR');
     }
   }

@@ -17,6 +17,7 @@ import type { ClientOpts } from 'redis';
 import { EventsModule } from './events/events.module';
 import { UploadModule } from './upload/upload.module';
 import { AskboardsModule } from './askboards/askboards.module';
+import { SearchModule } from './search/search.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { AskboardsModule } from './askboards/askboards.module';
     EventsModule,
     UploadModule,
     AskboardsModule,
+    SearchModule,
   ],
   controllers: [AppController],
   providers: [EmailService],
