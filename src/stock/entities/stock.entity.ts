@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { StockPrice } from './stockPrice.entity';
+import { Quiz } from 'src/quiz/quiz.entity';
 
 @Entity()
 export class Stock {
@@ -32,4 +33,7 @@ export class Stock {
     cascade: true,
   })
   stockPrices: StockPrice[];
+
+  @OneToMany(() => Quiz, (quiz) => quiz.user, { eager: true })
+  quiz: Quiz[];
 }

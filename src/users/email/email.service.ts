@@ -32,7 +32,7 @@ export class EmailService {
     if (randomCode) {
       await this.cacheManager.get(email);
     }
-    await this.cacheManager.set(email, randomCode);
+    await this.cacheManager.set(email, randomCode, { ttl: 300 });
 
     await this.mailerService
       .sendMail({
