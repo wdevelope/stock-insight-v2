@@ -206,15 +206,19 @@ export class StockService {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  async getStockPrice(id: string): Promise<Stock> {
+  async getStockPrice(id: string): Promise<any> {
     const stock = await this.stockRepository.findOne({
       where: { id: id },
       relations: ['stockPrices'],
       order: { stockPrices: { created_at: 'DESC' } },
     });
+    const prices = stock.stockPrices.map((StockPrice) => ({
+      price: StockPrice.stck_prpr,
+      time: StockPrice.created_at,
+    }));
     stock.stockPrices.splice(1);
 
-    return stock;
+    return { stock, prices };
   }
 
   async getStockPage(page: number = 1): Promise<any> {
@@ -225,7 +229,6 @@ export class StockService {
       skip: (page - 1) * take,
       relations: ['stockPrices'],
     });
-
     return {
       data: stocks.map((stock) => {
         const latestPrice = stock.stockPrices.reduce((latest, price) => {
@@ -254,14 +257,36 @@ export class StockService {
     };
   }
 
-  async searchStock(query: string): Promise<Stock[]> {
-    const stocks = this.stockRepository.find({
+  async searchStock(query: string): Promise<any> {
+    const stocks = await this.stockRepository.find({
       where: [
         { id: Like(`%${query}%`) },
         { prdt_abrv_name: Like(`%${query}%`) },
       ],
+      relations: ['stockPrices'],
     });
-    return stocks;
+
+    return {
+      data: stocks.map((stock) => {
+        const latestPrice = stock.stockPrices.reduce((latest, price) => {
+          if (!latest || price.created_at > latest.created_at) {
+            return price;
+          }
+          return latest;
+        }, null);
+
+        return {
+          id: stock.id,
+          prdt_abrv_name: stock.prdt_abrv_name,
+          rprs_mrkt_kor_name: stock.rprs_mrkt_kor_name,
+          stck_prpr: latestPrice.stck_prpr,
+          prdy_vrss: latestPrice.prdy_vrss,
+          prdy_vrss_sign: latestPrice.prdy_vrss_sign,
+          prdy_ctrt: latestPrice.prdy_ctrt,
+          hts_avls: latestPrice.hts_avls,
+        };
+      }),
+    };
   }
 
   async addMyStock(user: Users, stockId: string): Promise<void> {
@@ -283,6 +308,8 @@ export class StockService {
     }
 
     const myStock = new MyStock();
+    myStock.code = stock.id;
+    myStock.prdt_abrv_name = stock.prdt_abrv_name;
     myStock.user = user;
     myStock.stock = stock;
 
@@ -303,5 +330,15 @@ export class StockService {
     }
 
     await this.myStockRepository.remove(existMyStock);
+  }
+
+  async getMyStock(user: Users): Promise<MyStock[]> {
+    const userId = user.id;
+
+    return await this.myStockRepository.find({
+      where: {
+        user: { id: userId },
+      },
+    });
   }
 }
