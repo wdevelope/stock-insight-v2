@@ -15,7 +15,9 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
     />
     <link rel="stylesheet" href="/static/css/index.css" />
+    <link rel="stylesheet" href="/static/css/stock.css" />
   </head>
+
   <body>
     <!-- 🔴 위쪽 Nav 🔴-->
     <nav class="navbar navbar-expand-lg fixed-top-custom">
@@ -119,19 +121,34 @@
       </a>
     </nav>
 
-    <!-- 🔴보드 메인 내용🔴 -->
-    <main class="board-container">
-      <!-- 게시글 본문 -->
-      <header class="post-content mb-4"></header>
+    <!-- 🔴 메인 🔴 -->
+    <main>
+      <!-- 기본 Nav 메뉴 -->
+      <ul class="nav nav-pills mt-5">
+        <li class="nav-item">
+          <a class="nav-link" href="http://localhost:3000/view/stocks.html"
+            >전체종목</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="http://localhost:3000/view/stocksLike.html"
+            >즐겨찾기</a
+          >
+        </li>
+      </ul>
+      <br />
+      <br />
 
-      <!-- 좋아요 및 기타 버튼 -->
-      <section class="post-actions d-flex justify-content-start mb-4"></section>
-
-      <!-- 댓글 섹션 -->
-      <section class="comments-section mb-4">
-        <!-- 댓글 목록 -->
-        <div class="list-group"></div>
-      </section>
+      <div id="pagination">
+        <button onclick="prevGroup()"><<</button>
+        <!-- 페이지네이션 버튼들 -->
+        <button onclick="fetchStocks(1)">1</button>
+        <button onclick="fetchStocks(2)">2</button>
+        <button onclick="fetchStocks(3)">3</button>
+        <button onclick="fetchStocks(4)">4</button>
+        <button onclick="fetchStocks(5)">5</button>
+        <button onclick="nextGroup()">>></button>
+      </div>
     </main>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -145,7 +162,9 @@
       src="https://kit.fontawesome.com/1a93e99cf8.js"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="../socket-client/chat-socket.js"></script>
     <script src="/static/js/index.js"></script>
-    <script src="/static/js/noticeBoardInfo.js"></script>
+    <script src="/static/js/stock.js"></script>
   </body>
 </html>

@@ -16,7 +16,6 @@ const noticeBoardId = getURLParameter('noticeBoardId');
 const askBoardId = getURLParameter('askBoardId');
 const freeEditBoardId = getURLParameter('freeEditBoardId');
 // const noticeBoardId = getURLParameter('noticeBoardId');
-// const askBoardId = getURLParameter('askBoardId');
 
 // 🟠 쿠키없으면 돌려보냄
 document.addEventListener('DOMContentLoaded', () => {

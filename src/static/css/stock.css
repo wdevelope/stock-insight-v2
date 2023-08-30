@@ -1,0 +1,89 @@
+.stockNav > .nav-item > a {
+  color: rgb(81, 62, 248);
+}
+
+/* ⭐ 메인 테이블 */
+
+#totalStocks {
+  font-size: 24px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  border-top: 1px solid #ddd;
+  padding: 8px;
+}
+
+th {
+  background-color: #ffffff;
+}
+
+/* 홀수 번째 행 배경색 */
+tbody tr:nth-child(odd) {
+  background-color: #f3f3f3;
+}
+
+tbody tr:hover {
+  background-color: #d8d7d7;
+  cursor: pointer;
+}
+/* 종목명 열 굵게 */
+tbody tr td:nth-child(2) {
+  font-weight: bold;
+}
+
+tbody tr td:nth-child(4) {
+  color: red;
+  font-weight: bold;
+}
+
+/* ⭐ 페이지네이션 */
+#pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#pagination button {
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  background-color: white;
+  border: 1px solid #007bff;
+  color: #007bff;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease-in-out,
+    color 0.15s ease-in-out;
+}
+
+#pagination button:not(:first-child):not(:last-child) {
+  border-radius: 10px;
+}
+
+#pagination button:hover:not(:first-child):not(:last-child) {
+  background-color: #007bff;
+  color: white;
+}
+
+#pagination button:first-child,
+#pagination button:last-child {
+  background-color: transparent;
+  border: none;
+  color: black;
+  font-weight: bold;
+}
+
+#pagination button:first-child:hover,
+#pagination button:last-child:hover {
+  background-color: transparent;
+  color: #007bff;
+}

@@ -15,7 +15,9 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
     />
     <link rel="stylesheet" href="/static/css/index.css" />
+    <link rel="stylesheet" href="/static/css/stockInfo.css" />
   </head>
+
   <body>
     <!-- 🔴 위쪽 Nav 🔴-->
     <nav class="navbar navbar-expand-lg fixed-top-custom">
@@ -71,7 +73,6 @@
         </div>
       </div>
     </nav>
-
     <!-- 🔴 왼쪽 Nav 🔴 -->
     <nav
       class="d-flex flex-column align-items-start bg-light p-4 d-none d-lg-block left-nav-border"
@@ -119,19 +120,30 @@
       </a>
     </nav>
 
-    <!-- 🔴보드 메인 내용🔴 -->
-    <main class="board-container">
-      <!-- 게시글 본문 -->
-      <header class="post-content mb-4"></header>
-
-      <!-- 좋아요 및 기타 버튼 -->
-      <section class="post-actions d-flex justify-content-start mb-4"></section>
-
-      <!-- 댓글 섹션 -->
-      <section class="comments-section mb-4">
-        <!-- 댓글 목록 -->
-        <div class="list-group"></div>
-      </section>
+    <!-- 🔴 주식 상세 메인 🔴 -->
+    <main>
+      <div class="stock-detail-container">
+        <h1>종목명</h1>
+        <div class="stock-header">
+          <div class="stock-title">
+            <h2 id="stockId">종목코드: -</h2>
+            <p id="stockPrice">주식 가격: -</p>
+            <p id="priceDifference">전일 대비: -</p>
+          </div>
+          <div class="stock-highlights">
+            <p id="highPrice">고가: -</p>
+            <p id="lowPrice">저가: -</p>
+            <p id="volume">거래량: -</p>
+            <p id="volumePrice">거래대금: -</p>
+          </div>
+        </div>
+        <div class="stock-main-content">
+          <div class="stock-chart">
+            <svg id="stockChart" width="600" height="400"></svg>
+          </div>
+          <div class="stock-info" id="stockInfo"></div>
+        </div>
+      </div>
     </main>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -145,7 +157,9 @@
       src="https://kit.fontawesome.com/1a93e99cf8.js"
       crossorigin="anonymous"
     ></script>
+    <!-- d3 차트 -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="/static/js/index.js"></script>
-    <script src="/static/js/noticeBoardInfo.js"></script>
+    <script src="/static/js/stockInfo.js"></script>
   </body>
 </html>

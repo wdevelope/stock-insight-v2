@@ -32,7 +32,7 @@ async function fetchAndRenderPosts() {
       const postDate = post.updated_at.split('T')[0];
       const likesCount = post.likeCount;
       const viewsCount = await viewsRender(post.id);
-
+      console.log('자유게시판 렌더링 테스트:', post);
       postHTML += `
                     <a href="http://localhost:3000/view/freeBoardInfo.html?freeBoardId=${post.id}" class="list-group-item list-group-item-action"                  
                     onclick="handleBoardItemClick(${post.id})">

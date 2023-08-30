@@ -2,7 +2,7 @@ window.onload = function () {
   RenderNoticePosts();
 };
 
-// 🟡 공지사항 게시글 랜더링 함수
+// 🟢 공지사항 게시글 랜더링 함수
 async function RenderNoticePosts() {
   if (!token) {
     console.warn('Authorization token is missing');
@@ -32,7 +32,7 @@ async function RenderNoticePosts() {
     for (const post of data) {
       const postDate = post.created_at.split('T')[0];
       const viewsCount = await viewsRender(post.id);
-      const likesCount = await likesRender(post.id);
+      // const likesCount = await likesRender(post.id);
 
       postHTML += `
                     <a href="http://localhost:3000/view/noticeBoardInfo.html?noticeBoardId=${post.id}" class="list-group-item list-group-item-action"
@@ -47,7 +47,7 @@ async function RenderNoticePosts() {
                           <small class="me-2">닉네임</small>
                           <span>${postDate}</span>
                           <i class="fas fa-eye ms-4"></i> ${viewsCount}
-                          <i class="fas fa-thumbs-up ms-4"></i> ${likesCount}
+                          <i class="fas fa-thumbs-up ms-4"></i> 0
                         </div>
                       </div>
                     </a>
@@ -60,7 +60,7 @@ async function RenderNoticePosts() {
   }
 }
 
-// 🟠 조회수 불러오기
+// 🟢 조회수 불러오기
 async function viewsRender(boardId) {
   try {
     const response = await fetch(`http://localhost:3000/api/views/${boardId}`, {
@@ -82,7 +82,7 @@ async function viewsRender(boardId) {
     return 0;
   }
 }
-// 🟠 좋아요 불러오기
+// 🟢 좋아요 불러오기
 async function likesRender(boardId) {
   try {
     const response = await fetch(`http://localhost:3000/api/likes/${boardId}`, {
@@ -105,7 +105,7 @@ async function likesRender(boardId) {
   }
 }
 
-// 🟠 게시판 항목 클릭 이벤트 핸들러
+// 🟢 게시판 항목 클릭 이벤트 핸들러
 function handleBoardItemClick(boardId) {
   fetch(`http://localhost:3000/api/views/${boardId}`, {
     method: 'POST',
