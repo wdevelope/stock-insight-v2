@@ -24,7 +24,9 @@ import { UpdateRequestDto } from './dto/updateRequest.dto';
 import { EmailService } from './email/email.service';
 import { EmailDto } from './dto/email.dto';
 import { PointDto } from './dto/point.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('users')
 @Controller('api/users')
 export class UsersController {
   constructor(
@@ -47,6 +49,7 @@ export class UsersController {
 
   // GET. http://localhost:3000/api/users
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
   @Get()
   getCurrentUser(@CurrentUser() user: Users) {
     return user;
@@ -54,6 +57,7 @@ export class UsersController {
 
   // POST. http://localhost:3000/api/users/check
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
   @Post('/check')
   userCheck(@CurrentUser() user: Users, @Body() body: UserCheckDto) {
     return this.authService.userCheck(user.id, body);
@@ -61,6 +65,7 @@ export class UsersController {
 
   // PATCH. http://localhost:3000/api/users/:id
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
   @Patch('/:id')
   async updateCurrentUser(
     @Param('id') id: number,
@@ -72,6 +77,7 @@ export class UsersController {
 
   // DELETE. http://localhost:3000/api/users/:id
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
   @Delete('/:id')
   async deleteCurrentUser(@Param('id') id: number, @CurrentUser() user: Users) {
     return await this.usersService.deleteUser(id);
