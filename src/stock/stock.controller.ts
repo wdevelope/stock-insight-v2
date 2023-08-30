@@ -1,6 +1,18 @@
-import { Controller, Get, HttpCode, Param, Post, Query } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { StockService } from './stock.service';
 import { Stock } from './entities/stock.entity';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
+import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
+import { CurrentUser } from 'src/common/decorators/user.decorator';
+import { Users } from 'src/users/users.entity';
 
 @Controller('api/stocks')
 export class StockController {
@@ -52,10 +64,32 @@ export class StockController {
   async getStockPrice(@Param('id') id: string): Promise<Stock> {
     return this.stockService.getStockPrice(id);
   }
-
   //http://localhost:3000/api/stocks/(?page=1)
   @Get('/')
-  async all(@Query('page') page: number = 1): Promise<Stock[]> {
+  async getStockPage(@Query('page') page: number = 1): Promise<Stock[]> {
     return await this.stockService.getStockPage(page);
+  }
+  //http://localhost:3000/api/stocks/search/(?query=검색어)
+  @Get('search')
+  async searchStock(@Query('query') query: string): Promise<Stock[]> {
+    return await this.stockService.searchStock(query);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('mystock/:stockId')
+  addMyStock(
+    @CurrentUser() user: Users,
+    @Param('stockId') stockId: string,
+  ): Promise<void> {
+    return this.stockService.addMyStock(user, stockId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('mystock/:stockId')
+  deleteMyStock(
+    @CurrentUser() user: Users,
+    @Param('stockId') stockId: string,
+  ): Promise<void> {
+    return this.stockService.deleteMyStock(user, stockId);
   }
 }
