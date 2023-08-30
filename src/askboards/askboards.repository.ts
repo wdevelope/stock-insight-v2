@@ -4,9 +4,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Askboard } from './entities/askboard.entity';
-import { FindOneOptions, Repository, SelectQueryBuilder } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateAskboardDto } from './dto/create-askboard.dto';
+import { UpdateAskboardDto } from './dto/update-askboard.dto';
 import { Users } from 'src/users/users.entity';
 
 @Injectable()
@@ -46,27 +47,40 @@ export class AskboardsRepository {
     }
     return askboard;
   }
+  // 문의게시글 수정
+  async updateAskboard(
+    id: number,
+    updateAskboardDto: UpdateAskboardDto,
+  ): Promise<Askboard> {
+    await this.askboardsRepository.update(id, updateAskboardDto); // 직접 askboardsRepository의 update() 메소드를 사용합니다.
+    const updatedAskboard = await this.findOne(id);
+    if (!updatedAskboard) {
+      throw new Error('Failed to update askboard.');
+    }
+    return updatedAskboard;
+  }
+  // 문의 게시글 저장
+  async save(createAskboardDto: CreateAskboardDto, user: Users): Promise<void> {
+    try {
+      await this.askboardsRepository.save({
+        ...createAskboardDto,
+        user: user,
+      });
+    } catch (error) {
+      throw new BadRequestException('REPOSITORY_ERROR');
+    }
+  }
 
-  // async save(createAskboardDto: CreateAskboardDto, user: Users): Promise<void> {
-  //   try {
-  //     await this.askboardsRepository.save({
-  //       ...createAskboardDto,
-  //       user: user,
-  //     });
-  //   } catch (error) {
-  //     throw new BadRequestException('REPOSITORY_ERROR');
-  //   }
-  // }
-
-  // async remove(existedAskboard): Promise<void> {
-  //   try {
-  //     await this.askboardsRepository.manager.transaction(
-  //       async (transaction) => {
-  //         await transaction.remove(existedAskboard);
-  //       },
-  //     );
-  //   } catch (error) {
-  //     throw new BadRequestException('REPOSITORY_ERROR');
-  //   }
-  // }
+  // 문의게시판 삭제
+  async remove(existedAskboard): Promise<void> {
+    try {
+      await this.askboardsRepository.manager.transaction(
+        async (transaction) => {
+          await transaction.remove(existedAskboard);
+        },
+      );
+    } catch (error) {
+      throw new BadRequestException('REPOSITORY_ERROR');
+    }
+  }
 }

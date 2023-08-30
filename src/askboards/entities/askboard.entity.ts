@@ -6,8 +6,10 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  OneToMany,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
+import { Reply } from './reply.entity';
 
 @Entity()
 export class Askboard {
@@ -29,4 +31,7 @@ export class Askboard {
   @Exclude()
   @ManyToOne(() => Users, (user) => user.askboard)
   user: Users;
+
+  @OneToMany(() => Reply, (reply) => reply.askboard)
+  replies: Reply[];
 }
