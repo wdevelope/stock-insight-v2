@@ -18,6 +18,9 @@ import { EventsModule } from './events/events.module';
 import { UploadModule } from './upload/upload.module';
 import { QuizModule } from './quiz/quiz.module';
 import { AskboardsModule } from './askboards/askboards.module';
+import { APP_FILTER } from '@nestjs/core';
+import { HttpExceptionFilter } from './exception/http-exception.filter';
+import { ExceptionModule } from './exception/exception.module';
 import { SearchModule } from './search/search.module';
 
 @Module({
@@ -42,9 +45,13 @@ import { SearchModule } from './search/search.module';
     UploadModule,
     QuizModule,
     AskboardsModule,
+    ExceptionModule,
     SearchModule,
   ],
   controllers: [AppController],
-  providers: [EmailService],
+  providers: [
+    EmailService,
+    { provide: APP_FILTER, useClass: HttpExceptionFilter },
+  ],
 })
 export class AppModule {}
