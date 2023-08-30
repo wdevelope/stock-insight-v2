@@ -6,11 +6,19 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from 'src/users/users.module';
 import { StockModule } from 'src/stock/stock.module';
 import { Quiz } from './quiz.entity';
+import { StockService } from 'src/stock/stock.service';
+import { Stock } from 'src/stock/entities/stock.entity';
+import { StockPrice } from 'src/stock/entities/stockPrice.entity';
+import { MyStock } from 'src/stock/entities/myStock.entity';
 
 @Module({
-  imports: [StockModule, UsersModule, TypeOrmModule.forFeature([Quiz])],
+  imports: [
+    StockModule,
+    UsersModule,
+    TypeOrmModule.forFeature([Quiz, Stock, StockPrice, MyStock]),
+  ],
   controllers: [QuizController],
-  providers: [QuizService, QuizRepository],
+  providers: [QuizService, QuizRepository, StockService],
   exports: [QuizService, QuizRepository],
 })
 export class QuizModule {}
