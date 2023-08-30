@@ -17,6 +17,9 @@ import type { ClientOpts } from 'redis';
 import { EventsModule } from './events/events.module';
 import { UploadModule } from './upload/upload.module';
 import { AskboardsModule } from './askboards/askboards.module';
+import { APP_FILTER } from '@nestjs/core';
+import { HttpExceptionFilter } from './exception/http-exception.filter';
+import { ExceptionModule } from './exception/exception.module';
 
 @Module({
   imports: [
@@ -40,8 +43,12 @@ import { AskboardsModule } from './askboards/askboards.module';
     EventsModule,
     UploadModule,
     AskboardsModule,
+    ExceptionModule,
   ],
   controllers: [AppController],
-  providers: [EmailService],
+  providers: [
+    EmailService,
+    { provide: APP_FILTER, useClass: HttpExceptionFilter },
+  ],
 })
 export class AppModule {}

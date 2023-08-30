@@ -11,6 +11,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { MyStock } from 'src/stock/entities/myStock.entity';
 
 @Entity()
 export class Users {
@@ -76,4 +77,10 @@ export class Users {
     eager: true,
   })
   askboard: Askboard;
+
+  @OneToMany(() => MyStock, (myStock) => myStock.user, {
+    cascade: true,
+    eager: true,
+  })
+  myStocks: MyStock[];
 }

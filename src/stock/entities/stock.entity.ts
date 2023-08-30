@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { StockPrice } from './stockPrice.entity';
+import { MyStock } from './myStock.entity';
 
 @Entity()
 export class Stock {
@@ -32,4 +33,9 @@ export class Stock {
     cascade: true,
   })
   stockPrices: StockPrice[];
+
+  @OneToMany(() => MyStock, (myStock) => myStock.stock, {
+    cascade: true,
+  })
+  myStocks: MyStock[];
 }

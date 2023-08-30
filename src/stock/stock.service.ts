@@ -1,6 +1,11 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Not, Repository } from 'typeorm';
+import { Like, Not, Repository } from 'typeorm';
 import axios from 'axios';
 import { StockPrice } from './entities/stockPrice.entity';
 import { Stock } from './entities/stock.entity';
@@ -8,6 +13,8 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { CronJob } from 'cron';
 import { SchedulerRegistry } from '@nestjs/schedule';
+import { MyStock } from './entities/myStock.entity';
+import { Users } from 'src/users/users.entity';
 
 @Injectable()
 export class StockService {
@@ -16,6 +23,8 @@ export class StockService {
     private stockPriceRepository: Repository<StockPrice>,
     @InjectRepository(Stock)
     private stockRepository: Repository<Stock>,
+    @InjectRepository(MyStock)
+    private myStockRepository: Repository<MyStock>,
     private schedulerRegistry: SchedulerRegistry,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
@@ -197,7 +206,7 @@ export class StockService {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  async getStockPrice(id: string): Promise<any> {
+  async getStockPrice(id: string): Promise<Stock> {
     const stock = await this.stockRepository.findOne({
       where: { id: id },
       relations: ['stockPrices'],
@@ -243,5 +252,55 @@ export class StockService {
         last_page: Math.ceil(total / take),
       },
     };
+  }
+
+  async searchStock(query: string): Promise<Stock[]> {
+    return this.stockRepository.find({
+      where: [
+        { id: Like(`%${query}%`) },
+        { prdt_abrv_name: Like(`%${query}%`) },
+      ],
+    });
+  }
+
+  async addMyStock(user: Users, stockId: string): Promise<void> {
+    const userId = user.id;
+    const stock = await this.stockRepository.findOne({
+      where: { id: stockId },
+    });
+    if (!stock) {
+      throw new NotFoundException('stock not found');
+    }
+    const existMyStock = await this.myStockRepository.findOne({
+      where: {
+        user: { id: userId },
+        stock: { id: stockId },
+      },
+    });
+    if (existMyStock) {
+      throw new ConflictException('stock has already been registered');
+    }
+
+    const myStock = new MyStock();
+    myStock.user = user;
+    myStock.stock = stock;
+
+    await this.myStockRepository.save(myStock);
+  }
+
+  async deleteMyStock(user: Users, stockId: string): Promise<void> {
+    const userId = user.id;
+
+    const existMyStock = await this.myStockRepository.findOne({
+      where: {
+        user: { id: userId },
+        stock: { id: stockId },
+      },
+    });
+    if (!existMyStock) {
+      throw new ConflictException('stock not saved');
+    }
+
+    await this.myStockRepository.remove(existMyStock);
   }
 }
