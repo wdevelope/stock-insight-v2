@@ -72,14 +72,12 @@ export class Users {
   })
   noticeboard: NoticeBoard;
 
-<<<<<<< HEAD
   @OneToMany(() => Quiz, (quiz) => quiz.user, { eager: true })
   quiz: Quiz[];
-=======
+
   @OneToMany(() => Askboard, (askboard) => askboard.user, {
     cascade: true,
     eager: true,
   })
   askboard: Askboard;
->>>>>>> 56d3495949c28e4986ab3c3204d9aec0dde8ccb3
 }
