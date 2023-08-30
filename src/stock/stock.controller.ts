@@ -67,12 +67,12 @@ export class StockController {
   }
   //http://localhost:3000/api/stocks/(?page=1)
   @Get('/')
-  async getStockPage(@Query('page') page: number = 1): Promise<Stock[]> {
+  async getStockPage(@Query('page') page: number = 1): Promise<any> {
     return await this.stockService.getStockPage(page);
   }
   //http://localhost:3000/api/stocks/search/(?query=검색어)
   @Get('search')
-  async searchStock(@Query('query') query: string): Promise<Stock[]> {
+  async searchStock(@Query('query') query: string): Promise<any> {
     return await this.stockService.searchStock(query);
   }
 

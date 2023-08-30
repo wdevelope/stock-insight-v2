@@ -254,13 +254,36 @@ export class StockService {
     };
   }
 
-  async searchStock(query: string): Promise<Stock[]> {
-    return this.stockRepository.find({
+  async searchStock(query: string): Promise<any> {
+    const stocks = await this.stockRepository.find({
       where: [
         { id: Like(`%${query}%`) },
         { prdt_abrv_name: Like(`%${query}%`) },
       ],
+      relations: ['stockPrices'],
     });
+
+    return {
+      data: stocks.map((stock) => {
+        const latestPrice = stock.stockPrices.reduce((latest, price) => {
+          if (!latest || price.created_at > latest.created_at) {
+            return price;
+          }
+          return latest;
+        }, null);
+
+        return {
+          id: stock.id,
+          prdt_abrv_name: stock.prdt_abrv_name,
+          rprs_mrkt_kor_name: stock.rprs_mrkt_kor_name,
+          stck_prpr: latestPrice.stck_prpr,
+          prdy_vrss: latestPrice.prdy_vrss,
+          prdy_vrss_sign: latestPrice.prdy_vrss_sign,
+          prdy_ctrt: latestPrice.prdy_ctrt,
+          hts_avls: latestPrice.hts_avls,
+        };
+      }),
+    };
   }
 
   async addMyStock(user: Users, stockId: string): Promise<void> {
