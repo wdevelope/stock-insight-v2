@@ -13,6 +13,7 @@ import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
 import { Users } from 'src/users/users.entity';
+import { MyStock } from './entities/myStock.entity';
 
 @Controller('api/stocks')
 export class StockController {
@@ -91,5 +92,11 @@ export class StockController {
     @Param('stockId') stockId: string,
   ): Promise<void> {
     return this.stockService.deleteMyStock(user, stockId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('mystock')
+  getMyStock(@CurrentUser() user: Users): Promise<MyStock[]> {
+    return this.stockService.getMyStock(user);
   }
 }

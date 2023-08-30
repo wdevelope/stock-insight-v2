@@ -282,6 +282,8 @@ export class StockService {
     }
 
     const myStock = new MyStock();
+    myStock.code = stock.id;
+    myStock.prdt_abrv_name = stock.prdt_abrv_name;
     myStock.user = user;
     myStock.stock = stock;
 
@@ -302,5 +304,15 @@ export class StockService {
     }
 
     await this.myStockRepository.remove(existMyStock);
+  }
+
+  async getMyStock(user: Users): Promise<MyStock[]> {
+    const userId = user.id;
+
+    return await this.myStockRepository.find({
+      where: {
+        user: { id: userId },
+      },
+    });
   }
 }
