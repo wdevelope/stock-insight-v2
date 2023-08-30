@@ -43,11 +43,10 @@ async function fetchStockDetail() {
     console.log(data);
     renderStockDetail(data);
 
-    const chartData = data.stockPrices.map((item) => ({
+    const chartData = data.stock.stockPrices.map((item) => ({
       date: new Date(item.date), // 가정: item.date가 문자열 형식이라면 Date 객체로 변환
       stck_prpr: item.stck_prpr,
     }));
-    drawChart(chartData);
   } catch (error) {
     console.error('Error fetching stock detail:', error);
   }
@@ -55,11 +54,13 @@ async function fetchStockDetail() {
 
 // 🟤 주식 상세 정보를 화면에 표시하는 함수
 function renderStockDetail(data) {
-  const stockInfo = data.stockPrices[0];
+  const stockInfo = data.stock.stockPrices[0];
 
-  document.getElementById('stock-name').textContent = `${data.prdt_abrv_name}`;
+  document.getElementById(
+    'stock-name',
+  ).textContent = `${data.stock.prdt_abrv_name}`;
   // Header 부분 정보 업데이트
-  document.getElementById('stockId').textContent = `종목코드: ${data.id}`;
+  document.getElementById('stockId').textContent = `종목코드: ${data.stock.id}`;
   document.getElementById(
     'stockPrice',
   ).textContent = `주식 가격: ${formatNumberWithCommas(stockInfo.stck_prpr)}`;

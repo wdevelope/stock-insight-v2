@@ -142,8 +142,7 @@
       </nav>
       <!-- 검색창 -->
       <div class="search-section mt-5">
-        <div class="d-flex justify-content-center align-items-center">
-          <!-- align-items-left를 align-items-center로 변경 -->
+        <div class="d-flex align-items-center">
           <!-- 검색어 입력창 -->
           <input
             type="text"
@@ -163,17 +162,7 @@
           </button>
         </div>
         <!-- 자동완성 컨테이너 -->
-        <div
-          id="autocompleteContainer"
-          style="
-            position: absolute;
-            max-height: 200px;
-            overflow-y: auto;
-            width: auto;
-            left: 50%;
-            transform: translateX(-50%);
-          "
-        ></div>
+        <div id="autocompleteContainer"></div>
       </div>
       <!-- 주식 메인 페이지 -->
       <div id="totalStocks">
