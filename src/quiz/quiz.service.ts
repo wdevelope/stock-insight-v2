@@ -27,13 +27,17 @@ export class QuizService {
     const quizUser = await this.quizRepository.findOne({
       where: { id },
     });
+    // console.log(quizUser);
     const searchStock = await this.stockService.searchStock(quizUser.stockName);
-    // console.log('이름으로 찾기', searchStock[0].id);
+    // console.log('이름으로 찾기', searchStock.data[0].id);
     const searchStockNumber = await this.stockService.getStockPrice(
-      searchStock[0].id,
+      searchStock.data[0].id,
     );
-    // console.log('코드명으로 찾기', searchStockNumber);
-    const stockAnswer = searchStockNumber.stockPrices[0].prdy_vrss_sign;
+    // console.log(
+    //   '코드명으로 찾기',
+    //   searchStockNumber.stock.stockPrices[0].prdy_vrss_sign,
+    // );
+    const stockAnswer = searchStockNumber.stock.stockPrices[0].prdy_vrss_sign;
     let upANDdownAnswer: string;
     if (stockAnswer === '1') {
       upANDdownAnswer = 'up';
