@@ -4,6 +4,7 @@ import { Likes } from 'src/likes/entities/like.entity';
 import { NoticeBoard } from 'src/noticeboards/entities/noticeboard.entity';
 import { Askboard } from 'src/askboards/entities/askboard.entity';
 import { Views } from 'src/views/entities/view.entity';
+import { Quiz } from 'src/quiz/quiz.entity';
 import {
   CreateDateColumn,
   DeleteDateColumn,
@@ -71,6 +72,9 @@ export class Users {
     eager: true,
   })
   noticeboard: NoticeBoard;
+
+  @OneToMany(() => Quiz, (quiz) => quiz.user, { eager: true })
+  quiz: Quiz[];
 
   @OneToMany(() => Askboard, (askboard) => askboard.user, {
     cascade: true,

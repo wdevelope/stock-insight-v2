@@ -17,7 +17,7 @@ main {
   padding-left: 260px;
 }
 
-/* 메뉴 nav바 */
+/* ⭐ 메뉴 nav바 */
 .navbar {
   background-color: #01161e;
 }
@@ -58,7 +58,12 @@ main {
   background-color: #01161e; /* 클릭 시 원하는 배경색으로 변경 */
 }
 
-/* 유저 정보  */
+ul.nav .nav-item .nav-link.active {
+  background-color: rgb(4, 26, 66);
+  color: white;
+}
+
+/* ⭐ 유저 정보  */
 .user-details {
   display: none;
   position: absolute;
@@ -99,7 +104,7 @@ main {
   background-color: #0056b3;
 }
 
-/* 메인 css */
+/* ⭐ 메인 css */
 .board-container {
   display: none;
 }

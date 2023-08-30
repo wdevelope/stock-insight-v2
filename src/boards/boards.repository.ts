@@ -13,15 +13,15 @@ export class BoardsRepository {
     private boardsRepository: Repository<Board>,
   ) {}
 
-  // async find(): Promise<Board[] | undefined> {
-  //   try {
-  //     return this.boardsRepository.find();
-  //   } catch (error) {
-  //     throw new BadRequestException('REPOSITORY_ERROR');
-  //   }
-  // }
+  async find(): Promise<Board[] | undefined> {
+    try {
+      return this.boardsRepository.find();
+    } catch (error) {
+      throw new BadRequestException('REPOSITORY_ERROR');
+    }
+  }
 
-  async find(option: FindOneOptions<Board>): Promise<Board[] | undefined> {
+  async findBy(option: FindOneOptions<Board>): Promise<Board[] | undefined> {
     try {
       return this.boardsRepository.find(option);
     } catch (error) {

@@ -176,6 +176,7 @@ async function fetchBoardDetailsForEdit() {
   }
 }
 
+// 수정
 async function submitEdit() {
   const title = document.getElementById('editTitle').value;
   const description = document.getElementById('editDescription').value;

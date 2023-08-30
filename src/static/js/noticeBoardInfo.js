@@ -27,7 +27,7 @@ async function fetchNoticePostDetails() {
                                               <h3>${noticeBoard.title}</h3>
                                               <div class="putdelbutton position-absolute end-0" style="top: 100%;">
                                                   <button class="btn btn-secondary edit-post">수정</button>
-                                                  <button class="btn btn-secondary delete-post" onclick="deletePost()">삭제</button>
+                                                  <button class="btn btn-secondary delete-post" onclick="deleteNoticePost()">삭제</button>
                                               </div>
                                               <button
                                                 class="btn btn-light ms-auto"
@@ -66,7 +66,7 @@ async function deleteNoticePost() {
     }
 
     alert('게시글이 삭제되었습니다.');
-    location.reload();
+    window.location.href = 'http://localhost:3000/view/noticeBoard.html';
   } catch (error) {
     alert('게시글 삭제에 실패했습니다.');
     console.error('Error deleting post:', error);

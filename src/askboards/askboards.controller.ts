@@ -7,7 +7,6 @@ import {
   Param,
   Delete,
   ValidationPipe,
-  NotFoundException,
 } from '@nestjs/common';
 import { AskboardsService } from './askboards.service';
 import { CreateAskboardDto } from './dto/create-askboard.dto';
@@ -17,6 +16,7 @@ import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
 import { Users } from 'src/users/users.entity';
 import { AdminGuard } from 'src/askboards/jwt/admin.guard';
+import { CreateReplyDto } from './dto/create-reply.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('api/askboards')
@@ -45,17 +45,34 @@ export class AskboardsController {
     return await this.askboardsService.findOne(+id);
   }
 
-  // @Patch(':askBoardId')
-  // async update(
-  //   @CurrentUser() user: Users,
-  //   @Param('askBoardId') id: string,
-  //   @Body(ValidationPipe) updateAskboardDto: UpdateAskboardDto,
-  // ) {
-  //   return await this.askboardsService.update(+id, updateAskboardDto);
-  // }
+  // 문의 게시글 업데이트
+  @Patch(':askBoardId')
+  async update(
+    @CurrentUser() user: Users,
+    @Param('askBoardId') id: string,
+    @Body(ValidationPipe) updateAskboardDto: UpdateAskboardDto,
+  ) {
+    return await this.askboardsService.update(+id, updateAskboardDto);
+  }
 
-  // @Delete(':askBoardId')
-  // async remove(@Param('askBoardId') id: string) {
-  //   return await this.askboardsService.remove(+id);
-  // }
+  // 문의게시판 삭제
+  @Delete('/:askBoardId')
+  async remove(@Param('askBoardId') id: number) {
+    return await this.askboardsService.remove(+id);
+  }
+
+  // 문의게시판 답글 생성
+  @Post('/:askBoardId/replies')
+  async createReply(
+    @Param('askBoardId') askBoardId: number,
+    @Body(ValidationPipe) createReplyDto: CreateReplyDto,
+  ) {
+    return await this.askboardsService.createReply(askBoardId, createReplyDto);
+  }
+
+  // 문의게시판 답글 조회
+  @Get('/:askBoardId/replies')
+  async getReplies(@Param('askBoardId') askBoardId: number) {
+    return await this.askboardsService.getReplies(askBoardId);
+  }
 }

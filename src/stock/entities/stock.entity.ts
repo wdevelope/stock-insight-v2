@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { StockPrice } from './stockPrice.entity';
 import { MyStock } from './myStock.entity';
+import { Quiz } from 'src/quiz/quiz.entity';
 
 @Entity()
 export class Stock {
@@ -34,8 +35,9 @@ export class Stock {
   })
   stockPrices: StockPrice[];
 
-  @OneToMany(() => MyStock, (myStock) => myStock.stock, {
-    cascade: true,
-  })
+  @OneToMany(() => MyStock, (myStock) => myStock.stock, { cascade: true })
   myStocks: MyStock[];
+
+  @OneToMany(() => Quiz, (quiz) => quiz.user, { eager: true })
+  quiz: Quiz[];
 }
