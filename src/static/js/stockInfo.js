@@ -10,7 +10,7 @@ function formatNumberWithCommas(x) {
 
 const favoriteButton = document.getElementById('favoriteButton');
 
-// 🟤 즐겨찾기 버튼 리스너
+// 🟤 찜하기 버튼 리스너
 favoriteButton.addEventListener('click', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const stockId = urlParams.get('id');
@@ -100,7 +100,7 @@ function renderStockDetail(data) {
 
   stockInfoContainer.innerHTML = otherInfoHTML;
 }
-// 🟤 주식을 즐겨찾기에 추가하는 함수
+// 🟤 주식을 찜하기에 추가하는 함수
 async function addFavoriteStock(stockId) {
   try {
     const response = await fetch(
@@ -115,12 +115,12 @@ async function addFavoriteStock(stockId) {
     );
 
     if (response.status === 201) {
-      alert('즐겨찾기에 추가되었습니다!');
+      alert('찜한 종목에 추가되었습니다!');
       return response;
     } else if (response.status === 409) {
-      alert('이 주식은 이미 즐겨찾기에 추가되어 있습니다.');
+      alert('이 주식은 이미 찜한 종목에 추가되어 있습니다.');
     } else {
-      alert('즐겨찾기 추가에 실패했습니다.');
+      alert('찜한 종목 추가에 실패했습니다.');
     }
   } catch (error) {
     console.error('Error adding favorite stock:', error);

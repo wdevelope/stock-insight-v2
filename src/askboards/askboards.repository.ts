@@ -33,7 +33,7 @@ export class AskboardsRepository {
       this.askboardsRepository.createQueryBuilder('askboard');
     query
       .leftJoinAndSelect('askboard.user', 'user')
-      .select(['askboard', 'user.nickname', 'user.id']);
+      .select(['askboard', 'user.nickname']);
     return await query.getMany();
   }
 

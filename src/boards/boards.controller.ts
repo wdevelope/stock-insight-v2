@@ -73,6 +73,14 @@ export class BoardsController {
     return this.boardsService.getBoardsByUserId(page, findBoardDto);
   }
 
+  //페이지 네이션
+  @Get('/page')
+  async all(
+    @Query('page') page: number = 1,
+  ): Promise<{ data: Board[]; meta: any }> {
+    return await this.boardsService.paginate(page);
+  }
+
   @Get('/:boardId')
   @ApiOperation({
     summary: '게시물 상세조회 API.',
@@ -118,10 +126,5 @@ export class BoardsController {
     } catch (error) {
       throw new BadRequestException('CONTROLLER_ERROR');
     }
-  }
-  //페이지 네이션
-  @Get('/page')
-  async all(@Query('page') page: number = 1): Promise<Board[]> {
-    return await this.boardsService.paginate(page);
   }
 }

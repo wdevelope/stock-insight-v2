@@ -164,6 +164,25 @@ function debounce(func, delay) {
     inDebounce = setTimeout(() => func.apply(this, args), delay);
   };
 }
+// 페이지 네이션 다음페이지
+const nextGroup = () => {
+  currentGroup++;
+  for (let i = 0; i < 5; i++) {
+    document.getElementById('pagination').children[i + 1].innerText =
+      i + 1 + 5 * (currentGroup - 1);
+  }
+};
+
+// 페이지 네이션 이전페이지
+const prevGroup = () => {
+  if (currentGroup > 1) {
+    currentGroup--;
+    for (let i = 0; i < 5; i++) {
+      document.getElementById('pagination').children[i + 1].innerText =
+        i + 1 + 5 * (currentGroup - 1);
+    }
+  }
+};
 
 // 페이지 로딩시 초기 주식 목록 불러오기
 fetchStocks(currentPage);

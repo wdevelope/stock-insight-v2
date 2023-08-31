@@ -112,18 +112,14 @@ export class BoardsService {
     }
   }
 
-  async paginate(page: number = 1): Promise<any> {
-    const take = 2; // 페이지 상에서 보일 개수(LIMIT)
+  async paginate(page: number = 1): Promise<{ data: Board[]; meta: any }> {
+    const take = 5; // 페이지 상에서 보일 개수(LIMIT)
 
     const [boards, total] =
       await this.boardsRepository.findAndCountWithPagination(page, take);
 
     return {
-      data: boards.map((board) => {
-        const { ...data } = board;
-
-        return data;
-      }),
+      data: boards,
       meta: {
         total,
         page,
