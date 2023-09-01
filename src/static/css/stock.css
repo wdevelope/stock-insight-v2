@@ -51,6 +51,19 @@ tbody tr td:nth-child(4) {
   font-weight: bold;
 }
 
+/* 찜목록 */
+.card {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease; /* 부드러운 효과를 위한 전환 설정 */
+}
+
+.card:hover {
+  cursor: pointer;
+  transform: scale(1.05); /* 확대 효과 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 약간의 그림자를 추가하여 더 돋보이게 만들기 */
+}
+
 /* ⭐ 페이지네이션 */
 #pagination {
   display: flex;

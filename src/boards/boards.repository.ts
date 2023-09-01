@@ -91,6 +91,9 @@ export class BoardsRepository {
     return this.boardsRepository.findAndCount({
       take,
       skip: (page - 1) * take,
+      order: {
+        created_at: 'DESC', // 날짜 내림차순 정렬
+      },
     });
   }
 }

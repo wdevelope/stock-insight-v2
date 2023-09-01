@@ -1,4 +1,12 @@
-import { Column, ManyToOne, PrimaryGeneratedColumn, Entity } from 'typeorm';
+import {
+  Column,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Entity,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { Users } from 'src/users/users.entity';
 import { Askboard } from './askboard.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -16,6 +24,15 @@ export class Reply {
   @Column()
   description: string;
 
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
+
   @ManyToOne(() => Askboard, (askboard) => askboard.replies)
   askboard: Askboard;
+
+  @ManyToOne(() => Users, (user) => user.askboard)
+  user: Users;
 }

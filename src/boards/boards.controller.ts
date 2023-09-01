@@ -60,6 +60,19 @@ export class BoardsController {
     const findBoardDto = { title, description };
     return this.boardsService.getBoardsByUserId(page, findBoardDto);
   }
+
+  //페이지 네이션
+  @ApiOperation({
+    summary: '게시물 조회 API.',
+    description: '게시물을 조회한다.',
+  })
+  @Get('/page')
+  async all(
+    @Query('page') page: number = 1,
+  ): Promise<{ data: Board[]; meta: any }> {
+    return await this.boardsService.paginate(page);
+  }
+
   //보드 상세조회
   @Get('/:boardId')
   @ApiOperation({
@@ -106,14 +119,5 @@ export class BoardsController {
     } catch (error) {
       throw new BadRequestException('CONTROLLER_ERROR');
     }
-  }
-  //페이지 네이션
-  @ApiOperation({
-    summary: '게시물 조회 API.',
-    description: '게시물을 조회한다.',
-  })
-  @Get('/page')
-  async all(@Query('page') page: number = 1): Promise<Board[]> {
-    return await this.boardsService.paginate(page);
   }
 }

@@ -73,6 +73,7 @@ export class AskboardsService {
   async getReplies(askBoardId: number): Promise<Reply[]> {
     return await this.replyRepository.find({
       where: { askboard: { id: askBoardId } },
+      relations: ['user'], // 사용자의 정보를 포함하여 답글을 가져옴
     });
   }
 }
