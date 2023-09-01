@@ -15,7 +15,10 @@ export class BoardsRepository {
 
   async find(): Promise<Board[] | undefined> {
     try {
-      return this.boardsRepository.find();
+      const user = await this.boardsRepository.find({
+        relations: ['user'],
+      });
+      return user;
     } catch (error) {
       throw new BadRequestException('REPOSITORY_ERROR');
     }
@@ -53,6 +56,7 @@ export class BoardsRepository {
 
   async update(updateBoardDto: UpdateBoardDto, boardId: number): Promise<void> {
     try {
+      console.log(updateBoardDto);
       await this.boardsRepository
         .createQueryBuilder()
         .update(Board)
@@ -61,6 +65,7 @@ export class BoardsRepository {
           description: updateBoardDto.description,
           image: updateBoardDto.image,
           likeCount: updateBoardDto.likeCount,
+          viewCount: updateBoardDto.viewCount,
         })
         .where('id=:id', { id: boardId })
         .execute();

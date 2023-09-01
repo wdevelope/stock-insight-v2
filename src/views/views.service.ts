@@ -24,16 +24,16 @@ export class ViewsService {
     const existedView = await this.viewsRepository.findOne({
       where: { user: { id: userId }, board: { id: boardId } },
     });
-
+    const cnt = 0;
+    const viewscount = existedBoard.viewCount;
+    console.log(viewscount);
     try {
-      const viewscount = existedBoard.viewCount;
-      const cnt = 0;
       if (existedView === null) {
         updateBoardDto.viewCount = cnt + 1;
         await this.viewsRepository.create(user, boardId);
         await this.viewsRepository.update(boardId, updateBoardDto);
       } else {
-        updateBoardDto.likeCount = viewscount + 1;
+        updateBoardDto.viewCount = viewscount + 1;
         await this.viewsRepository.update(boardId, updateBoardDto);
       }
     } catch (error) {

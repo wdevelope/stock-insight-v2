@@ -13,6 +13,7 @@ export class SignUpDto {
   @IsNotEmpty()
   email: string;
 
+  @ApiProperty({ description: '비밀번호' })
   @IsString()
   @IsNotEmpty()
   @MinLength(8)
@@ -22,10 +23,12 @@ export class SignUpDto {
   })
   password: string;
 
+  @ApiProperty({ description: '비밀번호 확인' })
   @IsString()
   @IsNotEmpty()
   confirm: string;
 
+  @ApiProperty({ description: '닉네임' })
   @IsString()
   @IsNotEmpty()
   nickname: string;
