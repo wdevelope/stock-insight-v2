@@ -71,7 +71,7 @@
 
 > 아래 이미지를 클릭하면 시연 영상을 시청할 수 있습니다.
 
-[![시연영상](./src/static/photo/news.png)](https://)
+[![시연영상](./src/static/photo/news.png)](https://www.youtube.com/watch?v=_55dJlvUmz0)
 
 <br>
 <br>
