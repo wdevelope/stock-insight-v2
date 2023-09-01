@@ -30,6 +30,7 @@ export class LikesService {
       const cnt = 0;
       if (existedLike === null) {
         updateBoardDto.likeCount = cnt + 1;
+        console.log(updateBoardDto.likeCount);
         await this.likesRepository.save(user, boardId);
         await this.likesRepository.update(boardId, updateBoardDto);
       } else {

@@ -124,3 +124,8 @@ ul.nav .nav-item .nav-link.active {
 .page-item:hover .page-link {
   background-color: transparent;
 }
+
+/* 퀴즈 */
+.custom-btn {
+  padding: 50px 40px; /* 위아래 20px, 좌우 40px */
+}

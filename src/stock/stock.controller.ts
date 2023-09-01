@@ -13,7 +13,9 @@ import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
 import { Users } from 'src/users/users.entity';
 import { MyStock } from './entities/myStock.entity';
+import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiTags('stock')
 @Controller('api/stocks')
 export class StockController {
   constructor(private readonly stockService: StockService) {}
@@ -60,6 +62,7 @@ export class StockController {
     return '스케쥴 시작!';
   }
 
+  @ApiOperation({ summary: '' })
   @Post('pricesavestop')
   @HttpCode(200)
   stopStockPriceSave(): string {
@@ -67,6 +70,7 @@ export class StockController {
     return '스케쥴 종료!';
   }
 
+  @ApiOperation({ summary: '' })
   @Get('price/:id')
   async getStockPrice(@Param('id') id: string): Promise<any> {
     return this.stockService.getStockPrice(id);
@@ -77,16 +81,20 @@ export class StockController {
   }
 
   //http://localhost:3000/api/stocks/(?page=1)
+  @ApiOperation({ summary: '' })
   @Get('/')
   async getStockPage(@Query('page') page: number = 1): Promise<any> {
     return await this.stockService.getStockPage(page);
   }
   //http://localhost:3000/api/stocks/search/(?query=검색어)
+  @ApiOperation({ summary: '' })
   @Get('search')
   async searchStock(@Query('query') query: string): Promise<any> {
     return await this.stockService.searchStock(query);
   }
 
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: '' })
   @UseGuards(JwtAuthGuard)
   @Post('mystock/:stockId')
   addMyStock(
@@ -96,6 +104,8 @@ export class StockController {
     return this.stockService.addMyStock(user, stockId);
   }
 
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: '' })
   @UseGuards(JwtAuthGuard)
   @Delete('mystock/:stockId')
   deleteMyStock(
@@ -105,6 +115,8 @@ export class StockController {
     return this.stockService.deleteMyStock(user, stockId);
   }
 
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: '' })
   @UseGuards(JwtAuthGuard)
   @Get('mystock')
   getMyStock(@CurrentUser() user: Users): Promise<MyStock[]> {

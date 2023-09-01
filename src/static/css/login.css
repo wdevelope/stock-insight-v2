@@ -23,3 +23,8 @@ canvas {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   background-color: white;
 }
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: rgba(0, 0, 0, 0.5); /* 검정 반투명 배경 */
+}
