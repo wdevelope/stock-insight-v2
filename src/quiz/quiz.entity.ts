@@ -22,6 +22,9 @@ export class Quiz {
   @Column()
   answer: boolean;
 
+  @Column({ default: 1 })
+  count: number;
+
   @CreateDateColumn()
   createdAt: Date;
 
@@ -36,7 +39,4 @@ export class Quiz {
 
   @ManyToOne(() => Stock, (stock) => stock.id)
   stock: Stock;
-
-  // stock Code
-  // user answer
 }
