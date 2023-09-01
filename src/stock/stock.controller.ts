@@ -31,14 +31,14 @@ export class StockController {
   @HttpCode(200)
   startStockNameSave(): string {
     this.stockService.startStockNameSave();
-    return '스케쥴 시작!';
+    return '주식 목록 스케쥴 시작!';
   }
 
   @Post('namesavestop')
   @HttpCode(200)
   stopStockNameSave(): string {
     this.stockService.stopStockNameSave();
-    return '스케쥴 종료!';
+    return '주식 목록 스케쥴 종료!';
   }
 
   @Post('pricesave')
@@ -52,14 +52,14 @@ export class StockController {
   @HttpCode(200)
   stockIndexSave(): string {
     this.stockService.stockIndexSave();
-    return '주식 가격 저장 성공!';
+    return '주가 지수 저장 성공!';
   }
 
   @Post('pricesavestart')
   @HttpCode(200)
   startStockPriceSave(): string {
     this.stockService.startStockPriceSave();
-    return '스케쥴 시작!';
+    return '주식 가격 스케쥴 시작!';
   }
 
   @ApiOperation({ summary: '' })
@@ -67,7 +67,7 @@ export class StockController {
   @HttpCode(200)
   stopStockPriceSave(): string {
     this.stockService.stopStockPriceSave();
-    return '스케쥴 종료!';
+    return '주식 가격 스케쥴 종료!';
   }
 
   @ApiOperation({ summary: '' })

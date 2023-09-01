@@ -47,16 +47,19 @@ export class StockService {
     console.log(`Deleted ${deleteResult.affected} rows.`);
   }
   private async stockNameSaveMarket(market: string) {
-    const currentTime = new Date();
-    currentTime.setHours(currentTime.getHours() + 9);
-    const today = currentTime.toISOString().substring(0, 10).replace(/-/g, '');
+    let dayCal = 15;
     const dayWeek = new Date().getDay();
-    let enterDay = +today - 1;
     if (dayWeek >= 0 && dayWeek <= 1) {
-      enterDay = +today - 3;
+      dayCal = 63;
     } else if (dayWeek === 6) {
-      enterDay = +today - 2;
+      dayCal = 39;
     }
+    const currentTime = new Date();
+    currentTime.setHours(currentTime.getHours() - dayCal);
+    const enterDay = currentTime
+      .toISOString()
+      .substring(0, 10)
+      .replace(/-/g, '');
 
     const config = {
       method: 'get',
@@ -70,6 +73,7 @@ export class StockService {
     try {
       const response = await axios.request(config);
       const { OutBlock_1 } = response.data;
+      const today = new Date().toISOString().substring(0, 10).replace(/-/g, '');
 
       for (const OutBlock of OutBlock_1) {
         const entity = new Stock();
