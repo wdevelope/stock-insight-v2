@@ -1,6 +1,5 @@
 import { Users } from 'src/users/users.entity';
 import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from 'typeorm';
-import { Stock } from './stock.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
@@ -11,7 +10,7 @@ export class MyStock {
 
   @ApiProperty({ description: '코드' })
   @Column()
-  code: string; // 코드명
+  stockId: string; // 코드명
 
   @ApiProperty({ description: '이름' })
   @Column()
@@ -19,7 +18,4 @@ export class MyStock {
 
   @ManyToOne(() => Users, (user) => user.myStocks)
   user: Users;
-
-  @ManyToOne(() => Stock, (stock) => stock.myStocks, { nullable: false })
-  stock: Stock;
 }

@@ -48,6 +48,13 @@ export class StockController {
     return '주식 가격 저장 성공!';
   }
 
+  @Post('indexsave')
+  @HttpCode(200)
+  stockIndexSave(): string {
+    this.stockService.stockIndexSave();
+    return '주식 가격 저장 성공!';
+  }
+
   @Post('pricesavestart')
   @HttpCode(200)
   startStockPriceSave(): string {
@@ -68,6 +75,11 @@ export class StockController {
   async getStockPrice(@Param('id') id: string): Promise<any> {
     return this.stockService.getStockPrice(id);
   }
+  @Get('index')
+  async getStockindex(): Promise<any> {
+    return this.stockService.getStockindex();
+  }
+
   //http://localhost:3000/api/stocks/(?page=1)
   @ApiOperation({ summary: '' })
   @Get('/')

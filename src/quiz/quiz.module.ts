@@ -10,12 +10,13 @@ import { StockService } from 'src/stock/stock.service';
 import { Stock } from 'src/stock/entities/stock.entity';
 import { StockPrice } from 'src/stock/entities/stockPrice.entity';
 import { MyStock } from 'src/stock/entities/myStock.entity';
+import { StockIndex } from 'src/stock/entities/stockIndex.entity';
 
 @Module({
   imports: [
     StockModule,
     UsersModule,
-    TypeOrmModule.forFeature([Quiz, Stock, StockPrice, MyStock]),
+    TypeOrmModule.forFeature([Quiz, Stock, StockPrice, MyStock, StockIndex]),
   ],
   controllers: [QuizController],
   providers: [QuizService, QuizRepository, StockService],
