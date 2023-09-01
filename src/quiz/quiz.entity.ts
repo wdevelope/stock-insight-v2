@@ -25,6 +25,9 @@ export class Quiz {
   @Column({ default: 1 })
   count: number;
 
+  @Column()
+  updated_day: string; //업데이트 날짜
+
   @CreateDateColumn()
   createdAt: Date;
 

@@ -43,9 +43,9 @@ export class QuizController {
   // 퀴즈 확인
   @ApiOperation({ summary: '퀴즈 확인 API', description: '퀴즈 확인을 한다.' })
   @ApiBody({ type: UpdateQuizDto })
-  @Patch('/answer/:id')
-  async updateQuiz(@Param('id') id: number) {
-    return await this.quizService.updateQuiz(id);
+  @Patch('/answer')
+  async updateQuiz() {
+    return await this.quizService.updateQuiz();
   }
 
   // up, down 각각의 개수의 합
@@ -62,13 +62,13 @@ export class QuizController {
 
   //퀴즈 확인 스케줄러 시작
   @Post('/updatequizstart')
-  startUpdateQuiz(@Param('id') id: number): string {
-    this.quizService.startUpdateQuiz(id);
+  startUpdateQuiz(): string {
+    this.quizService.startUpdateQuiz();
     return '스케쥴 시작!';
   }
 
-  ////퀴즈 확인 스케줄러 종료
-  @Post('updatequizstop')
+  //퀴즈 확인 스케줄러 종료
+  @Post('/updatequizstop')
   stopUpdateQuiz(): string {
     this.quizService.stopUpdateQuiz();
     return '스케쥴 종료!';
