@@ -2,6 +2,7 @@ window.onload = function () {
   fetchAndRenderPosts();
 };
 let currentGroup = 1;
+
 // 🟠 자유게시판 검색
 async function freeBoardSearch() {
   const searchOption = document.getElementById('searchOption').value;
@@ -62,7 +63,7 @@ async function renderSearchResults(data) {
             <strong class="mb-1 ms-2">${post.title}</strong>
           </div>
           <div>
-            <small class="me-2">닉네임</small>
+            <small class="me-2">${post.user.nickname}</small>
             <span>${postDate}</span>
             <i class="fas fa-eye ms-4"></i> ${viewsCount}
             <i class="fas fa-thumbs-up ms-4"></i> ${likesCount}
@@ -97,17 +98,21 @@ async function fetchAndRenderPosts(page = 1) {
       throw new Error('fetch res 에러');
     }
     const { data, meta } = await response.json();
-
+    console.log('보드 전체 렌더링 테스트', data);
     data.sort((a, b) => {
       return new Date(b.created_at) - new Date(a.created_at);
     });
     const boardElement = document.querySelector('#notice .list-group');
     let postHTML = '';
 
+    const DEFAULT_IMAGE_URL = 'https://ifh.cc/g/a2Sg64.png';
+
     for (const post of data) {
       const postDate = post.created_at.split('T')[0];
       const likesCount = post.likeCount;
       const viewsCount = post.viewCount;
+      const userImageUrl = post.user.imgUrl || DEFAULT_IMAGE_URL;
+
       postHTML += `
         <a href="http://localhost:3000/view/freeBoardInfo.html?freeBoardId=${post.id}" class="list-group-item list-group-item-action"                  
         onclick="handleBoardItemClick(${post.id})">
@@ -117,7 +122,8 @@ async function fetchAndRenderPosts(page = 1) {
               <strong class="mb-1 ms-2">${post.title}</strong>
             </div>
             <div>
-              <small class="me-2">닉네임</small>
+            <img src="${userImageUrl}" width="20" class="me-2">  <!-- 이미지 추가 -->
+              <small class="me-2">${post.user.nickname}</small>
               <span>${postDate}</span>
               <i class="fas fa-eye ms-4"></i> ${viewsCount}
               <i class="fas fa-thumbs-up ms-4"></i> ${likesCount}
@@ -133,23 +139,32 @@ async function fetchAndRenderPosts(page = 1) {
   }
 }
 
+// 페이지 번호 동적 부여
+function updatePaginationUI() {
+  const buttons = document
+    .getElementById('pagination')
+    .querySelectorAll('button:not(:first-child):not(:last-child)');
+
+  for (let i = 0; i < buttons.length; i++) {
+    let pageNum = i + 1 + 5 * (currentGroup - 1);
+    buttons[i].innerText = pageNum;
+    buttons[i].onclick = function () {
+      fetchAndRenderPosts(pageNum);
+    };
+  }
+}
+
 // 페이지 네이션 다음페이지
 const nextGroup = () => {
   currentGroup++;
-  for (let i = 0; i < 5; i++) {
-    document.getElementById('pagination').children[i + 1].innerText =
-      i + 1 + 5 * (currentGroup - 1);
-  }
+  updatePaginationUI();
 };
 
 // 페이지 네이션 이전페이지
 const prevGroup = () => {
   if (currentGroup > 1) {
     currentGroup--;
-    for (let i = 0; i < 5; i++) {
-      document.getElementById('pagination').children[i + 1].innerText =
-        i + 1 + 5 * (currentGroup - 1);
-    }
+    updatePaginationUI();
   }
 };
 

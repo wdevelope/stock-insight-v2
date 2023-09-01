@@ -19,6 +19,9 @@ async function fetchAskePostDetails() {
       window.location.href = 'http://localhost:3000/view/askBoard.html';
     }
     const askBoard = await response.json();
+    console.log('문의게시판 데이터 테스트', askBoard);
+    const defaultImageUrl = 'https://ifh.cc/g/a2Sg64.png';
+    const authorImage = askBoard.user.imgUrl || defaultImageUrl;
 
     const boardContainer = document.querySelector('.board-container');
     // 공지 게시글 상세페이지
@@ -39,6 +42,7 @@ async function fetchAskePostDetails() {
                                     </button>   
                                   </div>         
                                   <p class="text-muted post-info">
+                                  <img src="${authorImage}" alt="Author's Image" style="width: 30px; height: 30px; border-radius: 50%;"> <!-- 작성자의 이미지 추가 -->
                                     작성자: <span class="author">${askBoard.id}</span> | 날짜: <span class="date">${askBoard.created_at}</span>
                                   </p>
                                   <p>${askBoard.description}</p>

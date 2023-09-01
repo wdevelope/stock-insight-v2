@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-  fetchBoardDetailsForEdit();
+  // fetchBoardDetailsForEdit();
   fetchPostDetails();
 });
 
@@ -10,6 +10,7 @@ async function fetchPostDetails() {
       `http://localhost:3000/api/boards/${freeBoardId}`,
       {
         headers: {
+          'Content-Type': 'application/json',
           Authorization: token,
         },
       },
@@ -22,6 +23,10 @@ async function fetchPostDetails() {
     const freeBoard = await response.json();
     const likeText = freeBoard.likeCount || 0;
 
+    const defaultImageUrl = 'https://ifh.cc/g/a2Sg64.png';
+    const authorImage = freeBoard.imgUrl || defaultImageUrl;
+
+    console.log('자유게시판 렌더링 테스트', freeBoard);
     const boardContainer = document.querySelector('.board-container');
 
     // 자유 게시글 상세페이지
@@ -43,10 +48,11 @@ async function fetchPostDetails() {
                                                 </button>   
                                             </div>         
                                             <p class="text-muted post-info">
-                                                작성자: <span class="author">${freeBoard.id}</span> | 날짜: <span class="date">${freeBoard.created_at}</span>
+                                            <img src="${authorImage}" alt="Author's Image" style="width: 30px; height: 30px; border-radius: 50%;"> <!-- 작성자의 이미지 추가 -->
+                                                작성자: <span class="author">${freeBoard.nickname}</span> | 날짜: <span class="date">${freeBoard.created_at}</span>
                                             </p>
                                             <p>${freeBoard.description}</p>
-                                            <button class="btn btn-primary" onclick="handleLikeClick()">👍  (${likeText})</button>
+                                            <button class="btn btn-primary" onclick="handleLikeClick()">👍(${likeText})</button>
                                         `;
 
     // 댓글 섹션 업데이트
@@ -105,12 +111,14 @@ async function deleteFreePost() {
       {
         method: 'DELETE',
         headers: {
+          'Content-Type': 'application/json',
           Authorization: token,
         },
       },
     );
+
     if (!response.ok) {
-      throw new Error('Failed to delete the post');
+      throw new Error('삭제 권한이 없습니다.');
     }
 
     alert('게시글이 삭제되었습니다.');
@@ -151,30 +159,55 @@ async function createComment() {
   }
 }
 
-//⚪ 게시글 수정 함수
-async function fetchBoardDetailsForEdit() {
-  console.log(freeEditBoardId);
+// ⚪ 좋아요 기능
+async function handleLikeClick() {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/boards/${freeEditBoardId}`,
+      `http://localhost:3000/api/likes/${freeBoardId}`,
       {
+        method: 'POST',
         headers: {
           Authorization: token,
+          'Content-Type': 'application/json',
         },
       },
     );
 
-    if (!response.ok) {
-      throw new Error('패치 응답 에러');
+    if (response.status === 201) {
+      // 좋아요 처리가 성공하면 게시글 상세 정보를 다시 불러옵니다.
+      await fetchPostDetails();
+    } else {
+      alert('좋아요 처리에 실패했습니다.');
     }
-
-    const freeBoardId = await response.json();
-    document.getElementById('titleInput').value = freeBoardId.title;
-    document.getElementById('descriptionInput').value = freeBoardId.description;
   } catch (error) {
-    console.error('Error fetching board details:', error);
+    console.error('Error processing like:', error);
   }
 }
+
+//⚪ 게시글 수정 함수
+// async function fetchBoardDetailsForEdit() {
+//   console.log(freeEditBoardId);
+//   try {
+//     const response = await fetch(
+//       `http://localhost:3000/api/boards/${freeEditBoardId}`,
+//       {
+//         headers: {
+//           Authorization: token,
+//         },
+//       },
+//     );
+
+//     if (!response.ok) {
+//       throw new Error('패치 응답 에러');
+//     }
+
+//     const freeBoardId = await response.json();
+//     document.getElementById('titleInput').value = freeBoardId.title;
+//     document.getElementById('descriptionInput').value = freeBoardId.description;
+//   } catch (error) {
+//     console.error('Error fetching board details:', error);
+//   }
+// }
 
 // 수정
 async function submitEdit() {
@@ -198,30 +231,5 @@ async function submitEdit() {
     window.location.href = 'http://localhost:3000/view/freeBoard.html';
   } catch (error) {
     console.log(err);
-  }
-}
-
-// ⚪ 좋아요 기능
-async function handleLikeClick() {
-  try {
-    const response = await fetch(
-      `http://localhost:3000/api/likes/${freeBoardId}`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: token,
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-
-    if (response.status === 201) {
-      // 좋아요 처리가 성공하면 게시글 상세 정보를 다시 불러옵니다.
-      await fetchPostDetails();
-    } else {
-      alert('좋아요 처리에 실패했습니다.');
-    }
-  } catch (error) {
-    console.error('Error processing like:', error);
   }
 }

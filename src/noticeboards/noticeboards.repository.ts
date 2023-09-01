@@ -15,7 +15,11 @@ export class NoticeBoardsRepository {
 
   async find(): Promise<NoticeBoard[] | undefined> {
     try {
-      return this.noticeBoardsRepository.find();
+      return await this.noticeBoardsRepository
+        .createQueryBuilder('noticeBoard')
+        .leftJoinAndSelect('noticeBoard.user', 'user') // noticeBoard 엔터티에서 user와의 관계를 기반으로 조인
+        .select(['noticeBoard', 'user.nickname', 'user.imgUrl']) // noticeBoard의 모든 컬럼과 user의 nickname만 선택
+        .getMany(); // 여러 개의 결과를 가져옴
     } catch (error) {
       throw new BadRequestException('REPOSITORY_ERROR');
     }
@@ -25,7 +29,10 @@ export class NoticeBoardsRepository {
     option: FindOneOptions<NoticeBoard>,
   ): Promise<NoticeBoard | undefined> {
     try {
-      return this.noticeBoardsRepository.findOne(option);
+      return this.noticeBoardsRepository.findOne({
+        ...option,
+        relations: ['user'],
+      });
     } catch (error) {
       throw new BadRequestException('REPOSITORY_ERROR');
     }

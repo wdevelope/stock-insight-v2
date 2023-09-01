@@ -5,12 +5,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { Users } from 'src/users/users.entity';
+import { EntityManager } from 'typeorm';
 
 @Injectable()
 export class BoardsRepository {
   constructor(
     @InjectRepository(Board)
     private boardsRepository: Repository<Board>,
+    private readonly entityManager: EntityManager, // Add this line
   ) {}
 
   async find(): Promise<Board[] | undefined> {
@@ -36,6 +38,33 @@ export class BoardsRepository {
     try {
       return this.boardsRepository.findOne(option);
     } catch (error) {
+      throw new BadRequestException('REPOSITORY_ERROR');
+    }
+  }
+
+  //보드 상세 조회
+  async findOneWith(boardId: number): Promise<Board | undefined> {
+    try {
+      const result = await this.entityManager.query(
+        `
+            SELECT 
+                board.id,
+                board.title,
+                board.description,
+                board.created_at,
+                board.updated_at,
+                users.nickname,
+                users.imgUrl
+            FROM board
+            LEFT JOIN users ON users.id = board.userId
+            WHERE board.id = ${boardId}
+        `,
+        [boardId],
+      );
+
+      return result[0];
+    } catch (error) {
+      console.log(error);
       throw new BadRequestException('REPOSITORY_ERROR');
     }
   }
@@ -88,12 +117,16 @@ export class BoardsRepository {
     page: number,
     take: number,
   ): Promise<[Board[], number]> {
-    return this.boardsRepository.findAndCount({
-      take,
-      skip: (page - 1) * take,
-      order: {
-        created_at: 'DESC', // 날짜 내림차순 정렬
-      },
-    });
+    const qb = this.boardsRepository
+      .createQueryBuilder('board')
+      .leftJoinAndSelect('board.user', 'user')
+      .select(['board', 'user.nickname', 'user.imgUrl']) // board와 user의 nickname,imgUrl 선택
+      .orderBy('board.created_at', 'DESC')
+      .skip((page - 1) * take)
+      .take(take);
+
+    const [boards, total] = await qb.getManyAndCount();
+
+    return [boards, total];
   }
 }
