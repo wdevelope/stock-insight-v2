@@ -15,6 +15,7 @@ import { CronJob } from 'cron';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { MyStock } from './entities/myStock.entity';
 import { Users } from 'src/users/users.entity';
+import { StockIndex } from './entities/stockIndex.entity';
 
 @Injectable()
 export class StockService {
@@ -25,6 +26,8 @@ export class StockService {
     private stockRepository: Repository<Stock>,
     @InjectRepository(MyStock)
     private myStockRepository: Repository<MyStock>,
+    @InjectRepository(StockIndex)
+    private stockIndexRepository: Repository<StockIndex>,
     private schedulerRegistry: SchedulerRegistry,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
@@ -156,6 +159,49 @@ export class StockService {
       }
     }
   }
+
+  async stockIndexSave() {
+    const indexCodes = ['0001', '1001'];
+    const currentTime = new Date();
+    currentTime.setHours(currentTime.getHours() + 9);
+    const today = currentTime.toISOString().substring(0, 10).replace(/-/g, '');
+    let ACCESS_TOKEN = await this.cacheManager.get('token');
+    if (!ACCESS_TOKEN) {
+      await this.tokenCreate();
+      await this.sleep(200);
+      ACCESS_TOKEN = await this.cacheManager.get('token');
+    }
+
+    for (const indexCode of indexCodes) {
+      const config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: `https://openapi.koreainvestment.com:9443/uapi/domestic-stock/v1/quotations/inquire-daily-indexchartprice?fid_cond_mrkt_div_code=U&fid_input_iscd=${indexCode}&fid_input_date_1=${today}&fid_input_date_2=${today}&fid_period_div_code=D`,
+        headers: {
+          'content-type': 'application/json',
+          authorization: String(ACCESS_TOKEN),
+          appkey: process.env.APPKEY,
+          appsecret: process.env.APPSECRET,
+          tr_id: 'FHKUP03500100',
+        },
+      };
+      try {
+        const response = await axios.request(config);
+        const { output1 } = response.data;
+
+        await this.stockIndexRepository.save({
+          bstp_cls_code: output1.bstp_cls_code,
+          bstp_nmix_prpr: output1.bstp_nmix_prpr,
+          bstp_nmix_prdy_vrss: output1.bstp_nmix_prdy_vrss,
+          bstp_nmix_prdy_ctrt: output1.bstp_nmix_prdy_ctrt,
+        });
+        await this.sleep(60);
+      } catch (error) {
+        console.error(`Error processing stock ${indexCode}: ${error.message}`);
+      }
+    }
+  }
+
   private async tokenCreate() {
     const data = JSON.stringify({
       grant_type: 'client_credentials',
@@ -189,6 +235,7 @@ export class StockService {
       () => {
         console.log('start');
         this.stockPriceSave();
+        this.stockIndexSave();
       },
       null,
       false,
@@ -219,6 +266,19 @@ export class StockService {
     stock.stockPrices.splice(1);
 
     return { stock, prices };
+  }
+
+  async getStockindex(): Promise<any> {
+    const KOSPI = await this.stockIndexRepository.findOne({
+      where: { bstp_cls_code: '0001' },
+      order: { created_at: 'DESC' },
+    });
+    const KOSDAQ = await this.stockIndexRepository.findOne({
+      where: { bstp_cls_code: '1001' },
+      order: { created_at: 'DESC' },
+    });
+
+    return { KOSPI: KOSPI, KOSDAQ: KOSDAQ };
   }
 
   async getStockPage(page: number = 1): Promise<any> {
@@ -299,8 +359,8 @@ export class StockService {
     }
     const existMyStock = await this.myStockRepository.findOne({
       where: {
+        stockId: stockId,
         user: { id: userId },
-        stock: { id: stockId },
       },
     });
     if (existMyStock) {
@@ -308,10 +368,9 @@ export class StockService {
     }
 
     const myStock = new MyStock();
-    myStock.code = stock.id;
+    myStock.stockId = stock.id;
     myStock.prdt_abrv_name = stock.prdt_abrv_name;
     myStock.user = user;
-    myStock.stock = stock;
 
     await this.myStockRepository.save(myStock);
   }
@@ -322,7 +381,7 @@ export class StockService {
     const existMyStock = await this.myStockRepository.findOne({
       where: {
         user: { id: userId },
-        stock: { id: stockId },
+        stockId: stockId,
       },
     });
     if (!existMyStock) {
