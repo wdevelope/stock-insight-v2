@@ -7,6 +7,7 @@ import { Views } from './entities/view.entity';
 import { BoardsModule } from 'src/boards/boards.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { ViewsRepository } from './views.repository';
+import { BoardsRepository } from 'src/boards/boards.repository';
 
 @Module({
   imports: [
@@ -22,6 +23,6 @@ import { ViewsRepository } from './views.repository';
     }),
   ],
   controllers: [ViewsController],
-  providers: [ViewsService, ViewsRepository],
+  providers: [ViewsService, ViewsRepository, BoardsRepository],
 })
 export class ViewsModule {}

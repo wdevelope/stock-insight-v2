@@ -3,6 +3,13 @@
 }
 
 /* ⭐ 메인 테이블 */
+#autocompleteContainer {
+  display: none; /* 초기 상태에서는 숨김 */
+  border: 1px solid #ccc;
+}
+#autocompleteContainer:hover {
+  cursor: pointer;
+}
 
 #totalStocks {
   font-size: 24px;

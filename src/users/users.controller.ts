@@ -24,7 +24,9 @@ import { UpdateRequestDto } from './dto/updateRequest.dto';
 import { EmailService } from './email/email.service';
 import { EmailDto } from './dto/email.dto';
 import { PointDto } from './dto/point.dto';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('users')
 @Controller('api/users')
 export class UsersController {
   constructor(
@@ -35,12 +37,22 @@ export class UsersController {
 
   // POST. http://localhost:3000/api/users
   @Post()
+  @ApiOperation({
+    summary: '회원가입 API.',
+    description: '회원가입을 한다.',
+  })
+  @ApiBody({ type: [SignUpDto] })
   async signUp(@Body(ValidationPipe) body: SignUpDto) {
     return await this.usersService.signUp(body);
   }
 
   // POST. http://localhost:3000/api/users/login
   @Post('/login')
+  @ApiOperation({
+    summary: '로그인 API.',
+    description: '로그인을 한다.',
+  })
+  @ApiBody({ type: [LoginDto] })
   logIn(@Body() body: LoginDto, @Res() res: Response) {
     return this.authService.jwtLogIn(body, res);
   }
@@ -61,6 +73,12 @@ export class UsersController {
 
   // PATCH. http://localhost:3000/api/users/:id
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({
+    summary: '유저 정보 수정API',
+    description: '유저 정보를 수정한다.',
+  })
+  @ApiBody({ type: [UpdateRequestDto] })
   @Patch('/:id')
   async updateCurrentUser(
     @Param('id') id: number,
@@ -72,6 +90,11 @@ export class UsersController {
 
   // DELETE. http://localhost:3000/api/users/:id
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({
+    summary: '유저 삭제 API',
+    description: '유저 정보를 삭제한다.',
+  })
   @Delete('/:id')
   async deleteCurrentUser(@Param('id') id: number, @CurrentUser() user: Users) {
     return await this.usersService.deleteUser(id);
@@ -79,17 +102,27 @@ export class UsersController {
 
   // 이메일 보내는것 까지 성공 http://localhost:3000/api/users/email
   @Post('/email')
+  @ApiOperation({
+    summary: '이메일 인증 API',
+  })
   sendTemplate(@Body() body: EmailDto): any {
     return this.emailService.authEmail(body);
   }
 
   // 이메일 인증 http://localhost:3000/api/users/verifyEmail
+  @ApiOperation({
+    summary: '이메일 인증 API',
+  })
   @Post('/verifyEmail')
   async verifyEmail(@Body() body) {
     return this.emailService.verifyEmail(body.email, body.randomCode);
   }
 
   // 유저 퀴즈 http://localhost:3000/api/users/quiz/:id
+  @ApiOperation({
+    summary: '퀴즈 API',
+  })
+  @ApiBody({ type: [PointDto] })
   @Patch('/quiz/:id')
   async userPoint(
     @Param('id') id: number,
@@ -100,6 +133,7 @@ export class UsersController {
   }
 
   // 유저 스텟 변동 http://localhost:3000/api/users/status/:id
+  @ApiOperation({ summary: '유저 스테이터스 변경 API' })
   @Patch('/status/:id')
   async userStatus(@Param('id') id: number, @CurrentUser() user: Users) {
     return await this.usersService.updateUserStatus(id);
