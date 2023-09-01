@@ -4,5 +4,6 @@ export class CreateQuizDto {
   upANDdown: string;
   @ApiProperty()
   stockName: string;
-  // user answer
+  @ApiProperty()
+  updated_day: string;
 }

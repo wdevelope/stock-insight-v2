@@ -12,9 +12,14 @@ export class QuizRepository extends Repository<Quiz> {
   }
   // 정답 제출
   async createQuiz(user: Users, data: CreateQuizDto): Promise<any> {
+    const currentTime = new Date();
+    currentTime.setHours(currentTime.getHours() + 9);
+    const today = currentTime.toISOString().substring(0, 10).replace(/-/g, '');
+
     return await this.insert({
       upANDdown: data.upANDdown,
       stockName: data.stockName,
+      updated_day: today,
       user,
     });
   }
