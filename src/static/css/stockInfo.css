@@ -29,13 +29,14 @@ h1 {
 
 .stock-title h2 {
   font-size: 1.4em;
-  color: #2f00ff;
+  color: #000000;
   font-weight: bold;
 }
 
 .stock-title p {
   font-size: 1.2em;
   color: #ff0000;
+  font-weight: bold;
 }
 .stock-title p:first-of-type {
   margin-top: 40px;

@@ -66,7 +66,7 @@ export class AskboardsController {
     summary: '문의 게시물 상세 조회 API.',
     description: '문의 게시물을 상세 조회한다.',
   })
-  @Patch(':askBoardId')
+  @Patch('/:askBoardId')
   async update(
     @CurrentUser() user: Users,
     @Param('askBoardId') id: string,

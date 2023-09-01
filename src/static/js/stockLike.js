@@ -16,6 +16,7 @@ async function fetchFavoriteStocks() {
     }
 
     const stocks = await response.json();
+    console.log('즐겨찾기 종목 데이터 테스트', stocks);
     displayFavoriteStocks(stocks);
   } catch (error) {
     console.error('Error fetching favorite stocks:', error);
@@ -33,7 +34,20 @@ function displayFavoriteStocks(stocks) {
 
     const cardHeader = document.createElement('div');
     cardHeader.className = 'card-header';
-    cardHeader.textContent = stock.code; // 종목 코드를 헤더에 설정
+
+    const stockIdText = document.createElement('span');
+    stockIdText.textContent = stock.stockId; // 종목 코드를 설정
+
+    const deleteButton = document.createElement('span');
+    deleteButton.innerHTML = '❌';
+    deleteButton.className = 'delete-button'; // CSS 클래스 적용
+    deleteButton.onclick = (e) => {
+      e.stopPropagation(); // 상위 요소로의 이벤트 전파를 막음
+      deleteMyStock(stock.stockId);
+    };
+
+    cardHeader.appendChild(stockIdText);
+    cardHeader.appendChild(deleteButton);
 
     const cardBody = document.createElement('div');
     cardBody.className = 'card-body';
@@ -50,7 +64,31 @@ function displayFavoriteStocks(stocks) {
     stockListContainer.appendChild(stockCard);
 
     stockCard.onclick = () => {
-      window.location.href = `http://localhost:3000/view/stocksInfo.html?id=${stock.code}`;
+      window.location.href = `http://localhost:3000/view/stocksInfo.html?id=${stock.stockId}`;
     };
   });
+}
+
+async function deleteMyStock(stockId) {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/stocks/mystock/${stockId}`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token,
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to delete the stock from favorites.');
+    }
+
+    // 삭제 후 목록을 다시 로드
+    fetchFavoriteStocks();
+  } catch (error) {
+    console.error('Error:', error);
+  }
 }

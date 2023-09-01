@@ -29,18 +29,12 @@ export class BoardsService {
     );
   }
 
-  async findOne(boardId: number): Promise<Board> {
-    const board = await this.boardsRepository.findOne({
-      where: { id: boardId },
-    });
+  async findOneWithDetails(boardId: number): Promise<Board> {
+    const board = await this.boardsRepository.findOneWith(boardId);
     if (!board) {
       throw new NotFoundException('보드가 존재하지 않습니다.');
     }
-    try {
-      return board;
-    } catch (error) {
-      throw new BadRequestException('SERVICE_ERROR');
-    }
+    return board;
   }
 
   async create(createBoardDto: CreateBoardDto, user: Users): Promise<void> {
@@ -85,7 +79,7 @@ export class BoardsService {
   }
 
   async paginate(page: number = 1): Promise<{ data: Board[]; meta: any }> {
-    const take = 5; // 페이지 상에서 보일 개수(LIMIT)
+    const take = 20; // 페이지 상에서 보일 개수(LIMIT)
 
     const [boards, total] =
       await this.boardsRepository.findAndCountWithPagination(page, take);

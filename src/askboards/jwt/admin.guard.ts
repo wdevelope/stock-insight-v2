@@ -19,7 +19,7 @@ export class AdminGuard extends AuthGuard('jwt') {
 
   async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
-    const postId = Number(request.params.id);
+    const askBoardId = Number(request.params.id);
 
     // JWT 인증과 관련된 기본 canActivate 함수 실행
     const canActivate = super.canActivate(context);
@@ -29,14 +29,14 @@ export class AdminGuard extends AuthGuard('jwt') {
 
     // JWT 인증 후 유저 정보
     const user = request.user;
-
     if (user.status === 'admin') {
       return true;
     }
 
     // 작성자가 본인의 게시글인지 확인
-    const post = await this.askboardsService.findOne(postId);
-    if (post && post.user === user.id) {
+    const post = await this.askboardsService.findOne(askBoardId);
+    console.log(post);
+    if (post && post.user.id === user.id) {
       return true;
     }
 

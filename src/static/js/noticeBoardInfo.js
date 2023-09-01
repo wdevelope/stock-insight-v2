@@ -18,6 +18,9 @@ async function fetchNoticePostDetails() {
       throw new Error('패치 응답 에러');
     }
     const noticeBoard = await response.json();
+    console.log('공지게시판 데이터 테스트', noticeBoard);
+    const defaultImageUrl = 'https://ifh.cc/g/a2Sg64.png';
+    const authorImage = noticeBoard.user.imgUrl || defaultImageUrl;
 
     const boardContainer = document.querySelector('.board-container');
     // 공지 게시글 상세페이지
@@ -38,6 +41,7 @@ async function fetchNoticePostDetails() {
                                               </button>   
                                           </div>         
                                           <p class="text-muted post-info">
+                                          <img src="${authorImage}" alt="Author's Image" style="width: 30px; height: 30px; border-radius: 50%;"> <!-- 작성자의 이미지 추가 -->
                                               작성자: <span class="author">${noticeBoard.id}</span> | 날짜: <span class="date">${noticeBoard.created_at}</span>
                                           </p>
                                           <p>${noticeBoard.description}</p>
