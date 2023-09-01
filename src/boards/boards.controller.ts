@@ -45,18 +45,6 @@ export class BoardsController {
     }
   }
 
-  @Get()
-  @ApiOperation({
-    summary: '게시물 조회 API.',
-    description: '게시물을 조회한다.',
-  })
-  findAll(): Promise<Board[]> {
-    try {
-      return this.boardsService.find();
-    } catch (error) {
-      throw new BadRequestException('CONTROLLE_ERROR');
-    }
-  }
   // 쿼리로 페이지, 페이지사이즈 값을 받아야함
   @Get('find')
   @ApiOperation({
@@ -74,6 +62,10 @@ export class BoardsController {
   }
 
   //페이지 네이션
+  @ApiOperation({
+    summary: '게시물 조회 API.',
+    description: '게시물을 조회한다.',
+  })
   @Get('/page')
   async all(
     @Query('page') page: number = 1,
@@ -81,6 +73,7 @@ export class BoardsController {
     return await this.boardsService.paginate(page);
   }
 
+  //보드 상세조회
   @Get('/:boardId')
   @ApiOperation({
     summary: '게시물 상세조회 API.',
@@ -93,7 +86,7 @@ export class BoardsController {
       throw new BadRequestException('CONTROLLER_ERROR');
     }
   }
-
+  //보드 수정
   @Patch('/:boardId')
   @ApiOperation({
     summary: '게시물 수정 API.',
@@ -111,7 +104,7 @@ export class BoardsController {
       throw new BadRequestException('CONTROLLER_ERROR');
     }
   }
-
+  // 보드삭제
   @Delete('/:boardId')
   @ApiOperation({
     summary: '게시물 삭제 API.',

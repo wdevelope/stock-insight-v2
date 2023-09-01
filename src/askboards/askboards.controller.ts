@@ -17,13 +17,21 @@ import { CurrentUser } from 'src/common/decorators/user.decorator';
 import { Users } from 'src/users/users.entity';
 import { AdminGuard } from 'src/askboards/jwt/admin.guard';
 import { CreateReplyDto } from './dto/create-reply.dto';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @UseGuards(JwtAuthGuard)
+@ApiBearerAuth('JWT-auth')
+@ApiTags('askboards')
 @Controller('api/askboards')
 export class AskboardsController {
   constructor(private readonly askboardsService: AskboardsService) {}
 
   // 문의 게시글 생성
+  @ApiOperation({
+    summary: '문의 게시물 생성 API.',
+    description: '문의 게시물을 생성한다.',
+  })
+  @ApiBody({ type: [CreateAskboardDto] })
   @Post()
   async create(
     @Body(ValidationPipe) createAskboardDto: CreateAskboardDto,
@@ -33,12 +41,20 @@ export class AskboardsController {
   }
 
   // 문의 게시글 전체 조회
+  @ApiOperation({
+    summary: '문의 게시물 조회 API.',
+    description: '문의 게시물을 조회한다.',
+  })
   @Get()
   async findAll() {
     return await this.askboardsService.findAll();
   }
 
   // 문의 게시글 상세 조회
+  @ApiOperation({
+    summary: '문의 게시물 상세 조회 API.',
+    description: '문의 게시물을 상세 조회한다.',
+  })
   @Get('/:id')
   @UseGuards(AdminGuard)
   async findOne(@Param('id') id: number) {
@@ -46,6 +62,10 @@ export class AskboardsController {
   }
 
   // 문의 게시글 업데이트
+  @ApiOperation({
+    summary: '문의 게시물 상세 조회 API.',
+    description: '문의 게시물을 상세 조회한다.',
+  })
   @Patch(':askBoardId')
   async update(
     @CurrentUser() user: Users,

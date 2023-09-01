@@ -18,10 +18,6 @@ export class BoardsService {
     private readonly boardSearchService: BoardSearchService,
   ) {}
 
-  async find(): Promise<Board[]> {
-    return await this.boardsRepository.find();
-  }
-
   async getBoardsByUserId(
     page: number,
     findBoardDto: FindBoardDto,
@@ -32,24 +28,6 @@ export class BoardsService {
       findBoardDto,
     );
   }
-  // async findBy(findBoardDto: FindBoardDto): Promise<Board[]> {
-  //   const board = await this.boardsRepository.findBy({
-  //     where: {
-  //       title: findBoardDto.title,
-  //       description: findBoardDto.description,
-  //       user: { id: findBoardDto.userId },
-  //     },
-  //     // relations: ['user'], //유저 정보도 같이 보고싶으면
-  //   });
-  //   if (!board) {
-  //     throw new NotFoundException('보드가 존재하지 않습니다.');
-  //   }
-  //   try {
-  //     return board;
-  //   } catch (error) {
-  //     throw new BadRequestException('SERVICE_ERROR');
-  //   }
-  // }
 
   async findOne(boardId: number): Promise<Board> {
     const board = await this.boardsRepository.findOne({
@@ -68,13 +46,7 @@ export class BoardsService {
   async create(createBoardDto: CreateBoardDto, user: Users): Promise<void> {
     try {
       await this.boardsRepository.save(createBoardDto, user);
-      const createdBoard = await this.boardsRepository.findOne({
-        where: { title: createBoardDto.title },
-      });
-
-      await this.boardSearchService.indexBoard(createdBoard);
     } catch (error) {
-      console.log(error);
       throw new BadRequestException('SERVICE_ERROR');
     }
   }
