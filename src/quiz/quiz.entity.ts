@@ -1,5 +1,6 @@
 import { Users } from 'src/users/users.entity';
 import { Stock } from '../stock/entities/stock.entity';
+import { QuizCount } from './quizCount.entity';
 import {
   CreateDateColumn,
   DeleteDateColumn,
@@ -22,6 +23,9 @@ export class Quiz {
   @Column()
   answer: boolean;
 
+  @Column({ default: 1 })
+  count: number;
+
   @CreateDateColumn()
   createdAt: Date;
 
@@ -37,6 +41,6 @@ export class Quiz {
   @ManyToOne(() => Stock, (stock) => stock.id)
   stock: Stock;
 
-  // stock Code
-  // user answer
+  @ManyToOne(() => QuizCount, (quizCount) => quizCount)
+  quizCount: QuizCount;
 }
