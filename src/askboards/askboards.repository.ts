@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Askboard } from './entities/askboard.entity';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -54,6 +50,7 @@ export class AskboardsRepository {
           'askboard.updated_at',
           'users.nickname',
           'users.imgUrl',
+          'users.id',
         ])
         .getOne();
 

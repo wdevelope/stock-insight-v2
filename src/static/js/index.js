@@ -72,6 +72,8 @@ async function fetchUserDetails() {
     }
 
     const data = await response.json();
+    console.log('유저 상세 정보  데이터 테스트', data);
+
     return data;
   } catch (error) {
     console.error('Error fetching user details:', error);
@@ -89,6 +91,8 @@ async function toggleProfile() {
     !userDetailsElem.style.display
   ) {
     const data = await fetchUserDetails();
+    console.log('유저 정보 토글 데이터 테스트', data);
+
     if (data) {
       document.getElementById('nickname').textContent = data.nickname;
       document.getElementById('email').textContent = data.email;

@@ -12,11 +12,11 @@ const TOTAL_PAGES = 87;
 document.addEventListener('DOMContentLoaded', () => getRandomStock());
 
 // 페이지 로드시 제출 날짜 체크
-const lastSubmittedDate = localStorage.getItem('lastSubmittedDate');
-if (lastSubmittedDate === new Date().toLocaleDateString()) {
-  riseButton.disabled = true;
-  fallButton.disabled = true;
-}
+// const lastSubmittedDate = localStorage.getItem('lastSubmittedDate');
+// if (lastSubmittedDate === new Date().toLocaleDateString()) {
+//   riseButton.disabled = true;
+//   fallButton.disabled = true;
+// }
 
 function getRandomPage() {
   return Math.floor(Math.random() * TOTAL_PAGES) + 1;
@@ -76,9 +76,9 @@ async function submitQuiz(prediction) {
     if (!response.ok) {
       throw new Error('Failed to submit quiz.');
     }
-    localStorage.setItem('lastSubmittedDate', new Date().toLocaleDateString());
-    riseButton.disabled = true;
-    fallButton.disabled = true;
+    // localStorage.setItem('lastSubmittedDate', new Date().toLocaleDateString());
+    // riseButton.disabled = true;
+    // fallButton.disabled = true;
 
     const data = await response.json();
     alert(data.message);

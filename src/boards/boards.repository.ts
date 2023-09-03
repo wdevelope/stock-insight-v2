@@ -53,6 +53,7 @@ export class BoardsRepository {
                 board.description,
                 board.created_at,
                 board.updated_at,
+                board.likeCount,
                 users.nickname,
                 users.imgUrl
             FROM board
@@ -120,7 +121,7 @@ export class BoardsRepository {
     const qb = this.boardsRepository
       .createQueryBuilder('board')
       .leftJoinAndSelect('board.user', 'user')
-      .select(['board', 'user.nickname', 'user.imgUrl']) // board와 user의 nickname,imgUrl 선택
+      .select(['board', 'user.nickname', 'user.imgUrl', 'user.status']) // board와 user의 nickname,imgUrl 선택
       .orderBy('board.created_at', 'DESC')
       .skip((page - 1) * take)
       .take(take);

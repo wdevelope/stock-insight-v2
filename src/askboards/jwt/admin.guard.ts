@@ -6,13 +6,13 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Reflector } from '@nestjs/core';
-import { AskboardsService } from 'src/askboards/askboards.service';
+import { AskboardsRepository } from 'src/askboards/askboards.repository';
 
 @Injectable()
 export class AdminGuard extends AuthGuard('jwt') {
   constructor(
     private readonly reflector: Reflector,
-    private readonly askboardsService: AskboardsService,
+    private readonly askboardsRepository: AskboardsRepository,
   ) {
     super();
   }
@@ -34,8 +34,7 @@ export class AdminGuard extends AuthGuard('jwt') {
     }
 
     // 작성자가 본인의 게시글인지 확인
-    const post = await this.askboardsService.findOne(askBoardId);
-    console.log(post);
+    const post = await this.askboardsRepository.findOneWith(askBoardId);
     if (post && post.user.id === user.id) {
       return true;
     }

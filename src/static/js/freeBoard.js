@@ -41,41 +41,6 @@ async function freeBoardSearch() {
   }
 }
 
-// 🟠 자유게시판 검색 결과 렌더링
-async function renderSearchResults(data) {
-  data.sort((a, b) => {
-    return new Date(b.created_at) - new Date(a.created_at);
-  });
-
-  const boardElement = document.querySelector('#notice .list-group');
-  let postHTML = '';
-
-  for (const post of data) {
-    const postDate = post.updated_at.split('T')[0];
-    const likesCount = post.likeCount;
-    const viewsCount = post.viewCount;
-    postHTML += `
-      <a href="http://localhost:3000/view/freeBoardInfo.html?freeBoardId=${post.id}" class="list-group-item list-group-item-action"                  
-      onclick="handleBoardItemClick(${post.id})">
-        <div class="d-flex justify-content-between align-items-center">
-          <div>
-            <span>[토론]</span>
-            <strong class="mb-1 ms-2">${post.title}</strong>
-          </div>
-          <div>
-            <small class="me-2">${post.user.nickname}</small>
-            <span>${postDate}</span>
-            <i class="fas fa-eye ms-4"></i> ${viewsCount}
-            <i class="fas fa-thumbs-up ms-4"></i> ${likesCount}
-          </div>
-        </div>
-      </a>
-    `;
-  }
-
-  boardElement.innerHTML = postHTML;
-}
-
 // 🟠 자유게시판 글 랜더링 함수
 async function fetchAndRenderPosts(page = 1) {
   if (!token) {
@@ -97,11 +62,14 @@ async function fetchAndRenderPosts(page = 1) {
     if (!response.ok) {
       throw new Error('fetch res 에러');
     }
+
     const { data, meta } = await response.json();
     console.log('보드 전체 렌더링 테스트', data);
+
     data.sort((a, b) => {
       return new Date(b.created_at) - new Date(a.created_at);
     });
+
     const boardElement = document.querySelector('#notice .list-group');
     let postHTML = '';
 
@@ -112,6 +80,7 @@ async function fetchAndRenderPosts(page = 1) {
       const likesCount = post.likeCount;
       const viewsCount = post.viewCount;
       const userImageUrl = post.user.imgUrl || DEFAULT_IMAGE_URL;
+      const rankerStar = post.user.status === 'ranker' ? '⭐️' : '';
 
       postHTML += `
         <a href="http://localhost:3000/view/freeBoardInfo.html?freeBoardId=${post.id}" class="list-group-item list-group-item-action"                  
@@ -122,6 +91,7 @@ async function fetchAndRenderPosts(page = 1) {
               <strong class="mb-1 ms-2">${post.title}</strong>
             </div>
             <div>
+            ${rankerStar} 
             <img src="${userImageUrl}" width="20" class="me-2">  <!-- 이미지 추가 -->
               <small class="me-2">${post.user.nickname}</small>
               <span>${postDate}</span>
@@ -137,6 +107,41 @@ async function fetchAndRenderPosts(page = 1) {
   } catch (error) {
     console.error('Error fetching posts:', error);
   }
+}
+
+// 🟠 자유게시판 검색 결과 렌더링
+async function renderSearchResults(data) {
+  data.sort((a, b) => {
+    return new Date(b.created_at) - new Date(a.created_at);
+  });
+
+  const boardElement = document.querySelector('#notice .list-group');
+  let postHTML = '';
+
+  for (const post of data) {
+    const postDate = post.updated_at.split('T')[0];
+    const likesCount = post.likeCount;
+    const viewsCount = post.viewCount;
+    postHTML += `
+                <a href="http://localhost:3000/view/freeBoardInfo.html?freeBoardId=${post.id}" class="list-group-item list-group-item-action"                  
+                onclick="handleBoardItemClick(${post.id})">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <span>[토론]</span>
+                      <strong class="mb-1 ms-2">${post.title}</strong>
+                    </div>
+                    <div>
+                      <small class="me-2">${post.user.nickname}</small>
+                      <span>${postDate}</span>
+                      <i class="fas fa-eye ms-4"></i> ${viewsCount}
+                      <i class="fas fa-thumbs-up ms-4"></i> ${likesCount}
+                    </div>
+                  </div>
+                </a>
+              `;
+  }
+
+  boardElement.innerHTML = postHTML;
 }
 
 // 페이지 번호 동적 부여

@@ -61,7 +61,18 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Get()
   getCurrentUser(@CurrentUser() user: Users) {
-    return user;
+    const {
+      board,
+      askboard,
+      noticeboard,
+      views,
+      likes,
+      comment,
+      quiz,
+      myStocks,
+      ...rest
+    } = user;
+    return rest;
   }
 
   // POST. http://localhost:3000/api/users/check
