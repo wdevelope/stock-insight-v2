@@ -7,4 +7,6 @@ export class FindBoardDto extends PartialType(CreateBoardDto) {
   title?: string;
   @ApiProperty({ description: '내용' })
   description?: string;
+  @ApiProperty({ description: '닉네임' })
+  nickname?: string;
 }

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { Client } from '@opensearch-project/opensearch';
-import { BoardSearchService } from './search.service';
+import { BoardSearchService } from 'src/boards/boards.search.service';
 
 @Module({
   providers: [

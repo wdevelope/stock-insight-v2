@@ -8,8 +8,8 @@ import { UpdateBoardDto } from './dto/update-board.dto';
 import { Board } from './entities/board.entity';
 import { Users } from 'src/users/users.entity';
 import { BoardsRepository } from './boards.repository';
-import { BoardSearchService } from 'src/search/search.service';
 import { FindBoardDto } from './dto/find-board.dto';
+import { BoardSearchService } from './boards.search.service';
 
 @Injectable()
 export class BoardsService {
@@ -18,12 +18,28 @@ export class BoardsService {
     private readonly boardSearchService: BoardSearchService,
   ) {}
 
+  async paginate(page: number = 1): Promise<{ data: Board[]; meta: any }> {
+    /**페이지 상 보일 개수*/
+    const take = 5;
+
+    const [boards, total] =
+      await this.boardsRepository.findAndCountWithPagination(page, take);
+
+    return {
+      data: boards,
+      meta: {
+        total,
+        page,
+        last_page: Math.ceil(total / take),
+      },
+    };
+  }
+
   async getBoardsByUserId(
     page: number,
     findBoardDto: FindBoardDto,
-  ): Promise<Board[]> {
-    // 보드 검색 서비스를 이용하여 유저 아이디로 보드를 검색합니다.
-    return this.boardSearchService.searchByTitleAndDescription(
+  ): Promise<{ data: Board[]; meta: any }> {
+    return this.boardSearchService.searchByTitleAndDescriptionAndNickname(
       page,
       findBoardDto,
     );
@@ -47,6 +63,16 @@ export class BoardsService {
     try {
       await this.boardsRepository.save(createBoardDto, user);
     } catch (error) {
+      throw new BadRequestException('SERVICE_ERROR');
+    }
+  }
+
+  async indexing(): Promise<void> {
+    const boards: Board[] = await this.boardsRepository.find();
+    try {
+      await this.boardSearchService.indexData(boards);
+    } catch (error) {
+      console.log(error);
       throw new BadRequestException('SERVICE_ERROR');
     }
   }
@@ -82,21 +108,5 @@ export class BoardsService {
     } catch (error) {
       throw new BadRequestException('SERVICE_ERROR');
     }
-  }
-
-  async paginate(page: number = 1): Promise<{ data: Board[]; meta: any }> {
-    const take = 5; // 페이지 상에서 보일 개수(LIMIT)
-
-    const [boards, total] =
-      await this.boardsRepository.findAndCountWithPagination(page, take);
-
-    return {
-      data: boards,
-      meta: {
-        total,
-        page,
-        last_page: Math.ceil(total / take),
-      },
-    };
   }
 }
