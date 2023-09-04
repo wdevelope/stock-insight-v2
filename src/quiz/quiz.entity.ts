@@ -1,11 +1,6 @@
 import { Users } from 'src/users/users.entity';
 import { Stock } from '../stock/entities/stock.entity';
-import {
-  CreateDateColumn,
-  DeleteDateColumn,
-  ManyToOne,
-  UpdateDateColumn,
-} from 'typeorm';
+import { CreateDateColumn, JoinColumn, ManyToOne } from 'typeorm';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -26,20 +21,18 @@ export class Quiz {
   count: number;
 
   @Column()
-  updated_day: string; //업데이트 날짜
+  updated_date: string; //업데이트 날짜
 
   @CreateDateColumn()
   createdAt: Date;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
-
-  @DeleteDateColumn()
-  deletedAt: Date | null;
-
   @ManyToOne(() => Users, (user) => user.id)
   user: Users;
 
-  @ManyToOne(() => Stock, (stock) => stock.id)
+  @ManyToOne(() => Stock, (stock) => stock.quiz)
+  @JoinColumn({ name: 'stockId', referencedColumnName: 'id' })
   stock: Stock;
+
+  @Column()
+  stockId: string;
 }

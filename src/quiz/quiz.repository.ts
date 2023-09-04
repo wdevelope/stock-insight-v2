@@ -18,8 +18,8 @@ export class QuizRepository extends Repository<Quiz> {
 
     return await this.insert({
       upANDdown: data.upANDdown,
-      stockName: data.stockName,
-      updated_day: today,
+      stockId: data.stockId,
+      updated_date: today,
       user,
     });
   }
