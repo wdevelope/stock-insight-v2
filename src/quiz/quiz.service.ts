@@ -23,48 +23,62 @@ export class QuizService {
     };
   }
   // 퀴즈 확인
-  async updateQuiz(id: number): Promise<any> {
-    const quizUser = await this.quizRepository.findOne({
-      where: { id },
-    });
-    // console.log(quizUser);
-    const searchStock = await this.stockService.searchStock(quizUser.stockName);
-    // console.log('이름으로 찾기', searchStock.data[0].id);
-    const searchStockNumber = await this.stockService.getStockPrice(
-      searchStock.data[0].id,
-    );
-    // console.log(
-    //   '코드명으로 찾기',
-    //   searchStockNumber.stock.stockPrices[0].prdy_vrss_sign,
-    // );
-    const stockAnswer = searchStockNumber.stock.stockPrices[0].prdy_vrss_sign;
-    let upANDdownAnswer: string;
-    if (stockAnswer === '1') {
-      upANDdownAnswer = 'up';
-    }
-    if (stockAnswer === '2') {
-      upANDdownAnswer = 'up';
-    }
-    if (stockAnswer === '3') {
-      upANDdownAnswer = 'keep';
-    }
-    if (stockAnswer === '4') {
-      upANDdownAnswer = 'down';
-    }
-    if (stockAnswer === '5') {
-      upANDdownAnswer = 'down';
-    }
+  async updateQuiz(): Promise<any> {
+    const currentTime = new Date();
+    currentTime.setHours(currentTime.getHours() + 9);
+    const today = currentTime.toISOString().substring(0, 10).replace(/-/g, '');
+    const updated_day = today;
 
-    let newAnswer: boolean;
-    if (quizUser.upANDdown === upANDdownAnswer) {
-      newAnswer = true;
-    } else {
-      newAnswer = false;
-    }
+    const quizId = await this.quizRepository.find({ where: { updated_day } });
+    // console.log(quizId[0].id);
 
-    await this.quizRepository.updateQuiz(quizUser, {
-      answer: newAnswer,
-    });
+    for (const ele of quizId) {
+      const id = ele.id;
+      const quizUser = await this.quizRepository.findOne({
+        where: { id },
+      });
+
+      // console.log(quizUser);
+      const searchStock = await this.stockService.searchStock(
+        quizUser.stockName,
+      );
+      // console.log('이름으로 찾기', searchStock.data[0].id);
+      const searchStockNumber = await this.stockService.getStockPrice(
+        searchStock.data[0].id,
+      );
+      // console.log(
+      //   '코드명으로 찾기',
+      //   searchStockNumber.stock.stockPrices[0].prdy_vrss_sign,
+      // );
+      const stockAnswer = searchStockNumber.stock.stockPrices[0].prdy_vrss_sign;
+      let upANDdownAnswer: string;
+      if (stockAnswer === '1') {
+        upANDdownAnswer = 'up';
+      }
+      if (stockAnswer === '2') {
+        upANDdownAnswer = 'up';
+      }
+      if (stockAnswer === '3') {
+        upANDdownAnswer = 'keep';
+      }
+      if (stockAnswer === '4') {
+        upANDdownAnswer = 'down';
+      }
+      if (stockAnswer === '5') {
+        upANDdownAnswer = 'down';
+      }
+
+      let newAnswer: boolean;
+      if (quizUser.upANDdown === upANDdownAnswer) {
+        newAnswer = true;
+      } else {
+        newAnswer = false;
+      }
+
+      await this.quizRepository.updateQuiz(quizUser, {
+        answer: newAnswer,
+      });
+    }
 
     return {
       statusCode: 201,
@@ -130,12 +144,12 @@ export class QuizService {
   }
 
   // 스케줄러
-  async startUpdateQuiz(id: number) {
+  async startUpdateQuiz() {
     const job = new CronJob(
-      '0 */10 9-16 * * 1-5',
+      '0 */60 9-16 * * 1-5',
       () => {
         console.log('start');
-        this.updateQuiz(id);
+        this.updateQuiz();
       },
       null,
       false,

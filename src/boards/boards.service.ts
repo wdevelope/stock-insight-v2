@@ -44,19 +44,13 @@ export class BoardsService {
       findBoardDto,
     );
   }
-
-  async findOne(boardId: number): Promise<Board> {
-    const board = await this.boardsRepository.findOne({
-      where: { id: boardId },
-    });
+  // 게시글 상세 조회
+  async findOneWithDetails(boardId: number): Promise<Board> {
+    const board = await this.boardsRepository.findOneWith(boardId);
     if (!board) {
       throw new NotFoundException('보드가 존재하지 않습니다.');
     }
-    try {
-      return board;
-    } catch (error) {
-      throw new BadRequestException('SERVICE_ERROR');
-    }
+    return board;
   }
 
   async create(createBoardDto: CreateBoardDto, user: Users): Promise<void> {

@@ -34,7 +34,7 @@ export class AskboardsService {
 
   // 문의 게시글 상세 조회
   async findOne(id: number): Promise<Askboard> {
-    return this.askboardRepository.findOne(id);
+    return this.askboardRepository.findOneWith(id);
   }
 
   // 문의 게시글 수정
@@ -59,7 +59,7 @@ export class AskboardsService {
     askBoardId: number,
     replyDto: CreateReplyDto,
   ): Promise<Reply> {
-    const askboard = await this.askboardRepository.findOne(askBoardId);
+    const askboard = await this.askboardRepository.findOneWith(askBoardId);
     if (!askboard) {
       throw new NotFoundException('Askboard not found');
     }

@@ -40,13 +40,14 @@ async function fetchStockDetail() {
       `http://localhost:3000/api/stocks/price/${id}`,
     );
     const data = await response.json();
-    console.log(data);
+    console.log('주식상세정보 데이터 테스트', data);
     renderStockDetail(data);
 
-    const chartData = data.stock.stockPrices.map((item) => ({
-      date: new Date(item.date), // 가정: item.date가 문자열 형식이라면 Date 객체로 변환
-      stck_prpr: item.stck_prpr,
+    const chartData = data.prices.map((item) => ({
+      date: new Date(item.time),
+      price: parseFloat(item.price),
     }));
+    renderChart(chartData);
   } catch (error) {
     console.error('Error fetching stock detail:', error);
   }
@@ -56,11 +57,29 @@ async function fetchStockDetail() {
 function renderStockDetail(data) {
   const stockInfo = data.stock.stockPrices[0];
 
+  // 기존의 전일 대비 값을 가져오는 코드
+  const priceDiff = formatNumberWithCommas(stockInfo.prdy_vrss);
+
+  // 전일 대비 값에 따라 색상 지정
+  const priceDiffElem = document.getElementById('priceDifference');
+  if (parseFloat(stockInfo.prdy_vrss) > 0) {
+    priceDiffElem.style.color = 'red'; // 상승일 때 빨간색
+    priceDiffElem.textContent = `전일 대비: +${priceDiff}`;
+  } else if (parseFloat(stockInfo.prdy_vrss) < 0) {
+    priceDiffElem.style.color = 'blue'; // 하락일 때 파란색
+    priceDiffElem.textContent = `전일 대비: ${priceDiff}`;
+  } else {
+    priceDiffElem.style.color = 'black'; // 변동 없을 때 검은색
+    priceDiffElem.textContent = `전일 대비: ${priceDiff}`;
+  }
+
   document.getElementById(
     'stock-name',
-  ).textContent = `${data.stock.prdt_abrv_name}`;
+  ).textContent = `${data.stock.prdt_abrv_name} (${data.stock.id})`;
   // Header 부분 정보 업데이트
-  document.getElementById('stockId').textContent = `종목코드: ${data.stock.id}`;
+  document.getElementById(
+    'stockId',
+  ).textContent = `${data.stock.rprs_mrkt_kor_name} `;
   document.getElementById(
     'stockPrice',
   ).textContent = `주식 가격: ${formatNumberWithCommas(stockInfo.stck_prpr)}`;
@@ -86,17 +105,17 @@ function renderStockDetail(data) {
   const stockInfoContainer = document.getElementById('stockInfo');
 
   const otherInfoHTML = `
-      <p>기준가: ${formatNumberWithCommas(stockInfo.stck_sdpr)}</p>
-      <p>외국인 보유율: ${stockInfo.hts_frgn_ehrt}</p>
-      <p>가용 물량: ${formatNumberWithCommas(stockInfo.hts_avls)}</p>
-      <p>PER: ${stockInfo.per}</p>
-      <p>PBR: ${stockInfo.pbr}</p>
-      <p>52주 최고가: ${formatNumberWithCommas(stockInfo.w52_hgpr)}</p>
-      <p>52주 최저가: ${formatNumberWithCommas(stockInfo.w52_lwpr)}</p>
-      <p>전체 대출 잔액 비율: ${stockInfo.whol_loan_rmnd_rate}</p>
-      <p>한국 이름: ${stockInfo.bstp_kor_isnm}</p>
-      <p>상태 코드: ${stockInfo.iscd_stat_cls_code}</p>
-  `;
+        <p>기준가: ${formatNumberWithCommas(stockInfo.stck_sdpr)}</p>
+        <p>외국인 보유율: ${stockInfo.hts_frgn_ehrt}</p>
+        <p>가용 물량: ${formatNumberWithCommas(stockInfo.hts_avls)}</p>
+        <p>PER: ${stockInfo.per}</p>
+        <p>PBR: ${stockInfo.pbr}</p>
+        <p>52주 최고가: ${formatNumberWithCommas(stockInfo.w52_hgpr)}</p>
+        <p>52주 최저가: ${formatNumberWithCommas(stockInfo.w52_lwpr)}</p>
+        <p>전체 대출 잔액 비율: ${stockInfo.whol_loan_rmnd_rate}</p>
+        <p>한국 이름: ${stockInfo.bstp_kor_isnm}</p>
+        <p>상태 코드: ${stockInfo.iscd_stat_cls_code}</p>
+    `;
 
   stockInfoContainer.innerHTML = otherInfoHTML;
 }
@@ -115,7 +134,7 @@ async function addFavoriteStock(stockId) {
     );
 
     if (response.status === 201) {
-      alert('찜한 종목에 추가되었습니다!');
+      console.log('찜한 종목에 추가되었습니다!');
       return response;
     } else if (response.status === 409) {
       alert('이 주식은 이미 찜한 종목에 추가되어 있습니다.');
@@ -129,25 +148,51 @@ async function addFavoriteStock(stockId) {
 
 // 🟤 주식 차트를 그리는 함수
 
-const ctx = document.getElementById('myChart');
+function renderChart(chartData) {
+  const ctx = document.getElementById('myChart');
 
-new Chart(ctx, {
-  type: 'bar',
-  data: {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    datasets: [
-      {
-        label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
-        borderWidth: 1,
-      },
-    ],
-  },
-  options: {
-    scales: {
-      y: {
-        beginAtZero: true,
+  // 차트 데이터를 역순으로 정렬
+  chartData = chartData.reverse();
+
+  // 차트 데이터에서 날짜와 가격 분리, 날짜에 5시간 40분 더함
+  const labels = chartData.map((data) => {
+    const date = new Date(data.date);
+    date.setHours(date.getHours() + 5);
+    date.setMinutes(date.getMinutes() + 40);
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    });
+  });
+  const prices = chartData.map((data) => data.price);
+
+  // 가격 데이터의 최대값과 최소값을 구하고, 여유분을 둔 범위 설정
+  const maxPrice = Math.max(...prices);
+  const minPrice = Math.min(...prices);
+  const padding = (maxPrice - minPrice) * 0.05; // 예: 전체 범위의 5%를 여유분으로 설정
+
+  new Chart(ctx, {
+    type: 'line', // 선형 차트 사용
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Stock Price',
+          data: prices,
+          borderWidth: 1,
+          borderColor: 'blue',
+          fill: false,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          min: minPrice - padding,
+          max: maxPrice + padding,
+        },
       },
     },
-  },
-});
+  });
+}

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-  fetchBoardDetailsForEdit();
+  // fetchBoardDetailsForEdit();
   fetchPostDetails();
 });
 
@@ -10,6 +10,7 @@ async function fetchPostDetails() {
       `http://localhost:3000/api/boards/${freeBoardId}`,
       {
         headers: {
+          'Content-Type': 'application/json',
           Authorization: token,
         },
       },
@@ -22,6 +23,10 @@ async function fetchPostDetails() {
     const freeBoard = await response.json();
     const likeText = freeBoard.likeCount || 0;
 
+    const defaultImageUrl = 'https://ifh.cc/g/a2Sg64.png';
+    const authorImage = freeBoard.imgUrl || defaultImageUrl;
+
+    console.log('자유게시판 상세 렌더링 테스트', freeBoard);
     const boardContainer = document.querySelector('.board-container');
 
     // 자유 게시글 상세페이지
@@ -43,16 +48,17 @@ async function fetchPostDetails() {
                                                 </button>   
                                             </div>         
                                             <p class="text-muted post-info">
-                                                작성자: <span class="author">${freeBoard.id}</span> | 날짜: <span class="date">${freeBoard.created_at}</span>
+                                            <img src="${authorImage}" alt="Author's Image" style="width: 30px; height: 30px; border-radius: 50%;"> <!-- 작성자의 이미지 추가 -->
+                                                작성자: <span class="author">${freeBoard.nickname}</span> | 날짜: <span class="date">${freeBoard.created_at}</span>
                                             </p>
                                             <p>${freeBoard.description}</p>
-                                            <button class="btn btn-primary" onclick="handleLikeClick()">👍  (${likeText})</button>
+                                            <button class="btn btn-primary" onclick="handleLikeClick()">👍(${likeText})</button>
                                         `;
 
     // 댓글 섹션 업데이트
+    const comments = await fetchComments(freeBoardId);
     const commentsSection = boardContainer.querySelector('.comments-section');
     const commentsList = commentsSection.querySelector('.list-group');
-    const comments = freeBoard.comment || [];
     // 댓글 날짜만
     function formatDate(dateString) {
       const date = new Date(dateString);
@@ -67,11 +73,18 @@ async function fetchPostDetails() {
         (comment) => `
                         <div class="list-group-item">
                             <div class="d-flex justify-content-between">
-                                <strong>${comment.id}</strong>
-                                <small>${formatDate(comment.updated_at)}</small>
+                                <strong>${freeBoard.nickname}</strong>
+                                <div>
+                                <button class="btn-close" aria-label="Close" onclick="deleteComment(${
+                                  comment.id
+                                })"></button>
+                             </div>
                             </div>
                             <p class="mt-2">${comment.comment}</p>
+                            <div style="text-align: right;">
+                            <small>${formatDate(comment.updated_at)}</small>
                         </div>
+                       </div>
                     `,
       )
       .join('');
@@ -105,12 +118,14 @@ async function deleteFreePost() {
       {
         method: 'DELETE',
         headers: {
+          'Content-Type': 'application/json',
           Authorization: token,
         },
       },
     );
+
     if (!response.ok) {
-      throw new Error('Failed to delete the post');
+      throw new Error('삭제 권한이 없습니다.');
     }
 
     alert('게시글이 삭제되었습니다.');
@@ -151,53 +166,57 @@ async function createComment() {
   }
 }
 
-//⚪ 게시글 수정 함수
-async function fetchBoardDetailsForEdit() {
-  console.log(freeEditBoardId);
+// ⚪ 댓글 조회
+async function fetchComments(freeBoardId) {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/boards/${freeEditBoardId}`,
+      `http://localhost:3000/api/boards/${freeBoardId}/comments`,
       {
+        method: 'GET',
         headers: {
+          'Content-Type': 'application/json',
           Authorization: token,
         },
       },
     );
 
     if (!response.ok) {
-      throw new Error('패치 응답 에러');
+      throw new Error('Failed to fetch comments');
     }
 
-    const freeBoardId = await response.json();
-    document.getElementById('titleInput').value = freeBoardId.title;
-    document.getElementById('descriptionInput').value = freeBoardId.description;
+    const comments = await response.json();
+    console.log('댓글 조회 렌더링 테스트:', comments);
+
+    return comments;
   } catch (error) {
-    console.error('Error fetching board details:', error);
+    console.error('Error fetching comments:', error);
+    return null;
   }
 }
 
-// 수정
-async function submitEdit() {
-  const title = document.getElementById('editTitle').value;
-  const description = document.getElementById('editDescription').value;
+// ⚪ 댓글 삭제
+async function deleteComment(commentId) {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/boards/${freeEditBoardId}`,
+      `http://localhost:3000/api/boards/${freeBoardId}/comments/${commentId}`,
       {
-        method: 'PATCH',
+        method: 'DELETE',
         headers: {
+          'Content-Type': 'application/json',
           Authorization: token,
         },
       },
     );
-    console.log(response);
-    if (!response) {
-      throw new Error('서버 접속 실패');
+
+    if (!response.ok) {
+      throw new Error('댓글 삭제에 실패했습니다.');
     }
-    alert('게시글이 수정되었습니다.');
-    window.location.href = 'http://localhost:3000/view/freeBoard.html';
+
+    alert('댓글이 삭제되었습니다.');
+    fetchPostDetails();
   } catch (error) {
-    console.log(err);
+    alert('댓글 삭제에 실패했습니다.');
+    console.error('Error deleting comment:', error);
   }
 }
 

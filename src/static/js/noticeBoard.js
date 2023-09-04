@@ -21,7 +21,7 @@ async function RenderNoticePosts() {
     }
 
     const data = await response.json();
-
+    console.log('공지게시판 데이터 렌더링 테스트', data);
     data.sort((a, b) => {
       return new Date(b.created_at) - new Date(a.created_at);
     });
@@ -29,10 +29,11 @@ async function RenderNoticePosts() {
     const boardElement = document.querySelector('#notice .list-group');
     let postHTML = '';
 
+    const DEFAULT_IMAGE_URL = 'https://ifh.cc/g/a2Sg64.png';
+
     for (const post of data) {
       const postDate = post.created_at.split('T')[0];
-      const viewsCount = await viewsRender(post.id);
-      // const likesCount = await likesRender(post.id);
+      const userImageUrl = post.user.imgUrl || DEFAULT_IMAGE_URL;
 
       postHTML += `
                     <a href="http://localhost:3000/view/noticeBoardInfo.html?noticeBoardId=${post.id}" class="list-group-item list-group-item-action"
@@ -44,10 +45,9 @@ async function RenderNoticePosts() {
                           <strong class="mb-1 ms-2">${post.title}</strong>
                         </div>
                         <div>
-                          <small class="me-2">닉네임</small>
+                        <img src="${userImageUrl}" width="20" class="me-2">  <!-- 이미지 추가 -->
+                          <small class="me-2">${post.user.nickname}</small>
                           <span>${postDate}</span>
-                          <i class="fas fa-eye ms-4"></i> ${viewsCount}
-                          <i class="fas fa-thumbs-up ms-4"></i> 0
                         </div>
                       </div>
                     </a>
@@ -75,8 +75,9 @@ async function viewsRender(boardId) {
       return 0;
     }
 
-    const viewsCount = await response.json();
-    return viewsCount;
+    // const viewsCount = await response.json();
+    // console.log(viewsCount);
+    // return viewsCount;
   } catch (error) {
     console.error('Error fetching views count for boardId:', boardId, error);
     return 0;

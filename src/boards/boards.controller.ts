@@ -9,6 +9,7 @@ import {
   ValidationPipe,
   BadRequestException,
   Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -85,14 +86,14 @@ export class BoardsController {
   }
 
   //보드 상세조회
-  @Get('/:boardId')
   @ApiOperation({
     summary: '게시물 상세조회 API.',
     description: '게시물을 상세 조회한다.',
   })
+  @Get('/:boardId')
   findOne(@Param('boardId') boardId: number): Promise<Board> {
     try {
-      return this.boardsService.findOne(boardId);
+      return this.boardsService.findOneWithDetails(boardId);
     } catch (error) {
       throw new BadRequestException('CONTROLLER_ERROR');
     }

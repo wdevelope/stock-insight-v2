@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Askboard } from './entities/askboard.entity';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -33,27 +29,45 @@ export class AskboardsRepository {
       this.askboardsRepository.createQueryBuilder('askboard');
     query
       .leftJoinAndSelect('askboard.user', 'user')
-      .select(['askboard', 'user.nickname']);
+      .select(['askboard', 'user.nickname', 'user.imgUrl']);
     return await query.getMany();
   }
 
   // 문의 게시글 상세 조회
-  async findOne(id: number): Promise<Askboard> {
-    const askboard = await this.askboardsRepository.findOne({
-      where: { id: id },
-    });
-    if (!askboard) {
-      throw new NotFoundException('게시글을 찾을 수 없습니다.');
+  async findOneWith(boardId: number): Promise<Askboard | undefined> {
+    try {
+      const queryBuilder: SelectQueryBuilder<Askboard> =
+        this.askboardsRepository.createQueryBuilder('askboard');
+
+      const result = await queryBuilder
+        .leftJoinAndSelect('askboard.user', 'users')
+        .where('askboard.id = :boardId', { boardId })
+        .select([
+          'askboard.id',
+          'askboard.title',
+          'askboard.description',
+          'askboard.created_at',
+          'askboard.updated_at',
+          'users.nickname',
+          'users.imgUrl',
+          'users.id',
+        ])
+        .getOne();
+
+      return result;
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException('REPOSITORY_ERROR');
     }
-    return askboard;
   }
+
   // 문의게시글 수정
   async updateAskboard(
     id: number,
     updateAskboardDto: UpdateAskboardDto,
   ): Promise<Askboard> {
     await this.askboardsRepository.update(id, updateAskboardDto); // 직접 askboardsRepository의 update() 메소드를 사용합니다.
-    const updatedAskboard = await this.findOne(id);
+    const updatedAskboard = await this.findOneWith(id);
     if (!updatedAskboard) {
       throw new Error('Failed to update askboard.');
     }

@@ -18,6 +18,7 @@ import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { NoticeBoard } from './entities/noticeboard.entity';
 import { UpdateBoardDto } from 'src/boards/dto/update-board.dto';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiBody } from '@nestjs/swagger';
+import { error } from 'console';
 
 @UseGuards(JwtAuthGuard)
 @ApiTags('noticeboards')
@@ -37,6 +38,10 @@ export class NoticeboardsController {
     @CurrentUser() user: Users,
   ): Promise<void> {
     try {
+      // 임시 코드
+      if (user.status !== 'admin') {
+        throw new error('You are not authorized to create a noticeboard post.');
+      }
       return this.noticeboardsService.create(createNoticeBoardDto, user);
     } catch (error) {
       throw new BadRequestException('CONTROLLER_ERROR');

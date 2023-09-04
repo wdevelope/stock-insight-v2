@@ -13,7 +13,7 @@ async function fetchNews(pageNumber = 1) {
 
   try {
     const response = await $.ajax({
-      url: `https://newsapi.org/v2/everything?q=stock OR stocks OR equity&from=${START_DATE}&to=${END_DATE}&sortBy=publishedAt&pageSize=${PAGE_SIZE}&page=${pageNumber}&apiKey=${API_KEY}`,
+      url: `https://newsapi.org/v2/top-headlines?category=business&country=kr&pageSize=${PAGE_SIZE}&page=${pageNumber}&apiKey=${API_KEY}`,
       method: 'GET',
     });
 
