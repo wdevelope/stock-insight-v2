@@ -3,7 +3,7 @@ export class CreateQuizDto {
   @ApiProperty()
   upANDdown: string;
   @ApiProperty()
-  stockName: string;
-  @ApiProperty()
   updated_day: string;
+  @ApiProperty()
+  stockId: string;
 }
