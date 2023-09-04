@@ -28,7 +28,7 @@ export class BoardsService {
       findBoardDto,
     );
   }
-
+  // 게시글 상세 조회
   async findOneWithDetails(boardId: number): Promise<Board> {
     const board = await this.boardsRepository.findOneWith(boardId);
     if (!board) {
@@ -44,7 +44,7 @@ export class BoardsService {
       throw new BadRequestException('SERVICE_ERROR');
     }
   }
-
+  //게시글 수정
   async update(
     user: Users,
     boardId: number,

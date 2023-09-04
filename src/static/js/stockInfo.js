@@ -148,13 +148,23 @@ async function addFavoriteStock(stockId) {
 
 // 🟤 주식 차트를 그리는 함수
 
-// 🟤 주식 차트를 그리는 함수
-
 function renderChart(chartData) {
   const ctx = document.getElementById('myChart');
 
-  // 차트 데이터에서 날짜와 가격 분리
-  const labels = chartData.map((data) => data.date.toLocaleTimeString());
+  // 차트 데이터를 역순으로 정렬
+  chartData = chartData.reverse();
+
+  // 차트 데이터에서 날짜와 가격 분리, 날짜에 5시간 40분 더함
+  const labels = chartData.map((data) => {
+    const date = new Date(data.date);
+    date.setHours(date.getHours() + 5);
+    date.setMinutes(date.getMinutes() + 40);
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    });
+  });
   const prices = chartData.map((data) => data.price);
 
   // 가격 데이터의 최대값과 최소값을 구하고, 여유분을 둔 범위 설정

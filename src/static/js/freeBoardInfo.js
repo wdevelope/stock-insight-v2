@@ -26,7 +26,7 @@ async function fetchPostDetails() {
     const defaultImageUrl = 'https://ifh.cc/g/a2Sg64.png';
     const authorImage = freeBoard.imgUrl || defaultImageUrl;
 
-    console.log('자유게시판 렌더링 테스트', freeBoard);
+    console.log('자유게시판 상세 렌더링 테스트', freeBoard);
     const boardContainer = document.querySelector('.board-container');
 
     // 자유 게시글 상세페이지
@@ -56,9 +56,9 @@ async function fetchPostDetails() {
                                         `;
 
     // 댓글 섹션 업데이트
+    const comments = await fetchComments(freeBoardId);
     const commentsSection = boardContainer.querySelector('.comments-section');
     const commentsList = commentsSection.querySelector('.list-group');
-    const comments = freeBoard.comment || [];
     // 댓글 날짜만
     function formatDate(dateString) {
       const date = new Date(dateString);
@@ -73,11 +73,18 @@ async function fetchPostDetails() {
         (comment) => `
                         <div class="list-group-item">
                             <div class="d-flex justify-content-between">
-                                <strong>${comment.id}</strong>
-                                <small>${formatDate(comment.updated_at)}</small>
+                                <strong>${freeBoard.nickname}</strong>
+                                <div>
+                                <button class="btn-close" aria-label="Close" onclick="deleteComment(${
+                                  comment.id
+                                })"></button>
+                             </div>
                             </div>
                             <p class="mt-2">${comment.comment}</p>
+                            <div style="text-align: right;">
+                            <small>${formatDate(comment.updated_at)}</small>
                         </div>
+                       </div>
                     `,
       )
       .join('');
@@ -159,6 +166,60 @@ async function createComment() {
   }
 }
 
+// ⚪ 댓글 조회
+async function fetchComments(freeBoardId) {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/boards/${freeBoardId}/comments`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token,
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch comments');
+    }
+
+    const comments = await response.json();
+    console.log('댓글 조회 렌더링 테스트:', comments);
+
+    return comments;
+  } catch (error) {
+    console.error('Error fetching comments:', error);
+    return null;
+  }
+}
+
+// ⚪ 댓글 삭제
+async function deleteComment(commentId) {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/boards/${freeBoardId}/comments/${commentId}`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token,
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error('댓글 삭제에 실패했습니다.');
+    }
+
+    alert('댓글이 삭제되었습니다.');
+    fetchPostDetails();
+  } catch (error) {
+    alert('댓글 삭제에 실패했습니다.');
+    console.error('Error deleting comment:', error);
+  }
+}
+
 // ⚪ 좋아요 기능
 async function handleLikeClick() {
   try {
@@ -181,55 +242,5 @@ async function handleLikeClick() {
     }
   } catch (error) {
     console.error('Error processing like:', error);
-  }
-}
-
-//⚪ 게시글 수정 함수
-// async function fetchBoardDetailsForEdit() {
-//   console.log(freeEditBoardId);
-//   try {
-//     const response = await fetch(
-//       `http://localhost:3000/api/boards/${freeEditBoardId}`,
-//       {
-//         headers: {
-//           Authorization: token,
-//         },
-//       },
-//     );
-
-//     if (!response.ok) {
-//       throw new Error('패치 응답 에러');
-//     }
-
-//     const freeBoardId = await response.json();
-//     document.getElementById('titleInput').value = freeBoardId.title;
-//     document.getElementById('descriptionInput').value = freeBoardId.description;
-//   } catch (error) {
-//     console.error('Error fetching board details:', error);
-//   }
-// }
-
-// 수정
-async function submitEdit() {
-  const title = document.getElementById('editTitle').value;
-  const description = document.getElementById('editDescription').value;
-  try {
-    const response = await fetch(
-      `http://localhost:3000/api/boards/${freeEditBoardId}`,
-      {
-        method: 'PATCH',
-        headers: {
-          Authorization: token,
-        },
-      },
-    );
-    console.log(response);
-    if (!response) {
-      throw new Error('서버 접속 실패');
-    }
-    alert('게시글이 수정되었습니다.');
-    window.location.href = 'http://localhost:3000/view/freeBoard.html';
-  } catch (error) {
-    console.log(err);
   }
 }

@@ -120,7 +120,40 @@
     </nav>
 
     <!-- 🔴 메인 🔴 -->
-    <main></main>
+    <main>
+      <div class="container mt-5">
+        <h1 class="text-center mb-4">KOREA COMPOSITE INDEX</h1>
+        <div class="row">
+          <!-- KOSPI 정보 카드 -->
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <div class="card-header">KOSPI</div>
+              <div class="card-body">
+                <div class="stock-chart">
+                  <canvas id="kospiChart"></canvas>
+                </div>
+                <h5 class="card-title" id="kospi-price"></h5>
+                <p class="card-text" id="kospi-change"></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- KOSDAQ 정보 카드 -->
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header">KOSDAQ</div>
+              <div class="card-body">
+                <div class="stock-chart">
+                  <canvas id="kosdaqChart"></canvas>
+                </div>
+                <h5 class="card-title" id="kosdaq-price"></h5>
+                <p class="card-text" id="kosdaq-change"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.1/umd/popper.min.js"></script>
@@ -133,6 +166,9 @@
       src="https://kit.fontawesome.com/1a93e99cf8.js"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script src="/static/js/index.js"></script>
+    <script src="/static/js/indexChart.js"></script>
   </body>
 </html>
