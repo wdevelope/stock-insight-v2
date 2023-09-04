@@ -6,7 +6,7 @@ import { Board } from './entities/board.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { BoardsRepository } from './boards.repository';
 import { SearchModule } from 'src/search/search.module';
-import { BoardSearchService } from 'src/search/search.service';
+import { BoardSearchService } from './boards.search.service';
 
 @Module({
   imports: [
