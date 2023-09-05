@@ -1,26 +1,40 @@
 window.onload = function () {
-  fetchAndRenderPosts();
+  const urlParams = new URLSearchParams(window.location.search);
+  const page = urlParams.get('page') || 1;
+  fetchAndRenderPosts(page); // pass the current page
+  document
+    .querySelectorAll('input[name="sortOption"]')
+    .forEach(function (radio) {
+      radio.addEventListener('change', onSortOptionChanged);
+    });
 };
+
 let currentGroup = 1;
+// 🟠 정렬 옵션 변경
+function onSortOptionChanged() {
+  const selectedOption = document.querySelector(
+    'input[name="sortOption"]:checked',
+  ).value;
+  fetchAndRenderPosts(1, selectedOption);
+}
 
 // 🟠 자유게시판 검색
 async function freeBoardSearch() {
   const searchOption = document.getElementById('searchOption').value;
   const searchValue = document.getElementById('searchInput').value;
 
-  let queryParams = new URLSearchParams(); // 쿼리 문자열을 쉽게 생성하기 위해 URLSearchParams 사용
-  queryParams.append('page', '1');
+  let queryParams = 'page=1';
 
   if (searchOption === 'titleContent') {
-    queryParams.append('title', searchValue);
-    queryParams.append('description', searchValue);
+    queryParams += '&title=' + searchValue;
+    queryParams += '&description=' + searchValue;
   } else if (searchOption === 'nickname') {
-    queryParams.append('title', searchValue);
+    queryParams += '&nickname=' + searchValue;
   }
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/boards/find?${queryParams.toString()}`, // 쿼리 파라미터를 문자열로 변환하여 URL에 추가
+      `http://localhost:3000/api/boards/find?${queryParams}`,
       {
         method: 'GET',
         headers: {
@@ -33,31 +47,39 @@ async function freeBoardSearch() {
     if (!response.ok) {
       throw new Error('Failed to fetch search results.');
     }
-
     const data = await response.json();
-    renderSearchResults(data); // 검색 결과를 화면에 표시하는 함수
+    renderSearchResults(data);
   } catch (error) {
     console.error('Error during search:', error);
   }
 }
 
 // 🟠 자유게시판 글 랜더링 함수
-async function fetchAndRenderPosts(page = 1) {
+async function fetchAndRenderPosts(page = 1, orderBy = '') {
+  window.history.pushState(null, null, `?page=${page}`);
+
+  updatePaginationUI();
+
   if (!token) {
     console.warn('Authorization token is missing');
     return;
   }
 
+  let url = `http://localhost:3000/api/boards/page?page=${page}`;
+
+  if (orderBy === 'view') {
+    url = `http://localhost:3000/api/boards/orderbyviewcount`;
+  } else if (orderBy === 'like') {
+    url = `http://localhost:3000/api/boards/orderbylikecount`;
+  }
+
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/boards/page?page=${page}`, // 변경된 부분
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token,
-        },
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
       },
-    );
+    });
 
     if (!response.ok) {
       throw new Error('fetch res 에러');
@@ -111,34 +133,41 @@ async function fetchAndRenderPosts(page = 1) {
 
 // 🟠 자유게시판 검색 결과 렌더링
 async function renderSearchResults(data) {
-  data.sort((a, b) => {
-    return new Date(b.created_at) - new Date(a.created_at);
-  });
+  const hits = data.data;
 
   const boardElement = document.querySelector('#notice .list-group');
   let postHTML = '';
 
-  for (const post of data) {
-    const postDate = post.updated_at.split('T')[0];
-    const likesCount = post.likeCount;
-    const viewsCount = post.viewCount;
-    postHTML += `
-                <a href="http://localhost:3000/view/freeBoardInfo.html?freeBoardId=${post.id}" class="list-group-item list-group-item-action"                  
-                onclick="handleBoardItemClick(${post.id})">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                      <span>[토론]</span>
-                      <strong class="mb-1 ms-2">${post.title}</strong>
-                    </div>
-                    <div>
-                      <small class="me-2">${post.user.nickname}</small>
-                      <span>${postDate}</span>
-                      <i class="fas fa-eye ms-4"></i> ${viewsCount}
-                      <i class="fas fa-thumbs-up ms-4"></i> ${likesCount}
-                    </div>
-                  </div>
-                </a>
-              `;
+  if (hits.length === 0) {
+    postHTML = '<p class="text-center">검색 결과가 없습니다.</p>';
+  } else {
+    hits.sort((a, b) => {
+      return new Date(b.created_at) - new Date(a.created_at);
+    });
+
+    for (const post of hits) {
+      console.log('검색시 불러오는 데이터', post);
+      const postDate = post.created_at.split('T')[0];
+      const likesCount = post.likeCount;
+      const viewsCount = post.viewCount;
+      postHTML += `
+        <a href="http://localhost:3000/view/freeBoardInfo.html?freeBoardId=${post.id}" class="list-group-item list-group-item-action"
+        onclick="handleBoardItemClick(${post.id})">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <span>[토론]</span>
+              <strong class="mb-1 ms-2">${post.title}</strong>
+            </div>
+            <div>
+              <small class="me-2">${post.nickname}</small>
+              <span>${postDate}</span>
+              <i class="fas fa-eye ms-4"></i> ${viewsCount}
+              <i class="fas fa-thumbs-up ms-4"></i> ${likesCount}
+            </div>
+          </div>
+        </a>
+      `;
+    }
   }
 
   boardElement.innerHTML = postHTML;
@@ -146,9 +175,14 @@ async function renderSearchResults(data) {
 
 // 페이지 번호 동적 부여
 function updatePaginationUI() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const currentPage = parseInt(urlParams.get('page') || 1);
+
   const buttons = document
     .getElementById('pagination')
     .querySelectorAll('button:not(:first-child):not(:last-child)');
+
+  buttons.forEach((button) => button.classList.remove('active'));
 
   for (let i = 0; i < buttons.length; i++) {
     let pageNum = i + 1 + 5 * (currentGroup - 1);
@@ -156,6 +190,10 @@ function updatePaginationUI() {
     buttons[i].onclick = function () {
       fetchAndRenderPosts(pageNum);
     };
+
+    if (pageNum === currentPage) {
+      buttons[i].classList.add('active');
+    }
   }
 }
 

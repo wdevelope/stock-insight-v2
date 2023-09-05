@@ -68,6 +68,7 @@ async function fetchStocks(page) {
     const response = await fetch(
       `http://localhost:3000/api/stocks/?page=${page}`,
     );
+
     if (!response.ok) {
       throw new Error('Failed to fetch stocks.');
     }
@@ -76,6 +77,8 @@ async function fetchStocks(page) {
     console.log('stock 데이터 테스트', data);
     renderStocks(data.data); // 'data' 키에 해당하는 배열 사용
     updateStockCount(data.meta.total);
+    updateURL(page);
+    updatePaginationUI();
   } catch (error) {
     console.error('Error fetching stocks:', error);
   }
@@ -195,6 +198,7 @@ function updatePaginationUI() {
   const buttons = document
     .getElementById('pagination')
     .querySelectorAll('button:not(:first-child):not(:last-child)');
+  const currentPage = getPageFromURL();
 
   for (let i = 0; i < buttons.length; i++) {
     let pageNum = i + 1 + 5 * (currentGroup - 1);
@@ -202,7 +206,19 @@ function updatePaginationUI() {
     buttons[i].onclick = function () {
       fetchStocks(pageNum);
     };
+
+    if (pageNum === currentPage) {
+      buttons[i].classList.add('active');
+    } else {
+      buttons[i].classList.remove('active');
+    }
   }
+}
+
+function updateURL(page) {
+  const currentURL = window.location.href.split('?')[0];
+  const newURL = `${currentURL}?page=${page}`;
+  window.history.pushState({ path: newURL }, '', newURL);
 }
 
 // 페이지 네이션 다음페이지
@@ -218,6 +234,16 @@ const prevGroup = () => {
     updatePaginationUI();
   }
 };
+
+window.onload = function () {
+  const currentPage = getPageFromURL();
+  fetchStocks(currentPage);
+};
+
+function getPageFromURL() {
+  const searchParams = new URLSearchParams(window.location.search);
+  return parseInt(searchParams.get('page')) || 1;
+}
 
 // 페이지 로딩시 초기 주식 목록 불러오기
 fetchStocks(currentPage);
