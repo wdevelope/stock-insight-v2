@@ -21,4 +21,14 @@ export class UpdateRequestDto {
   @IsString()
   @IsNotEmpty()
   nickname: string;
+
+  @ApiProperty({ description: '비밀번호 확인' })
+  @IsString()
+  @IsNotEmpty()
+  confirm: string;
+
+  @ApiProperty({ description: '새 비밀번호 확인' })
+  @IsString()
+  @IsNotEmpty()
+  newConfirm: string;
 }
