@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 export class UpdateQuizDto {
   @ApiProperty()
-  answer: boolean;
+  correct: string;
 }

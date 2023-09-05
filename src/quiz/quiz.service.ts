@@ -13,7 +13,7 @@ export class QuizService {
     private readonly stockService: StockService,
     private schedulerRegistry: SchedulerRegistry,
   ) {}
-  // up, down 세가지
+  // up, down 퀴즈 제출
   async createQuiz(user: Users, data: CreateQuizDto) {
     await this.quizRepository.createQuiz(user, data);
 
@@ -30,7 +30,8 @@ export class QuizService {
     const updated_date = today;
 
     const quizId = await this.quizRepository.find({ where: { updated_date } });
-    console.log(quizId[0].id);
+    // console.log(quizId[0].id);
+    console.log(quizId[0].user.id);
 
     for (const ele of quizId) {
       const id = ele.id;
@@ -38,44 +39,48 @@ export class QuizService {
         where: { id },
       });
 
-      console.log(quizUser);
+      // console.log(quizUser);
       const searchStock = await this.stockService.searchStock(quizUser.stockId);
-      // console.log('ID로 찾기', searchStock);
-      //   const searchStockNumber = await this.stockService.getStockPrice(
-      //     searchStock.data[0].id,
-      //   );
-      //   // console.log(
-      //   //   '코드명으로 찾기',
-      //   //   searchStockNumber.stock.stockPrices[0].prdy_vrss_sign,
-      //   // );
-      //   const stockAnswer = searchStockNumber.stock.stockPrices[0].prdy_vrss_sign;
-      //   let upANDdownAnswer: string;
-      //   if (stockAnswer === '1') {
-      //     upANDdownAnswer = 'up';
-      //   }
-      //   if (stockAnswer === '2') {
-      //     upANDdownAnswer = 'up';
-      //   }
-      //   if (stockAnswer === '3') {
-      //     upANDdownAnswer = 'keep';
-      //   }
-      //   if (stockAnswer === '4') {
-      //     upANDdownAnswer = 'down';
-      //   }
-      //   if (stockAnswer === '5') {
-      //     upANDdownAnswer = 'down';
-      //   }
+      // console.log('stockId로 찾기', searchStock);
+      const searchStockNumber = await this.stockService.getStockPrice(
+        searchStock.data[0].id,
+      );
+      console.log(
+        '코드명으로 찾기',
+        searchStockNumber.stock.stockPrices[0].prdy_vrss_sign,
+      );
+      const stockAnswer = searchStockNumber.stock.stockPrices[0].prdy_vrss_sign;
+      let upANDdownAnswer: string;
+      if (stockAnswer === '1') {
+        upANDdownAnswer = 'up';
+      }
+      if (stockAnswer === '2') {
+        upANDdownAnswer = 'up';
+      }
+      if (stockAnswer === '3') {
+        upANDdownAnswer = 'keep';
+      }
+      if (stockAnswer === '4') {
+        upANDdownAnswer = 'down';
+      }
+      if (stockAnswer === '5') {
+        upANDdownAnswer = 'down';
+      }
+      // keep 뜰 경우
+      let newCorrect: string;
+      if (upANDdownAnswer === 'keep') {
+        newCorrect = 'keep';
+      } else {
+        if (quizUser.upANDdown === upANDdownAnswer) {
+          newCorrect = 'true';
+        } else {
+          newCorrect = 'false';
+        }
+      }
 
-      //   let newAnswer: boolean;
-      //   if (quizUser.upANDdown === upANDdownAnswer) {
-      //     newAnswer = true;
-      //   } else {
-      //     newAnswer = false;
-      //   }
-
-      //   await this.quizRepository.updateQuiz(quizUser, {
-      //     answer: newAnswer,
-      //   });
+      await this.quizRepository.updateQuiz(quizUser, {
+        correct: newCorrect,
+      });
     }
 
     return {
@@ -84,71 +89,64 @@ export class QuizService {
     };
   }
 
-  // // up down 페이지네이션
-  // async findNumberByupANDdown(
-  //   upANDdown: string,
-  //   page: number = 1,
-  // ): Promise<any> {
-  //   const take = 20; //페이지 상에서 보일 개수(LIMIT)
-  //   const [quizUpAndDown, total] = await this.quizRepository.findAndCount({
-  //     take,
-  //     skip: (page - 1) * take, //skip이 OFFSET
-  //     where: { upANDdown },
-  //   });
+  // up 비율
+  async upQuiz() {
+    const upQ = await this.quizRepository.upQuiz();
+    const downQ = await this.quizRepository.downQuiz();
+    const sumQ = Number(upQ.count) + Number(downQ.count);
+    const upPercent = (Number(upQ.count) / sumQ) * 100;
 
-  //   return {
-  //     data: quizUpAndDown.map((quiz) => {
-  //       const { id, answer, user, stock, createdAt, ...data } = quiz;
+    return Math.round(upPercent);
+  }
 
-  //       return data;
-  //     }),
-  //     meta: {
-  //       total,
-  //       page,
-  //       last_page: Math.ceil(total / take),
-  //     },
-  //   };
-  // }
+  // down 비율
+  async downQuiz() {
+    const upQ = await this.quizRepository.upQuiz();
+    const downQ = await this.quizRepository.downQuiz();
+    const sumQ = Number(upQ.count) + Number(downQ.count);
+    const downPercent = (Number(downQ.count) / sumQ) * 100;
 
-  // // up, down 각각의 개수의 합
-  // async getQuiz() {
-  //   return await this.quizRepository.getQuiz();
-  // }
+    return Math.round(downPercent);
+  }
 
-  // async getPercentQuiz() {
-  //   const getQuiz = await this.quizRepository.getQuiz();
+  // 퀴즈 확인 스케줄러 (시작)
+  async startUpdateQuiz() {
+    const job = new CronJob(
+      '0 */60 18-19 * * 1-5',
+      () => {
+        console.log('start');
+        this.updateQuiz();
+      },
+      null,
+      false,
+      'Asia/Seoul',
+    );
+    await this.schedulerRegistry.addCronJob('updateQuiz', job);
+    job.start();
+  }
+  // 퀴즈 확인 스케줄러 (종료)
+  async stopUpdateQuiz() {
+    const job = await this.schedulerRegistry.getCronJob('updateQuiz');
+    job.stop();
+  }
 
-  //   // console.log('string', getQuiz[0].sum + getQuiz[1].sum);
-  //   // console.log('Number', Number(getQuiz[0].sum) + Number(getQuiz[1].sum));
-  //   const downQuiz = Number(getQuiz[0].sum);
-  //   const upQuiz = Number(getQuiz[1].sum);
-  //   const sum = Number(getQuiz[0].sum) + Number(getQuiz[1].sum);
+  // stockId에 맞는 up 비율
+  async upStockQuiz(stockId: string) {
+    const upQ = await this.quizRepository.upStockQuiz(stockId);
+    const downQ = await this.quizRepository.downStockQuiz(stockId);
+    const sumQ = Number(upQ.count) + Number(downQ.count);
+    const upPercent = (Number(upQ.count) / sumQ) * 100;
 
-  //   const downPercent = (downQuiz / sum) * 100;
-  //   const upPercent = (upQuiz / sum) * 100;
-  //   // console.log('다운', downPercent);
-  //   // console.log('업', upPercent);
+    return Math.round(upPercent);
+  }
 
-  //   return [downPercent, upPercent];
-  // }
+  // stockId에 맞는 down 비율
+  async downStockQuiz(stockId: string) {
+    const upQ = await this.quizRepository.upStockQuiz(stockId);
+    const downQ = await this.quizRepository.downStockQuiz(stockId);
+    const sumQ = Number(upQ.count) + Number(downQ.count);
+    const downPercent = (Number(downQ.count) / sumQ) * 100;
 
-  // // 스케줄러
-  // async startUpdateQuiz() {
-  //   const job = new CronJob(
-  //     '0 */60 9-16 * * 1-5',
-  //     () => {
-  //       console.log('start');
-  //       this.updateQuiz();
-  //     },
-  //     null,
-  //     false,
-  //     'Asia/Seoul',
-  //   );
-  //   await this.schedulerRegistry.addCronJob('updateQuiz', job);
-  //   job.start();
-  // }
-  // async stopUpdateQuiz() {
-  //   const job = await this.schedulerRegistry.getCronJob('updateQuiz');
-  //   job.stop();
-  // }
+    return Math.round(downPercent);
+  }
 }
