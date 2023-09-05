@@ -127,5 +127,22 @@ ul.nav .nav-item .nav-link.active {
 
 /* 퀴즈 */
 .custom-btn {
-  padding: 50px 40px; /* 위아래 20px, 좌우 40px */
+  width: 200px;
+  height: 50px;
+  margin-right: 30px;
+  margin-bottom: 10px;
+}
+/* 채팅박스 */
+#chat-box {
+  width: 400px;
+  height: 600px;
+  overflow-y: scroll;
+  border-radius: 3px;
+}
+.input-group {
+  width: 400px;
+}
+
+#chattingNickname {
+  margin-top: 10px;
 }

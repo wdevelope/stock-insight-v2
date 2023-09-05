@@ -22,6 +22,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './exception/http-exception.filter';
 import { ExceptionModule } from './exception/exception.module';
 import { SearchModule } from './search/search.module';
+import { ChatGateway } from './chat/chat.gateway';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { SearchModule } from './search/search.module';
   providers: [
     EmailService,
     { provide: APP_FILTER, useClass: HttpExceptionFilter },
+    ChatGateway,
   ],
 })
 export class AppModule {}

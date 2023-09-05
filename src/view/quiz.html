@@ -121,39 +121,52 @@
 
     <!-- 🔴 메인 🔴 -->
     <main>
-      <section class="quiz-section text-center">
-        <div class="container">
-          <div class="row justify-content-center">
-            <div class="col-md-9">
-              <div class="card">
-                <div class="card-header">오늘의 종목</div>
-                <div class="card-body">
-                  <h1 class="card-title" id="stock-name-title"></h1>
-                  <h2
-                    class="card-subtitle mb-2 text-muted"
-                    id="stock-price"
-                  ></h2>
-                  <p class="card-text lead"></p>
-                  <div class="buttons-container mt-4">
-                    <button
-                      class="btn btn-outline-success btn-lg btn-block me-2 custom-btn"
-                      id="rise-button"
-                    >
-                      <i class="fa-solid fa-arrow-trend-up"></i> 올라간다
-                    </button>
-                    <button
-                      class="btn btn-outline-danger btn-lg btn-block custom-btn"
-                      id="fall-button"
-                    >
-                      <i class="fa-solid fa-arrow-trend-down"></i> 내려간다
-                    </button>
-                  </div>
+      <div class="container">
+        <div class="row">
+          <!-- Cards Section -->
+          <div class="col-md-10 cards-container">
+            <!-- Cards will be appended here -->
+          </div>
+          <!-- 채팅 세션 -->
+          <div class="col-md-2 chattingSession">
+            <h3><i class="fa-brands fa-rocketchat"></i> 실시간 채팅</h3>
+            <div id="chat-box" class="border border-dark p-2">
+              <!-- Chat messages will be appended here -->
+            </div>
+            <form id="chat-form" class="input-group mb-3">
+              <div class="input-group mb-1">
+                <input
+                  type="text"
+                  id="chattingNickname"
+                  class="form-control w-100 rounded"
+                  placeholder="닉네임을 입력하세요."
+                  aria-label="Recipient's username"
+                  aria-describedby="button-addon2"
+                />
+              </div>
+              <div class="input-group">
+                <input
+                  type="text"
+                  id="message"
+                  class="form-control"
+                  placeholder="채팅을 입력하세요."
+                  aria-label="Recipient's username"
+                  aria-describedby="button-addon2"
+                />
+                <div class="input-group-append">
+                  <button
+                    class="btn btn-primary rounded"
+                    type="submit"
+                    id="sendBtn"
+                  >
+                    보내기
+                  </button>
                 </div>
               </div>
-            </div>
+            </form>
           </div>
         </div>
-      </section>
+      </div>
     </main>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -167,7 +180,9 @@
       src="https://kit.fontawesome.com/1a93e99cf8.js"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
     <script src="/static/js/index.js"></script>
     <script src="/static/js/quiz.js"></script>
+    <script src="/static/js/chatting.js"></script>
   </body>
 </html>
