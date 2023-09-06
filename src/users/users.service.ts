@@ -157,7 +157,7 @@ export class UsersService {
 
   //페이지네이션
   async paginate(page: number = 1): Promise<any> {
-    const take = 2; //페이지 상에서 보일 개수(LIMIT)
+    const take = 10; //페이지 상에서 보일 개수(LIMIT)
 
     const [users, total] = await this.usersRepository.findAndCount({
       take,
