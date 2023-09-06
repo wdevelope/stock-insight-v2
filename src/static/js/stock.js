@@ -68,6 +68,7 @@ async function fetchStocks(page) {
     const response = await fetch(
       `http://localhost:3000/api/stocks/?page=${page}`,
     );
+
     if (!response.ok) {
       throw new Error('Failed to fetch stocks.');
     }
@@ -76,6 +77,8 @@ async function fetchStocks(page) {
     console.log('stock 데이터 테스트', data);
     renderStocks(data.data); // 'data' 키에 해당하는 배열 사용
     updateStockCount(data.meta.total);
+    updateURL(page);
+    updatePaginationUI();
   } catch (error) {
     console.error('Error fetching stocks:', error);
   }
@@ -118,34 +121,32 @@ document.addEventListener('click', function (event) {
 // 주식 정보를 테이블 형태로 출력
 function renderStocks(stocks) {
   let tableBody = document.getElementById('stockTable');
-  tableBody.innerHTML = ''; // 기존 테이블 내용을 지웁니다.
+  tableBody.innerHTML = '';
 
   stocks.forEach((stock) => {
     let row = tableBody.insertRow();
 
-    // 종목코드
     row.insertCell().textContent = stock.id;
-
-    // 종목명
     row.insertCell().textContent = stock.prdt_abrv_name;
-
-    // 시장명
     row.insertCell().textContent = stock.rprs_mrkt_kor_name;
 
-    // 주식 가격
     let priceCell = row.insertCell();
     priceCell.textContent = Number(stock.stck_prpr).toLocaleString();
 
     // 전일 대비 셀
     let diffCell = row.insertCell();
-    diffCell.textContent = Number(stock.prdy_vrss).toLocaleString();
+    // 전일대비 가격 옆에 등락률 추가
+    diffCell.textContent = `${Number(stock.prdy_vrss).toLocaleString()} (${
+      stock.prdy_ctrt
+    }%)`;
+
     // 전일 대비 값에 따라 셀 색상 설정
     if (Number(stock.prdy_vrss) > 0) {
-      diffCell.style.color = 'red'; // 주가 상승
+      diffCell.style.color = 'red';
     } else if (Number(stock.prdy_vrss) < 0) {
-      diffCell.style.color = 'blue'; // 주가 하락
+      diffCell.style.color = 'blue';
     } else {
-      diffCell.style.color = 'black'; // 주가 변동 없음
+      diffCell.style.color = 'black';
     }
 
     // 행 클릭 이벤트 추가
@@ -168,7 +169,7 @@ async function searchStock() {
 
 // 검색 결과 출력
 function renderSearchResults(stocks) {
-  renderStocks(stocks); // This can use the same function if the rendering process is the same.
+  renderStocks(stocks);
 }
 
 // 전체 주식 수 업데이트
@@ -195,6 +196,7 @@ function updatePaginationUI() {
   const buttons = document
     .getElementById('pagination')
     .querySelectorAll('button:not(:first-child):not(:last-child)');
+  const currentPage = getPageFromURL();
 
   for (let i = 0; i < buttons.length; i++) {
     let pageNum = i + 1 + 5 * (currentGroup - 1);
@@ -202,22 +204,30 @@ function updatePaginationUI() {
     buttons[i].onclick = function () {
       fetchStocks(pageNum);
     };
+
+    if (pageNum === currentPage) {
+      buttons[i].classList.add('active');
+    } else {
+      buttons[i].classList.remove('active');
+    }
   }
 }
 
-// 페이지 네이션 다음페이지
-const nextGroup = () => {
-  currentGroup++;
-  updatePaginationUI();
+function updateURL(page) {
+  const currentURL = window.location.href.split('?')[0];
+  const newURL = `${currentURL}?page=${page}`;
+  window.history.pushState({ path: newURL }, '', newURL);
+}
+
+window.onload = function () {
+  const currentPage = getPageFromURL();
+  fetchStocks(currentPage);
 };
 
-// 페이지 네이션 이전페이지
-const prevGroup = () => {
-  if (currentGroup > 1) {
-    currentGroup--;
-    updatePaginationUI();
-  }
-};
+function getPageFromURL() {
+  const searchParams = new URLSearchParams(window.location.search);
+  return parseInt(searchParams.get('page')) || 1;
+}
 
 // 페이지 로딩시 초기 주식 목록 불러오기
 fetchStocks(currentPage);

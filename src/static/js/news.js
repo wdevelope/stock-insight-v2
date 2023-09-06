@@ -29,7 +29,10 @@ async function fetchNews(pageNumber = 1) {
 
 function displayNews(articles) {
   const mainArticle = articles[0];
-  $('.col-lg-8 img').attr('src', mainArticle.urlToImage);
+  const defaultImage =
+    'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fE5FV1N8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60';
+
+  $('.col-lg-8 img').attr('src', mainArticle.urlToImage || defaultImage);
   $('.col-lg-8 h2').html(
     `<a href="${mainArticle.url}" target="_blank">${mainArticle.title}</a>`,
   );
@@ -40,9 +43,10 @@ function displayNews(articles) {
   const mostViewedNews = $('.col-lg-4 ul');
   mostViewedNews.empty(); // 기존 뉴스 지우기
   articles.slice(1, 7).forEach((article) => {
+    const imageUrl = article.urlToImage || defaultImage;
     mostViewedNews.append(`
                             <li class="mb-3">
-                                <a href="${article.url}" target="_blank"><img src="${article.urlToImage}" alt="${article.title}" class="img-fluid" style="width: 120px"></a>
+                                <a href="${article.url}" target="_blank"><img src="${imageUrl}" alt="${article.title}" class="img-fluid" style="width: 120px"></a>
                                 <a href="${article.url}" target="_blank">${article.title}</a>
                             </li>
                           `);
@@ -52,9 +56,10 @@ function displayNews(articles) {
   const stockNewsSection = $('#stock-news-section');
   stockNewsSection.empty(); // 기존 뉴스 지우기
   articles.slice(7, 10).forEach((article) => {
+    const imageUrl = article.urlToImage || defaultImage;
     stockNewsSection.append(`
                                 <div class="col-md-4 mb-4">
-                                    <a href="${article.url}" target="_blank"><img src="${article.urlToImage}" alt="${article.title}" class="img-fluid"></a>
+                                    <a href="${article.url}" target="_blank"><img src="${imageUrl}" alt="${article.title}" class="img-fluid"></a>
                                     <h4 class="mt-2"><a href="${article.url}" target="_blank">${article.title}</a></h4>
                                     <p>${article.description}</p>
                                 </div>

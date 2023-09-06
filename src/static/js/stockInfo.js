@@ -57,17 +57,18 @@ async function fetchStockDetail() {
 function renderStockDetail(data) {
   const stockInfo = data.stock.stockPrices[0];
 
-  // 기존의 전일 대비 값을 가져오는 코드
+  // 전일 대비 값
   const priceDiff = formatNumberWithCommas(stockInfo.prdy_vrss);
+  const priceDiffPercent = stockInfo.prdy_ctrt;
 
   // 전일 대비 값에 따라 색상 지정
   const priceDiffElem = document.getElementById('priceDifference');
   if (parseFloat(stockInfo.prdy_vrss) > 0) {
     priceDiffElem.style.color = 'red'; // 상승일 때 빨간색
-    priceDiffElem.textContent = `전일 대비: +${priceDiff}`;
+    priceDiffElem.textContent = `전일 대비: +${priceDiff} (${priceDiffPercent}%)`;
   } else if (parseFloat(stockInfo.prdy_vrss) < 0) {
     priceDiffElem.style.color = 'blue'; // 하락일 때 파란색
-    priceDiffElem.textContent = `전일 대비: ${priceDiff}`;
+    priceDiffElem.textContent = `전일 대비: ${priceDiff} (${priceDiffPercent}%)`;
   } else {
     priceDiffElem.style.color = 'black'; // 변동 없을 때 검은색
     priceDiffElem.textContent = `전일 대비: ${priceDiff}`;
@@ -147,7 +148,6 @@ async function addFavoriteStock(stockId) {
 }
 
 // 🟤 주식 차트를 그리는 함수
-
 function renderChart(chartData) {
   const ctx = document.getElementById('myChart');
 
@@ -182,7 +182,9 @@ function renderChart(chartData) {
           data: prices,
           borderWidth: 1,
           borderColor: 'blue',
-          fill: false,
+          fill: true,
+          backgroundColor: 'rgba(0, 0, 255, 0.1)',
+          pointRadius: 0,
         },
       ],
     },

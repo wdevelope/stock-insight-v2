@@ -1,10 +1,21 @@
-/* ⭐ 페이지네이션 */
+.board-user-image {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+/* 🔥 페이지네이션 */
 #pagination {
   display: flex;
   justify-content: center;
   margin-top: 20px;
   align-items: center;
   gap: 0.5rem;
+}
+
+#pagination .active {
+  background-color: #007bff;
+  color: white;
 }
 
 #pagination button {
@@ -40,4 +51,20 @@
 #pagination button:last-child:hover {
   background-color: transparent;
   color: #007bff;
+}
+
+/* select 설정 */
+#sortSelector {
+  width: 150px;
+  height: 40px;
+  margin-left: 20px;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: #f9f9f9;
+}
+
+#sortSelector:hover {
+  background-color: #e9e9e9;
 }

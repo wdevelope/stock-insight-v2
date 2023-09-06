@@ -20,10 +20,64 @@ export class BoardsService {
 
   async paginate(page: number = 1): Promise<{ data: Board[]; meta: any }> {
     /**페이지 상 보일 개수*/
-    const take = 5;
+    const take = 15;
 
     const [boards, total] =
       await this.boardsRepository.findAndCountWithPagination(page, take);
+
+    return {
+      data: boards,
+      meta: {
+        total,
+        page,
+        last_page: Math.ceil(total / take),
+      },
+    };
+  }
+
+  // 조회수 정렬
+  async getBoardsOrderByViewCount(
+    page: number,
+    take: number,
+  ): Promise<{ data: Board[]; meta: any }> {
+    const [boards, total] =
+      await this.boardsRepository.getBoardsOrderByViewCount(page, take);
+
+    return {
+      data: boards,
+      meta: {
+        total,
+        page,
+        last_page: Math.ceil(total / take),
+      },
+    };
+  }
+  // 좋아요 정렬
+  async getBoardsOrderByLikeCount(
+    page: number,
+    take: number,
+  ): Promise<{ data: Board[]; meta: any }> {
+    const [boards, total] =
+      await this.boardsRepository.getBoardsOrderByLikeCount(page, take);
+
+    return {
+      data: boards,
+      meta: {
+        total,
+        page,
+        last_page: Math.ceil(total / take),
+      },
+    };
+  }
+  //랭커유저 정렬
+  async getBoardsOrderByRanker(
+    page: number,
+    take: number,
+  ): Promise<{ data: Board[]; meta: any }> {
+    const [boards, total] = await this.boardsRepository.getBoardsOrderByRanker(
+      page,
+      take,
+    );
 
     return {
       data: boards,

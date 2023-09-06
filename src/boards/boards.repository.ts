@@ -58,8 +58,8 @@ export class BoardsRepository {
                 users.imgUrl
             FROM board
             LEFT JOIN users ON users.id = board.userId
-            WHERE board.id = ${boardId}
-        `,
+            WHERE board.id = ? 
+            `,
         [boardId],
       );
 
@@ -129,5 +129,72 @@ export class BoardsRepository {
     const [boards, total] = await qb.getManyAndCount();
 
     return [boards, total];
+  }
+  // 조회수 정렬
+  async getBoardsOrderByViewCount(
+    page: number,
+    take: number,
+  ): Promise<[Board[], number]> {
+    try {
+      const qb = this.boardsRepository
+        .createQueryBuilder('board')
+        .leftJoinAndSelect('board.user', 'user')
+        .select(['board', 'user.nickname', 'user.imgUrl', 'user.status'])
+        .orderBy('board.viewCount', 'DESC')
+        .skip((page - 1) * take)
+        .take(take);
+
+      const [boards, total] = await qb.getManyAndCount();
+
+      return [boards, total];
+    } catch (error) {
+      console.error('Error fetching boards order by view count', error);
+      throw new BadRequestException('REPOSITORY_ERROR');
+    }
+  }
+  // 좋아요 정렬
+  async getBoardsOrderByLikeCount(
+    page: number,
+    take: number,
+  ): Promise<[Board[], number]> {
+    try {
+      const qb = this.boardsRepository
+        .createQueryBuilder('board')
+        .leftJoinAndSelect('board.user', 'user')
+        .select(['board', 'user.nickname', 'user.imgUrl', 'user.status'])
+        .orderBy('board.likeCount', 'DESC')
+        .skip((page - 1) * take)
+        .take(take);
+
+      const [boards, total] = await qb.getManyAndCount();
+
+      return [boards, total];
+    } catch (error) {
+      console.error('Error fetching boards order by view count', error);
+      throw new BadRequestException('REPOSITORY_ERROR');
+    }
+  }
+  // 랭커유저 정렬
+  async getBoardsOrderByRanker(
+    page: number,
+    take: number,
+  ): Promise<[Board[], number]> {
+    try {
+      const qb = this.boardsRepository
+        .createQueryBuilder('board')
+        .leftJoinAndSelect('board.user', 'user')
+        .select(['board', 'user.nickname', 'user.imgUrl', 'user.status'])
+        .where('user.status = :status', { status: 'ranker' })
+        .orderBy('board.created_at', 'DESC')
+        .skip((page - 1) * take)
+        .take(take);
+
+      const [boards, total] = await qb.getManyAndCount();
+
+      return [boards, total];
+    } catch (error) {
+      console.error('Error Details:', error);
+      throw new BadRequestException('REPOSITORY_ERROR');
+    }
   }
 }
