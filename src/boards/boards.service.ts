@@ -10,6 +10,7 @@ import { Users } from 'src/users/users.entity';
 import { BoardsRepository } from './boards.repository';
 import { FindBoardDto } from './dto/find-board.dto';
 import { BoardSearchService } from './boards.search.service';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class BoardsService {
@@ -61,12 +62,12 @@ export class BoardsService {
     }
   }
 
+  @Cron('0 */3 * * * *')
   async indexing(): Promise<void> {
     const boards: Board[] = await this.boardsRepository.find();
     try {
       await this.boardSearchService.indexData(boards);
     } catch (error) {
-      console.log(error);
       throw new BadRequestException('SERVICE_ERROR');
     }
   }

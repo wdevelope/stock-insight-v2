@@ -9,7 +9,6 @@ import {
   ValidationPipe,
   BadRequestException,
   Query,
-  ParseIntPipe,
 } from '@nestjs/common';
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
