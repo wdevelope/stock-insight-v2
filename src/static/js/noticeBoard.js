@@ -1,14 +1,9 @@
-window.onload = function () {
+document.addEventListener('DOMContentLoaded', () => {
   RenderNoticePosts();
-};
+});
 
 // 🟢 공지사항 게시글 랜더링 함수
 async function RenderNoticePosts() {
-  if (!token) {
-    console.warn('Authorization token is missing');
-    return;
-  }
-
   try {
     const response = await fetch('http://localhost:3000/api/noticeboards', {
       headers: {
@@ -45,7 +40,7 @@ async function RenderNoticePosts() {
                           <strong class="mb-1 ms-2">${post.title}</strong>
                         </div>
                         <div>
-                        <img src="${userImageUrl}" width="20" class="me-2">  <!-- 이미지 추가 -->
+                        <img src="${userImageUrl}" class="me-2 board-user-image">  
                           <small class="me-2">${post.user.nickname}</small>
                           <span>${postDate}</span>
                         </div>

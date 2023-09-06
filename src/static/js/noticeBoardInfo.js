@@ -42,7 +42,7 @@ async function fetchNoticePostDetails() {
                                           </div>         
                                           <p class="text-muted post-info">
                                           <img src="${authorImage}" alt="Author's Image" style="width: 30px; height: 30px; border-radius: 50%;"> <!-- 작성자의 이미지 추가 -->
-                                              작성자: <span class="author">${noticeBoard.id}</span> | 날짜: <span class="date">${noticeBoard.created_at}</span>
+                                             <span class="author">${noticeBoard.user.nickname}</span> | 날짜: <span class="date">${noticeBoard.created_at}</span>
                                           </p>
                                           <p>${noticeBoard.description}</p>
                                           <button class="btn btn-primary" onclick="handleLikeClick()">👍 (0)</button>

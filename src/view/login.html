@@ -13,6 +13,8 @@
 
   <body>
     <canvas id="canvas"></canvas>
+
+    <!-- 🔴 로그인 -->
     <div class="form-container w-25 mx-auto">
       <h3 class="text-center mb-4">로그인</h3>
       <div class="mb-3">
@@ -46,8 +48,7 @@
       </div>
     </div>
 
-    <!-- 정보 모달 -->
-    <!-- 정보 모달 -->
+    <!-- 🔴 정보 모달 -->
     <div
       class="modal fade"
       id="infoModal"
@@ -81,10 +82,11 @@
                     alt="Platform Description Image"
                     class="img-fluid mb-3"
                   />
+                  <br />
                   <h3>주식 플랫폼</h3>
                   <p>
-                    <strong>stock insight</strong>은 주식 투자자들을 위한 통합
-                    플랫폼입니다.
+                    <strong>stock insight</strong>은 주식에 관심있는 모든
+                    유저들을 위한 종합 플랫폼입니다.
                   </p>
                 </div>
 
@@ -95,11 +97,11 @@
                     alt="Image Description"
                     class="img-fluid mb-3"
                   />
-                  <!-- 이미지 추가 -->
+                  <br />
                   <h3>주식 정보</h3>
                   <p>
-                    현재 주식의 시세, 과거의 데이터, 주식에 대한 다양한 분석
-                    정보를 제공합니다.
+                    현재 주식의 시세, 데이터, 주식에 대한 다양한 분석 정보를
+                    제공합니다.
                   </p>
                 </div>
 
@@ -110,10 +112,10 @@
                     alt="Image Description"
                     class="img-fluid mb-3"
                   />
-                  <!-- 이미지 추가 -->
+                  <br />
                   <h3>뉴스</h3>
                   <p>
-                    주식과 관련된 최신 뉴스 및 시장 동향을 실시간으로
+                    비즈니스와 관련된 최신 뉴스 및 시장 동향을 실시간으로
                     전해드립니다.
                   </p>
                 </div>
@@ -125,7 +127,7 @@
                     alt="Image Description"
                     class="img-fluid mb-3"
                   />
-                  <!-- 이미지 추가 -->
+                  <br />
                   <h3>커뮤니티</h3>
                   <p>
                     주식 투자에 대한 다양한 의견과 정보를 교환할 수 있는
@@ -219,7 +221,7 @@
                 <button
                   type="button"
                   class="btn btn-primary"
-                  onclick="sendVerificationCode()"
+                  onclick="verifyEmail()"
                 >
                   인증코드 받기
                 </button>
@@ -239,7 +241,7 @@
               <button
                 type="button"
                 class="btn btn-primary"
-                onclick="checkVerificationCode()"
+                onclick="checkEmailCode()"
               >
                 인증코드 확인
               </button>

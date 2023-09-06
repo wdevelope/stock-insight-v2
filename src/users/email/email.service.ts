@@ -9,6 +9,7 @@ import { UsersRepository } from '../users.repository';
 import { EmailDto } from '../dto/email.dto';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class EmailService {
@@ -42,8 +43,8 @@ export class EmailService {
         template: 'index', // The `.pug` or `.hbs` extension is appended automatically.
         context: {
           // Data to be sent to template engine.
-          code: `The Authentication code is ${randomCode}`,
-          username: 'test email',
+          code: `가입 인증번호는 ${randomCode} 입니다.`,
+          username: 'stock insight',
         },
       })
       .then((success) => {
@@ -63,6 +64,52 @@ export class EmailService {
       throw new UnauthorizedException('인증번호가 일치하지 않습니다.');
     } else {
       await this.cacheManager.del(email); // 인증이 완료되면 삭제
+    }
+  }
+
+  async resetPassword(body: EmailDto): Promise<void> {
+    const { email } = body;
+
+    const existEmail = await this.usersRepository.findUserByEmail(email);
+
+    if (!existEmail) {
+      throw new NotFoundException('가입한 이메일 주소가 없습니다.');
+    } else {
+      const getRandomPassword = (min, max) => {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min)) + min;
+      };
+
+      const randomPassword = getRandomPassword(11111111, 99999999);
+
+      let hashedPassword: string | undefined;
+      if (randomPassword) {
+        hashedPassword = await bcrypt.hash(randomPassword, 10);
+      }
+
+      await this.usersRepository.updateUser(existEmail, {
+        password: hashedPassword || existEmail.password,
+      });
+
+      await this.mailerService
+        .sendMail({
+          to: email, // List of receivers email address
+          from: 'gwagbyeol@naver.com', // Senders email address
+          subject: 'Testing Nest Mailermodule with template ✔',
+          template: 'index', // The `.pug` or `.hbs` extension is appended automatically.
+          context: {
+            // Data to be sent to template engine.
+            code: `임시 비밀번호는 ${randomPassword} 입니다.`,
+            username: 'stock insight',
+          },
+        })
+        .then((success) => {
+          console.log(success);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }
 }

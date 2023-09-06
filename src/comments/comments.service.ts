@@ -31,10 +31,8 @@ export class CommentsService {
       throw new NotFoundException('게시물이 존재하지 않습니다.');
     }
     try {
-      const comment = await this.commentsRepository.find({
-        where: { board: { id: boardId } },
-      });
-
+      const comment =
+        await this.commentsRepository.findWithUserNickname(boardId);
       return comment;
     } catch (error) {
       throw new BadRequestException('SERVICE_ERROR');

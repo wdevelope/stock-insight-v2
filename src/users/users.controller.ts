@@ -111,7 +111,7 @@ export class UsersController {
     return await this.usersService.deleteUser(id);
   }
 
-  // 이메일 보내는것 까지 성공 http://localhost:3000/api/users/email
+  // 이메일 인증번호 발송 http://localhost:3000/api/users/email
   @Post('/email')
   @ApiOperation({
     summary: '이메일 인증 API',
@@ -120,7 +120,7 @@ export class UsersController {
     return this.emailService.authEmail(body);
   }
 
-  // 이메일 인증 http://localhost:3000/api/users/verifyEmail
+  // 이메일 인증 확인 http://localhost:3000/api/users/verifyEmail
   @ApiOperation({
     summary: '이메일 인증 API',
   })
@@ -129,30 +129,60 @@ export class UsersController {
     return this.emailService.verifyEmail(body.email, body.randomCode);
   }
 
-  // 유저 퀴즈 http://localhost:3000/api/users/quiz/:id
+  // 유저 포인트 http://localhost:3000/api/users/point
   @ApiOperation({
     summary: '퀴즈 API',
   })
   @ApiBody({ type: [PointDto] })
-  @Patch('/quiz/:id')
-  async userPoint(
-    @Param('id') id: number,
-    @CurrentUser() user: Users,
-    @Body() body: PointDto,
-  ) {
-    return await this.usersService.updatePoint(id, body);
+  @Patch('/point')
+  async userPoint() {
+    return await this.usersService.updatePoint();
   }
 
-  // 유저 스텟 변동 http://localhost:3000/api/users/status/:id
+  // 유저 스텟 변동 http://localhost:3000/api/users/status
   @ApiOperation({ summary: '유저 스테이터스 변경 API' })
-  @Patch('/status/:id')
-  async userStatus(@Param('id') id: number, @CurrentUser() user: Users) {
-    return await this.usersService.updateUserStatus(id);
+  @Patch('/status')
+  async userStatus() {
+    return await this.usersService.updateUserStatus();
   }
 
-  //페이지네이션 http://localhost:3000/api/users/page(?page=1)쿼리부분
+  //페이지네이션 http://localhost:3000/api/users/page?page=(number)
   @Get('/page')
   async all(@Query('page') page: number = 1): Promise<Users[]> {
     return await this.usersService.paginate(page);
+  }
+
+  //update-point 스케줄러 시작 http://localhost:3000/api/users/pointStart
+  @Post('/pointStart')
+  startUpdatePoint(): string {
+    this.usersService.startUpdatePoint();
+    return '스케쥴 시작!';
+  }
+
+  //update-point 스케줄러 종료 http://localhost:3000/api/users/pointStop
+  @Post('/pointStop')
+  stopUpdatePoint(): string {
+    this.usersService.stopUpdatePoint();
+    return '스케쥴 종료!';
+  }
+
+  //스테이터스 스케줄러 시작 http://localhost:3000/api/users/statStart
+  @Post('/statStart')
+  startUpdateStatus(): string {
+    this.usersService.startUpdateStatus();
+    return '스케쥴 시작!';
+  }
+
+  //스테이터스 스케줄러 종료 http://localhost:3000/api/users/statStop
+  @Post('/statStop')
+  stopUpdateStatus(): string {
+    this.usersService.stopUpdateStatus();
+    return '스케쥴 종료!';
+  }
+
+  // 임시비밀번호로 변경 http://localhost:3000/api/users/resetPassword
+  @Patch('/resetPassword')
+  async resetPassword(@Body() body: EmailDto) {
+    return await this.emailService.resetPassword(body);
   }
 }

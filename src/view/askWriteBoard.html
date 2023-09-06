@@ -16,109 +16,113 @@
     />
     <link rel="stylesheet" href="/static/css/index.css" />
   </head>
+
   <body>
-    <!-- 🔴 위쪽 Nav 🔴-->
-    <nav class="navbar navbar-expand-lg fixed-top-custom">
-      <div class="container-fluid">
-        <!-- 햄버거 메뉴 버튼 추가 -->
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#sidebarMenu"
-          aria-controls="sidebarMenu"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <a
-          class="navbar-brand text-light"
-          href="http://localhost:3000/view/index.html"
-        >
-          <i class="fa-brands fa-stack-overflow"> stock insight</i>
-        </a>
-        <!-- 알림,회원 -->
-        <div class="d-flex ms-auto">
-          <!-- 알림 -->
-          <button class="btn btn-outline-light me-2">
-            <i class="fas fa-bell fa-2x"></i>
-          </button>
-          <!-- 회원 -->
-          <button class="btn btn-outline-light" onclick="toggleProfile()">
-            <i class="fas fa-user fa-2x"></i>
-          </button>
-        </div>
-        <!-- 회원 상세 정보 영역 -->
-        <div class="user-details" id="userDetails">
-          <img
-            id="profileImage"
-            src="/static/photo/login.jpg"
-            alt="Profile Image"
-          />
-          <div class="user-info">
-            <div><strong>닉네임:</strong> <span id="nickname"></span></div>
-            <div><strong>이메일:</strong> <span id="email"></span></div>
-          </div>
-          <!-- 회원상세정보 버튼 -->
-          <a
-            href="http://localhost:3000/view/userInfo.html"
-            class="custom-button"
-            >회원상세정보</a
+    <!-- 🔴 메인 Nav 창 -->
+    <header>
+      <!--  위쪽 Nav -->
+      <nav class="navbar navbar-expand-lg fixed-top-custom">
+        <div class="container-fluid">
+          <!-- 햄버거 메뉴 버튼 추가 -->
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#sidebarMenu"
+            aria-controls="sidebarMenu"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
           >
-          <!-- 로그아웃 버튼 -->
-          <button onclick="logout()" class="custom-button">로그아웃</button>
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <a
+            class="navbar-brand text-light"
+            href="http://localhost:3000/view/index.html"
+          >
+            <i class="fa-brands fa-stack-overflow"> stock insight</i>
+          </a>
+          <!-- 알림,회원 -->
+          <div class="d-flex ms-auto">
+            <!-- 알림 -->
+            <button class="btn btn-outline-light me-2">
+              <i class="fas fa-bell fa-2x"></i>
+            </button>
+            <!-- 회원 -->
+            <button class="btn btn-outline-light" onclick="toggleProfile()">
+              <i class="fas fa-user fa-2x"></i>
+            </button>
+          </div>
+          <!-- 회원 상세 정보 영역 -->
+          <div class="user-details" id="userDetails">
+            <img
+              id="profileImage"
+              src="/static/photo/login.jpg"
+              alt="Profile Image"
+            />
+            <div class="user-info">
+              <div><strong>닉네임:</strong> <span id="nickname"></span></div>
+              <div><strong>이메일:</strong> <span id="email"></span></div>
+            </div>
+            <!-- 회원상세정보 버튼 -->
+            <a
+              href="http://localhost:3000/view/userInfo.html"
+              class="custom-button"
+              >회원상세정보</a
+            >
+            <!-- 로그아웃 버튼 -->
+            <button onclick="logout()" class="custom-button">로그아웃</button>
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
 
-    <!-- 🔴 왼쪽 Nav 🔴 -->
-    <nav
-      class="d-flex flex-column align-items-start bg-light p-4 d-none d-lg-block left-nav-border"
-    >
-      <a
-        href="http://localhost:3000/view/search.html"
-        class="d-flex align-items-center my-3 sidebar"
-        role="button"
-        aria-label="search"
+      <!--  왼쪽 Nav  -->
+      <nav
+        class="d-flex flex-column align-items-start bg-light p-4 d-none d-lg-block left-nav-border"
       >
-        <i class="fa-solid fa-magnifying-glass me-2" aria-hidden="true"></i>
-        search
-      </a>
-      <a
-        href="http://localhost:3000/view/news.html"
-        class="d-flex align-items-center my-3 sidebar"
-        role="button"
-        aria-label="Economy"
-      >
-        <i class="fa-regular fa-newspaper me-2"></i> news
-      </a>
-      <a
-        href="http://localhost:3000/view/stocksLike.html"
-        class="d-flex align-items-center my-3 sidebar"
-        role="button"
-        aria-label="Analysis"
-      >
-        <i class="fas fa-chart-bar me-2" aria-hidden="true"></i> stocks
-      </a>
-      <a
-        href="http://localhost:3000/view/noticeBoard.html"
-        class="d-flex align-items-center my-3 sidebar"
-        role="button"
-        aria-label="Community"
-      >
-        <i class="fas fa-users me-2" aria-hidden="true"></i> Community
-      </a>
-      <a
-        href="http://localhost:3000/view/quiz.html"
-        class="d-flex align-items-center my-3 sidebar"
-        role="button"
-        aria-label="quiz"
-      >
-        <i class="fa-brands fa-square-pinterest me-2"></i> quiz
-      </a>
-    </nav>
-
+        <a
+          href="http://localhost:3000/view/search.html"
+          class="d-flex align-items-center my-3 sidebar"
+          role="button"
+          aria-label="search"
+        >
+          <i class="fa-solid fa-magnifying-glass me-2" aria-hidden="true"></i>
+          search
+        </a>
+        <a
+          href="http://localhost:3000/view/news.html"
+          class="d-flex align-items-center my-3 sidebar"
+          role="button"
+          aria-label="Economy"
+        >
+          <i class="fa-regular fa-newspaper me-2"></i> news
+        </a>
+        <a
+          href="http://localhost:3000/view/stocksLike.html"
+          class="d-flex align-items-center my-3 sidebar"
+          role="button"
+          aria-label="Analysis"
+        >
+          <i class="fas fa-chart-bar me-2" aria-hidden="true"></i> stocks
+        </a>
+        <a
+          href="http://localhost:3000/view/noticeBoard.html"
+          class="d-flex align-items-center my-3 sidebar"
+          role="button"
+          aria-label="Community"
+        >
+          <i class="fas fa-users me-2" aria-hidden="true"></i> Community
+        </a>
+        <a
+          href="http://localhost:3000/view/quiz.html"
+          class="d-flex align-items-center my-3 sidebar"
+          role="button"
+          aria-label="quiz"
+        >
+          <i class="fa-brands fa-square-pinterest me-2"></i> quiz
+        </a>
+      </nav>
+    </header>
+    <!-- 🔴 문의게시판 쓰기화면 -->
     <main>
       <h2>글쓰기</h2>
       <form>
@@ -153,10 +157,6 @@
         </button>
       </form>
     </main>
-
-    <footer class="text-center mt-5">
-      © 2023 Stock Platform. All rights reserved.
-    </footer>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.1/umd/popper.min.js"></script>

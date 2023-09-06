@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Quiz } from './quiz.entity';
 import { DataSource, Repository } from 'typeorm';
 import { CreateQuizDto } from './dto/create-quiz.dto';
@@ -18,8 +18,8 @@ export class QuizRepository extends Repository<Quiz> {
 
     return await this.insert({
       upANDdown: data.upANDdown,
-      stockName: data.stockName,
-      updated_day: today,
+      stockId: data.stockId,
+      updated_date: today,
       user,
     });
   }
@@ -30,16 +30,77 @@ export class QuizRepository extends Repository<Quiz> {
     return result;
   }
 
-  // up, down 각각의 개수의 합
-  async getQuiz(): Promise<any> {
-    const sum = this.createQueryBuilder('q')
-      .select('q.stockName')
-      .addSelect('q.upANDdown')
-      .addSelect('q.createdAt')
-      .addSelect('SUM(q.count)', 'sum')
-      .groupBy('q.upANDdown')
-      .getRawMany();
+  // up 의 개수
+  async upQuiz(): Promise<any> {
+    const currentTime = new Date();
+    currentTime.setHours(currentTime.getHours() + 9);
+    const today = currentTime.toISOString().substring(0, 10).replace(/-/g, '');
+    const updated_date = today;
 
-    return sum;
+    const upQuiz = await this.createQueryBuilder('q')
+      .select('COUNT(*)', 'count')
+      .where('q.upANDdown = :upANDdown', { upANDdown: 'up' })
+      .andWhere('quiz.updated_date = :updated_date', {
+        updated_date: updated_date,
+      })
+      .getRawOne();
+
+    return upQuiz;
+  }
+
+  // down 의 개수
+  async downQuiz(): Promise<any> {
+    const currentTime = new Date();
+    currentTime.setHours(currentTime.getHours() + 9);
+    const today = currentTime.toISOString().substring(0, 10).replace(/-/g, '');
+    const updated_date = today;
+
+    const downQuiz = await this.createQueryBuilder('q')
+      .select('COUNT(*)', 'count')
+      .where('q.upANDdown = :upANDdown', { upANDdown: 'down' })
+      .andWhere('quiz.updated_date = :updated_date', {
+        updated_date: updated_date,
+      })
+      .getRawOne();
+
+    return downQuiz;
+  }
+
+  // stockId에 맞는 up 의 개수
+  async upStockQuiz(stockId: string): Promise<any> {
+    const currentTime = new Date();
+    currentTime.setHours(currentTime.getHours() + 9);
+    const today = currentTime.toISOString().substring(0, 10).replace(/-/g, '');
+    const updated_date = today;
+
+    const upQuiz = await this.createQueryBuilder('q')
+      .select('COUNT(*)', 'count')
+      .where('q.upANDdown = :upANDdown', { upANDdown: 'up' })
+      .andWhere('quiz.updated_date = :updated_date', {
+        updated_date: updated_date,
+      })
+      .andWhere('quiz.stockId = :stockId', { stockId: stockId })
+      .getRawOne();
+
+    return upQuiz;
+  }
+
+  // stockId에 맞는 down 의 개수
+  async downStockQuiz(stockId: string): Promise<any> {
+    const currentTime = new Date();
+    currentTime.setHours(currentTime.getHours() + 9);
+    const today = currentTime.toISOString().substring(0, 10).replace(/-/g, '');
+    const updated_date = today;
+
+    const downQuiz = await this.createQueryBuilder('q')
+      .select('COUNT(*)', 'count')
+      .where('q.upANDdown = :upANDdown', { upANDdown: 'down' })
+      .andWhere('quiz.updated_date = :updated_date', {
+        updated_date: updated_date,
+      })
+      .andWhere('quiz.stockId = :stockId', { stockId: stockId })
+      .getRawOne();
+
+    return downQuiz;
   }
 }

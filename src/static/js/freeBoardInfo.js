@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-  // fetchBoardDetailsForEdit();
   fetchPostDetails();
 });
 
@@ -10,7 +9,6 @@ async function fetchPostDetails() {
       `http://localhost:3000/api/boards/${freeBoardId}`,
       {
         headers: {
-          'Content-Type': 'application/json',
           Authorization: token,
         },
       },
@@ -48,8 +46,8 @@ async function fetchPostDetails() {
                                                 </button>   
                                             </div>         
                                             <p class="text-muted post-info">
-                                            <img src="${authorImage}" alt="Author's Image" style="width: 30px; height: 30px; border-radius: 50%;"> <!-- 작성자의 이미지 추가 -->
-                                                작성자: <span class="author">${freeBoard.nickname}</span> | 날짜: <span class="date">${freeBoard.created_at}</span>
+                                            <img src="${authorImage}" alt="Author's Image" style="width: 30px; height: 30px; border-radius: 50%;">
+                                               <span class="author">${freeBoard.nickname}</span> | 날짜: <span class="date">${freeBoard.created_at}</span>
                                             </p>
                                             <p>${freeBoard.description}</p>
                                             <button class="btn btn-primary" onclick="handleLikeClick()">👍(${likeText})</button>
@@ -59,6 +57,7 @@ async function fetchPostDetails() {
     const comments = await fetchComments(freeBoardId);
     const commentsSection = boardContainer.querySelector('.comments-section');
     const commentsList = commentsSection.querySelector('.list-group');
+    const commentsImage = comments.imgUrl || defaultImageUrl;
     // 댓글 날짜만
     function formatDate(dateString) {
       const date = new Date(dateString);
@@ -71,21 +70,28 @@ async function fetchPostDetails() {
     const commentsHTML = comments
       .map(
         (comment) => `
-                        <div class="list-group-item">
-                            <div class="d-flex justify-content-between">
-                                <strong>${freeBoard.nickname}</strong>
-                                <div>
-                                <button class="btn-close" aria-label="Close" onclick="deleteComment(${
-                                  comment.id
-                                })"></button>
-                             </div>
-                            </div>
-                            <p class="mt-2">${comment.comment}</p>
-                            <div style="text-align: right;">
-                            <small>${formatDate(comment.updated_at)}</small>
-                        </div>
-                       </div>
-                    `,
+                      <div class="list-group-item">
+                          <div class="d-flex justify-content-between align-items-center">
+                              <div class="d-flex align-items-center">
+                                  <img src="${
+                                    comment.user.imgUrl
+                                  }" alt="Author's Image" style="width: 30px; height: 30px; border-radius: 50%;">
+                                  <strong class="ms-2">${
+                                    comment.user.nickname
+                                  }</strong>
+                              </div>
+                              <div>
+                                  <button class="btn-close" aria-label="Close" onclick="deleteComment(${
+                                    comment.id
+                                  })"></button>
+                              </div>
+                          </div>
+                          <p class="mt-2">${comment.comment}</p>
+                          <div style="text-align: right;">
+                              <small>${formatDate(comment.updated_at)}</small>
+                          </div>
+                      </div>
+                  `,
       )
       .join('');
 
@@ -136,6 +142,34 @@ async function deleteFreePost() {
   }
 }
 
+// ⚪ 댓글 조회
+async function fetchComments(freeBoardId) {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/boards/${freeBoardId}/comments`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token,
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch comments');
+    }
+
+    const comments = await response.json();
+    console.log('댓글 조회 렌더링 테스트:', comments);
+
+    return comments;
+  } catch (error) {
+    console.error('Error fetching comments:', error);
+    return null;
+  }
+}
+
 // ⚪ 댓글 생성
 async function createComment() {
   const commentBox = document.querySelector('textarea');
@@ -163,34 +197,6 @@ async function createComment() {
     alert('댓글 작성이 성공했습니다.');
   } catch (error) {
     console.error('Error posting comment:', error);
-  }
-}
-
-// ⚪ 댓글 조회
-async function fetchComments(freeBoardId) {
-  try {
-    const response = await fetch(
-      `http://localhost:3000/api/boards/${freeBoardId}/comments`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token,
-        },
-      },
-    );
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch comments');
-    }
-
-    const comments = await response.json();
-    console.log('댓글 조회 렌더링 테스트:', comments);
-
-    return comments;
-  } catch (error) {
-    console.error('Error fetching comments:', error);
-    return null;
   }
 }
 
@@ -235,7 +241,6 @@ async function handleLikeClick() {
     );
 
     if (response.status === 201) {
-      // 좋아요 처리가 성공하면 게시글 상세 정보를 다시 불러옵니다.
       await fetchPostDetails();
     } else {
       alert('좋아요 처리에 실패했습니다.');

@@ -1,7 +1,16 @@
+@font-face {
+  font-family: 'NEXON Lv1 Gothic OTF';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 * {
   margin: 0px;
   padding: 0px;
   list-style: none;
+  font-family: 'NEXON Lv1 Gothic OTF';
 }
 
 main {
@@ -17,7 +26,7 @@ main {
   padding-left: 260px;
 }
 
-/* ⭐ 메뉴 nav바 */
+/* 🔥 메뉴 nav바 */
 .navbar {
   background-color: #01161e;
 }
@@ -46,6 +55,7 @@ main {
   text-decoration: none;
   font-weight: 600;
   font-size: 19px;
+  font-family: 'Pretendard-Bold';
 }
 
 .sidebar:hover {
@@ -63,7 +73,7 @@ ul.nav .nav-item .nav-link.active {
   color: white;
 }
 
-/* ⭐ 유저 정보  */
+/* 🔥 유저 정보  */
 .user-details {
   display: none;
   position: absolute;
@@ -85,7 +95,8 @@ ul.nav .nav-item .nav-link.active {
 }
 
 #mainProfileImage {
-  width: 400px;
+  width: 200px;
+  height: 200px;
 }
 
 .custom-button {
@@ -104,7 +115,19 @@ ul.nav .nav-item .nav-link.active {
   background-color: #0056b3;
 }
 
-/* ⭐ 메인 css */
+.userInfo {
+  /* border: 1px solid rgb(188, 188, 188); */
+  height: 450px;
+  padding: 50px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+}
+
+.h6 {
+  color: grey;
+}
+
+/* 🔥 메인 css */
 .board-container {
   display: none;
 }
@@ -114,7 +137,7 @@ ul.nav .nav-item .nav-link.active {
   z-index: 1;
   border-radius: 4px;
 }
-/* 페이지 네이션 */
+/* 🔥 페이지 네이션 */
 .page-item .page-link {
   color: black;
 }
@@ -125,7 +148,38 @@ ul.nav .nav-item .nav-link.active {
   background-color: transparent;
 }
 
-/* 퀴즈 */
+/* 🔥 퀴즈 */
+.clickable-title:hover {
+  cursor: pointer;
+  font-weight: bold;
+  color: navy;
+}
+
 .custom-btn {
-  padding: 50px 40px; /* 위아래 20px, 좌우 40px */
+  width: 200px;
+  height: 50px;
+  margin-right: 30px;
+  margin-bottom: 10px;
+}
+
+.current-price-text {
+  font-size: 1rem;
+}
+
+.current-price-value {
+  color: red;
+}
+/* 🔥 채팅박스 */
+#chat-box {
+  width: 380px;
+  height: 600px;
+  overflow-y: scroll;
+  border-radius: 3px;
+}
+.input-group {
+  width: 380px;
+}
+
+#chattingNickname {
+  margin-top: 10px;
 }
