@@ -26,6 +26,19 @@ export class CommentsRepository {
     }
   }
 
+  async findWithUserNickname(boardId: number): Promise<Comment[] | undefined> {
+    try {
+      return await this.commentsRepository
+        .createQueryBuilder('comment')
+        .leftJoinAndSelect('comment.user', 'user', 'user.id = comment.userId')
+        .addSelect(['user.nickname']) // nickname만 선택하여 가져옵니다.
+        .where('comment.boardId = :boardId', { boardId })
+        .getMany();
+    } catch (error) {
+      throw new BadRequestException('REPOSITORY_ERROR');
+    }
+  }
+
   async find(option: FindOneOptions<Comment>): Promise<Comment[] | undefined> {
     try {
       return await this.commentsRepository.find(option);

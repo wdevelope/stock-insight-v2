@@ -6,14 +6,13 @@ import { FindBoardDto } from './dto/find-board.dto';
 @Injectable()
 export class BoardSearchService {
   constructor(@Inject('OpenSearchClient') private readonly client: Client) {}
-
   async indexData(boards: Board[]): Promise<void> {
+    console.log('인덱싱 프로세스를 시작합니다.');
     for (const board of boards) {
       const isIndexed = await this.checkIfIndexed(board.id);
       if (isIndexed) {
         continue;
       }
-
       await this.client.index({
         index: 'index_board',
         id: board.id.toString(),
@@ -29,14 +28,27 @@ export class BoardSearchService {
         },
       });
     }
+    console.log('인덱싱 프로세스가 완료되었습니다.');
   }
 
-  async checkIfIndexed(boardId: number): Promise<any> {
-    const response = await this.client.get({
-      index: 'index_board',
-      id: boardId.toString(),
-    });
-    return response;
+  async checkIfIndexed(boardId: number): Promise<boolean> {
+    try {
+      const response = await this.client.get({
+        index: 'index_board',
+        id: boardId.toString(),
+      });
+
+      // 데이터를 찾았을 때 (인덱스에 있을 때) true 반환
+      return response.statusCode === 200;
+    } catch (error) {
+      // 데이터를 찾지 못했을 때 (인덱스에 없을 때) false 반환
+      if (error.statusCode === 404) {
+        return false;
+      }
+
+      // 그 외의 오류 처리
+      throw new Error('Failed to check if indexed: ' + error.message);
+    }
   }
 
   async searchByTitleAndDescriptionAndNickname(

@@ -11,7 +11,7 @@ export class Quiz {
   @Column() // upANDdown
   upANDdown: string;
 
-  @Column()
+  @Column({ default: null })
   correct: string;
 
   @Column()

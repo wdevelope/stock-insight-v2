@@ -10,6 +10,7 @@ import { Users } from 'src/users/users.entity';
 import { BoardsRepository } from './boards.repository';
 import { FindBoardDto } from './dto/find-board.dto';
 import { BoardSearchService } from './boards.search.service';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class BoardsService {
@@ -20,10 +21,64 @@ export class BoardsService {
 
   async paginate(page: number = 1): Promise<{ data: Board[]; meta: any }> {
     /**페이지 상 보일 개수*/
-    const take = 5;
+    const take = 15;
 
     const [boards, total] =
       await this.boardsRepository.findAndCountWithPagination(page, take);
+
+    return {
+      data: boards,
+      meta: {
+        total,
+        page,
+        last_page: Math.ceil(total / take),
+      },
+    };
+  }
+
+  // 조회수 정렬
+  async getBoardsOrderByViewCount(
+    page: number,
+    take: number,
+  ): Promise<{ data: Board[]; meta: any }> {
+    const [boards, total] =
+      await this.boardsRepository.getBoardsOrderByViewCount(page, take);
+
+    return {
+      data: boards,
+      meta: {
+        total,
+        page,
+        last_page: Math.ceil(total / take),
+      },
+    };
+  }
+  // 좋아요 정렬
+  async getBoardsOrderByLikeCount(
+    page: number,
+    take: number,
+  ): Promise<{ data: Board[]; meta: any }> {
+    const [boards, total] =
+      await this.boardsRepository.getBoardsOrderByLikeCount(page, take);
+
+    return {
+      data: boards,
+      meta: {
+        total,
+        page,
+        last_page: Math.ceil(total / take),
+      },
+    };
+  }
+  //랭커유저 정렬
+  async getBoardsOrderByRanker(
+    page: number,
+    take: number,
+  ): Promise<{ data: Board[]; meta: any }> {
+    const [boards, total] = await this.boardsRepository.getBoardsOrderByRanker(
+      page,
+      take,
+    );
 
     return {
       data: boards,
@@ -61,12 +116,12 @@ export class BoardsService {
     }
   }
 
+  @Cron('0 */3 * * * *')
   async indexing(): Promise<void> {
     const boards: Board[] = await this.boardsRepository.find();
     try {
       await this.boardSearchService.indexData(boards);
     } catch (error) {
-      console.log(error);
       throw new BadRequestException('SERVICE_ERROR');
     }
   }

@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { QuizService } from './quiz.service';
 import { CreateQuizDto } from './dto/create-quiz.dto';
@@ -73,5 +74,14 @@ export class QuizController {
   @Get('/down/:id')
   async downStockQuiz(@Param('id') stockId: string) {
     return await this.quizService.downStockQuiz(stockId);
+  }
+
+  // userId에 맞는 퀴즈들을 페이지네이션 http://localhost:3000/quiz/userQuiz/?page=(number)&userId=(number)
+  @Get('userQuiz')
+  async getUserQuiz(
+    @Query('page') page: number = 1,
+    @Query('userId') userId: number,
+  ): Promise<any> {
+    return await this.quizService.getUserQuiz(userId, page);
   }
 }

@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   fetchStockData();
 });
 
+// 🟢 코스피 코스닥 불러오기
 async function fetchStockData() {
   try {
     const response = await fetch('http://localhost:3000/api/stocks/index');
@@ -20,7 +21,7 @@ async function fetchStockData() {
   }
 }
 
-// 메인페이지 index데이터
+// 🟢 메인페이지 index데이터
 function displayStockData(data) {
   const kospiPriceEl = document.getElementById('kospi-price');
   const kospiChangeEl = document.getElementById('kospi-change');
@@ -49,20 +50,19 @@ function displayStockData(data) {
     kosdaqData.bstp_nmix_prdy_ctrt >= 0 ? 'green' : 'red';
 }
 
-// 차트 그리기
+// 🟢 차트 그리기
 function createDemoChart(canvasId, labelName) {
   const ctx = document.getElementById(canvasId).getContext('2d');
 
   // 기본 색상 및 수치 설정
-  let backgroundColor = 'rgba(255, 99, 132, 0.2)'; // 빨간색
-  let borderColor = 'rgba(255, 99, 132, 1)'; // 빨간색
-  let dataPoints = [12, 19, 3, 5, 2, 3, 9]; // 기본 수치
+  let backgroundColor = 'rgba(255, 99, 132, 0.2)';
+  let borderColor = 'rgba(255, 99, 132, 1)';
+  let dataPoints = [12, 19, 3, 5, 2, 3, 9];
 
-  // 만약 KOSDAQ 차트라면 색상을 파랑색으로 변경하고, 수치도 변경
   if (canvasId === 'kosdaqChart') {
-    backgroundColor = 'rgba(54, 162, 235, 0.2)'; // 파랑색
-    borderColor = 'rgba(54, 162, 235, 1)'; // 파랑색
-    dataPoints = [5, 15, 8, 12, 6, 10, 7]; // 새로운 수치
+    backgroundColor = 'rgba(54, 162, 235, 0.2)';
+    borderColor = 'rgba(54, 162, 235, 1)';
+    dataPoints = [5, 15, 8, 12, 6, 10, 7];
   }
 
   const myChart = new Chart(ctx, {

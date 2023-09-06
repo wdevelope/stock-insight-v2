@@ -59,7 +59,7 @@ h1 {
   border: 1px solid #ddd;
   justify-content: center; /* 가로 중앙 정렬 */
   align-items: center; /* 세로 중앙 정렬 */
-  height: 100%; /* 또는 원하는 높이값 */
+  height: 370px; /* 또는 원하는 높이값 */
   border-radius: 8px;
   overflow: hidden;
   padding: 20px;
@@ -75,10 +75,11 @@ h1 {
 }
 
 .stock-info > p {
-  font-size: 1em;
+  font-size: 1.1em;
   color: #000000;
+  margin-left: 30px;
 }
-/* 찜하기 */
+/* 🔥 찜하기 */
 .star-btn {
   background-color: transparent;
   border: none;

@@ -1,5 +1,5 @@
 // 현재 보고 있는 주식 정보 저장하기 위한 변수
-let currentStock = null;
+let currentStocks = null;
 
 // DOM 요소 가져오기
 const stockNameTitle = document.getElementById('stock-name-title');
@@ -8,21 +8,13 @@ const riseButton = document.getElementById('rise-button');
 const fallButton = document.getElementById('fall-button');
 const TOTAL_PAGES = 87;
 
-//페이지 로드시 함수실행
 document.addEventListener('DOMContentLoaded', () => getRandomStock());
-
-// 페이지 로드시 제출 날짜 체크
-// const lastSubmittedDate = localStorage.getItem('lastSubmittedDate');
-// if (lastSubmittedDate === new Date().toLocaleDateString()) {
-//   riseButton.disabled = true;
-//   fallButton.disabled = true;
-// }
 
 function getRandomPage() {
   return Math.floor(Math.random() * TOTAL_PAGES) + 1;
 }
 
-// 주식 종목 가져오기
+// 🟢 주식 종목 가져오기
 async function getRandomStock() {
   const randomPage = getRandomPage();
   try {
@@ -30,37 +22,83 @@ async function getRandomStock() {
       `http://localhost:3000/api/stocks/?page=${randomPage}`,
       {
         headers: {
+          'content-type': 'application/json',
           Authorization: token,
         },
       },
     );
+
     if (!response.ok) {
       throw new Error('Failed to fetch stocks.');
     }
+
     const data = await response.json();
-    console.log(data);
     const stocks = data.data;
-    return stocks[Math.floor(Math.random() * stocks.length)];
+
+    console.log(data);
+
+    if (stocks) {
+      currentStocks = stocks;
+      createCards(stocks);
+    } else {
+      console.error('주식 정보를 가져오는데 실패했습니다.');
+    }
   } catch (error) {
     console.error('Error fetching stocks:', error);
   }
 }
 
-// 주식 정보 업데이트
-async function updateStockInfo() {
-  const stock = await getRandomStock();
-  stockNameTitle.textContent = `${stock.prdt_abrv_name} 종목이 오를지, 내릴지 맞혀보세요!`;
-  stockPrice.textContent = `${stock.prdt_abrv_name} 주식의 현재 가격: ${Number(
-    stock.stck_prpr,
-  ).toLocaleString()}원`;
+// 🟢 카드 생성 함수
+function createCards(stocks) {
+  const cardsContainer = document.querySelector('.cards-container');
+  cardsContainer.innerHTML = '';
+
+  const cardRow = document.createElement('div');
+  cardRow.className = 'row';
+  cardsContainer.appendChild(cardRow);
+
+  stocks.forEach((stock, index) => {
+    const card = `
+                  <div class="col-md-3 mb-4">
+                    <div class="card" style="height: 400px;">
+                      <div class="card-header"><i class="fa-brands fa-square-pinterest me-2"></i>${
+                        stock.rprs_mrkt_kor_name
+                      }</div>
+                      <div class="card-body" style="position: relative;">
+                          <h3 class="card-title clickable-title" id="stock-name-title-${index}" onclick="navigateToStockDetail('${
+                            stock.id
+                          }')">${stock.prdt_abrv_name}</h3>
+                        <h4 class="card-subtitle mb-2 text-muted" id="stock-price-${index}">
+                          <span class="current-price-text">현재가</span> <br> 
+                          <span class="current-price-value">${parseInt(
+                            stock.stck_prpr,
+                          ).toLocaleString()}원</span>
+                        </h4>
+                      
+                        <div class="buttons-container d-flex justify-content-between mt-4" style="position: absolute; bottom: 10px; width: 100%;">
+                          <button class="btn btn-outline-success btn-lg custom-btn me-2 " id="up-button-${index}" onclick="submitQuiz('up', ${index})">
+                          <i class="fa-solid fa-arrow-trend-up"></i> 
+                          </button>
+                          <button class="btn btn-outline-danger btn-lg custom-btn" id="down-button-${index}" onclick="submitQuiz('down', ${index})">
+                            <i class="fa-solid fa-arrow-trend-down"></i> 
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                `;
+
+    cardRow.innerHTML += card;
+  });
 }
 
-// 퀴즈 제출 함수
-async function submitQuiz(prediction) {
-  const stockName = stockNameTitle.textContent.split(' ')[0];
+// 🟢 퀴즈 제출 함수
+async function submitQuiz(prediction, index) {
+  const stock = currentStocks[index];
+  const stockId = stock.id;
   const bodyData = {
     upANDdown: prediction,
-    stockName: stockName,
+    stockId: stockId,
   };
 
   try {
@@ -68,7 +106,7 @@ async function submitQuiz(prediction) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: token, // token 변수 값이 어디서 오는지 확인 필요
+        Authorization: token,
       },
       body: JSON.stringify(bodyData),
     });
@@ -76,9 +114,6 @@ async function submitQuiz(prediction) {
     if (!response.ok) {
       throw new Error('Failed to submit quiz.');
     }
-    // localStorage.setItem('lastSubmittedDate', new Date().toLocaleDateString());
-    // riseButton.disabled = true;
-    // fallButton.disabled = true;
 
     const data = await response.json();
     alert(data.message);
@@ -88,14 +123,6 @@ async function submitQuiz(prediction) {
   }
 }
 
-// 버튼 클릭 이벤트 수정
-riseButton.addEventListener('click', () => {
-  submitQuiz('up');
-});
-
-fallButton.addEventListener('click', () => {
-  submitQuiz('down');
-});
-
-// 초기 로딩시 주식 정보 갱신
-updateStockInfo();
+function navigateToStockDetail(id) {
+  window.location.href = `stocksInfo.html?id=${id}`;
+}

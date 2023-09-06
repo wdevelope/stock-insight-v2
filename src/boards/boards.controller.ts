@@ -9,7 +9,6 @@ import {
   ValidationPipe,
   BadRequestException,
   Query,
-  ParseIntPipe,
 } from '@nestjs/common';
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -83,6 +82,45 @@ export class BoardsController {
     @Query('page') page: number = 1,
   ): Promise<{ data: Board[]; meta: any }> {
     return await this.boardsService.paginate(page);
+  }
+
+  // 조회수 정렬
+  @Get('/orderbyviewcount')
+  @ApiOperation({
+    summary: 'View count별로 정렬된 게시물 조회 API',
+    description: 'View count별로 내림차순 정렬된 게시물을 조회한다.',
+  })
+  async getBoardsOrderByViewCount(
+    @Query('page') page: number = 1,
+    @Query('take') take: number = 15,
+  ): Promise<{ data: Board[]; meta: any }> {
+    return await this.boardsService.getBoardsOrderByViewCount(page, take);
+  }
+
+  // 좋아요 정렬
+  @Get('/orderbylikecount')
+  @ApiOperation({
+    summary: 'Like count별로 정렬된 게시물 조회 API',
+    description: 'Like count별로 내림차순 정렬된 게시물을 조회한다.',
+  })
+  async getBoardsOrderByLikeCount(
+    @Query('page') page: number = 1,
+    @Query('take') take: number = 15,
+  ): Promise<{ data: Board[]; meta: any }> {
+    return await this.boardsService.getBoardsOrderByLikeCount(page, take);
+  }
+
+  // 랭커유저 정렬
+  @Get('/orderbyRanker')
+  @ApiOperation({
+    summary: '랭커유저별로 정렬된 게시물 조회 API',
+    description: '랭커유저별로 날짜별 내림차순 정렬된 게시물을 조회한다.',
+  })
+  async getBoardsOrderByRanker(
+    @Query('page') page: number = 1,
+    @Query('take') take: number = 15,
+  ): Promise<{ data: Board[]; meta: any }> {
+    return await this.boardsService.getBoardsOrderByRanker(page, take);
   }
 
   //보드 상세조회

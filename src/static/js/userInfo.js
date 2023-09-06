@@ -14,7 +14,7 @@ async function renderUserDetails() {
   if (data.imgUrl) {
     userProfileImage.src = data.imgUrl;
   } else {
-    userProfileImage.src = 'https://ifh.cc/g/P5Wo5H.png';
+    userProfileImage.src = 'https://ifh.cc/g/YacO4N.png';
   }
 
   // 닉네임 및 이메일 렌더링
@@ -24,40 +24,38 @@ async function renderUserDetails() {
   userStatus.textContent = data.status;
 }
 
-// 페이지 로드 시 사용자 정보를 렌더링합니다.
-
 // 🟡 s3 이미지 생성
-function uploadImageToServer() {
-  const fileInput = document.getElementById('profileImageInput');
-  const file = fileInput.files[0];
-  if (!file) return;
+async function uploadImageToServer() {
+  try {
+    const fileInput = document.getElementById('profileImageInput');
+    const file = fileInput.files[0];
+    if (!file) return;
 
-  const formData = new FormData();
-  formData.append('file', file);
+    const formData = new FormData();
+    formData.append('file', file);
 
-  fetch('http://localhost:3000/api/upload', {
-    headers: {
-      Authorization: token,
-    },
-    method: 'POST',
-    body: formData,
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then((data) => {
-      if (data && data.url) {
-        const imageElement = document.getElementById('mainProfileImage');
-        imageElement.src = data.url;
-      } else {
-        console.error('Upload 실패:');
-        alert('업로드 실패!');
-      }
-    })
-    .catch((error) => {
-      alert('업로드 중 오류 발생', error);
+    const response = await fetch('http://localhost:3000/api/upload', {
+      headers: {
+        Authorization: token,
+      },
+      method: 'POST',
+      body: formData,
     });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+
+    if (data && data.url) {
+      const imageElement = document.getElementById('mainProfileImage');
+      imageElement.src = data.url;
+    } else {
+      console.error('Upload 실패:');
+      alert('업로드 실패!');
+    }
+  } catch (error) {
+    alert('업로드 중 오류 발생: ' + error);
+  }
 }
