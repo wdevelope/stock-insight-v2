@@ -320,6 +320,35 @@ export class StockService {
       },
     };
   }
+  async getStockRank(): Promise<any> {
+    const stocks = await this.stockRepository
+      .createQueryBuilder('stock')
+      .leftJoinAndSelect(
+        'stock.stockPrices',
+        'stockPrice',
+        'stockPrice.id = (SELECT MAX(id) FROM stock_price WHERE stock_price.stockId = stock.id)',
+      )
+      .getMany();
+
+    const data = stocks.map((stock) => {
+      return {
+        id: stock.id,
+        prdt_abrv_name: stock.prdt_abrv_name,
+        rprs_mrkt_kor_name: stock.rprs_mrkt_kor_name,
+        stck_prpr: stock.stockPrices[0].stck_prpr,
+        prdy_vrss: stock.stockPrices[0].prdy_vrss,
+        prdy_vrss_sign: stock.stockPrices[0].prdy_vrss_sign,
+        prdy_ctrt: stock.stockPrices[0].prdy_ctrt,
+        hts_avls: stock.stockPrices[0].hts_avls,
+      };
+    });
+
+    data.sort((a, b) => parseFloat(b.prdy_ctrt) - parseFloat(a.prdy_ctrt));
+
+    const top30Data = data.slice(0, 30);
+
+    return top30Data;
+  }
 
   async searchStock(query: string): Promise<any> {
     const stocks = await this.stockRepository.find({
@@ -395,13 +424,25 @@ export class StockService {
     await this.myStockRepository.remove(existMyStock);
   }
 
-  async getMyStock(user: Users): Promise<MyStock[]> {
+  async getMyStock(user: Users): Promise<any> {
     const userId = user.id;
 
-    return await this.myStockRepository.find({
+    const myStocks = await this.myStockRepository.find({
       where: {
         user: { id: userId },
       },
     });
+    const stockIds = myStocks.map((myStock) => myStock.stockId);
+
+    for (const stockId of stockIds) {
+      const stock = await this.getStockPrice(stockId);
+      const myStock = myStocks.find((item) => item.stockId === stockId);
+      (myStock as any).stck_prpr = stock.stock.stockPrices[0].stck_prpr;
+      (myStock as any).prdy_vrss = stock.stock.stockPrices[0].prdy_vrss;
+      (myStock as any).prdy_ctrt = stock.stock.stockPrices[0].prdy_ctrt;
+      (myStock as any).prices = stock.prices;
+    }
+
+    return myStocks;
   }
 }
