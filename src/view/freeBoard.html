@@ -17,111 +17,115 @@
     <link rel="stylesheet" href="../static/css/index.css" />
     <link rel="stylesheet" href="../static/css/board.css" />
   </head>
-  <body id="noticeBoardPage">
-    <!-- 🔴 위쪽 Nav 🔴-->
-    <nav class="navbar navbar-expand-lg fixed-top-custom">
-      <div class="container-fluid">
-        <!-- 햄버거 메뉴 버튼 추가 -->
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#sidebarMenu"
-          aria-controls="sidebarMenu"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <a
-          class="navbar-brand text-light"
-          href="http://localhost:3000/view/index.html"
-        >
-          <i class="fa-brands fa-stack-overflow"> stock insight</i>
-        </a>
-        <!-- 알림,회원 -->
-        <div class="d-flex ms-auto">
-          <!-- 알림 -->
-          <button class="btn btn-outline-light me-2">
-            <i class="fas fa-bell fa-2x"></i>
-          </button>
-          <!-- 회원 -->
-          <button class="btn btn-outline-light" onclick="toggleProfile()">
-            <i class="fas fa-user fa-2x"></i>
-          </button>
-        </div>
-        <!-- 회원 상세 정보 영역 -->
-        <div class="user-details" id="userDetails">
-          <img
-            id="profileImage"
-            src="/static/photo/login.jpg"
-            alt="Profile Image"
-          />
-          <div class="user-info">
-            <div><strong>닉네임:</strong> <span id="nickname"></span></div>
-            <div><strong>이메일:</strong> <span id="email"></span></div>
-          </div>
-          <!-- 회원상세정보 버튼 -->
-          <a
-            href="http://localhost:3000/view/userInfo.html"
-            class="custom-button"
-            >회원상세정보</a
+
+  <body>
+    <!-- 🔴 메인 Nav 창 -->
+    <header>
+      <!--  위쪽 Nav -->
+      <nav class="navbar navbar-expand-lg fixed-top-custom">
+        <div class="container-fluid">
+          <!-- 햄버거 메뉴 버튼 추가 -->
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#sidebarMenu"
+            aria-controls="sidebarMenu"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
           >
-          <!-- 로그아웃 버튼 -->
-          <button onclick="logout()" class="custom-button">로그아웃</button>
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <a
+            class="navbar-brand text-light"
+            href="http://localhost:3000/view/index.html"
+          >
+            <i class="fa-brands fa-stack-overflow"> stock insight</i>
+          </a>
+          <!-- 알림,회원 -->
+          <div class="d-flex ms-auto">
+            <!-- 알림 -->
+            <button class="btn btn-outline-light me-2">
+              <i class="fas fa-bell fa-2x"></i>
+            </button>
+            <!-- 회원 -->
+            <button class="btn btn-outline-light" onclick="toggleProfile()">
+              <i class="fas fa-user fa-2x"></i>
+            </button>
+          </div>
+          <!-- 회원 상세 정보 영역 -->
+          <div class="user-details" id="userDetails">
+            <img
+              id="profileImage"
+              src="/static/photo/login.jpg"
+              alt="Profile Image"
+            />
+            <div class="user-info">
+              <div><strong>닉네임:</strong> <span id="nickname"></span></div>
+              <div><strong>이메일:</strong> <span id="email"></span></div>
+            </div>
+            <!-- 회원상세정보 버튼 -->
+            <a
+              href="http://localhost:3000/view/userInfo.html"
+              class="custom-button"
+              >회원상세정보</a
+            >
+            <!-- 로그아웃 버튼 -->
+            <button onclick="logout()" class="custom-button">로그아웃</button>
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
 
-    <!-- 🔴 왼쪽 Nav 🔴 -->
-    <nav
-      class="d-flex flex-column align-items-start bg-light p-4 d-none d-lg-block left-nav-border"
-    >
-      <a
-        href="http://localhost:3000/view/search.html"
-        class="d-flex align-items-center my-3 sidebar"
-        role="button"
-        aria-label="search"
+      <!--  왼쪽 Nav  -->
+      <nav
+        class="d-flex flex-column align-items-start bg-light p-4 d-none d-lg-block left-nav-border"
       >
-        <i class="fa-solid fa-magnifying-glass me-2" aria-hidden="true"></i>
-        search
-      </a>
-      <a
-        href="http://localhost:3000/view/news.html"
-        class="d-flex align-items-center my-3 sidebar"
-        role="button"
-        aria-label="Economy"
-      >
-        <i class="fa-regular fa-newspaper me-2"></i> news
-      </a>
-      <a
-        href="http://localhost:3000/view/stocksLike.html"
-        class="d-flex align-items-center my-3 sidebar"
-        role="button"
-        aria-label="Analysis"
-      >
-        <i class="fas fa-chart-bar me-2" aria-hidden="true"></i> stocks
-      </a>
-      <a
-        href="http://localhost:3000/view/noticeBoard.html"
-        class="d-flex align-items-center my-3 sidebar"
-        role="button"
-        aria-label="Community"
-      >
-        <i class="fas fa-users me-2" aria-hidden="true"></i> Community
-      </a>
-      <a
-        href="http://localhost:3000/view/quiz.html"
-        class="d-flex align-items-center my-3 sidebar"
-        role="button"
-        aria-label="quiz"
-      >
-        <i class="fa-brands fa-square-pinterest me-2"></i> quiz
-      </a>
-    </nav>
+        <a
+          href="http://localhost:3000/view/search.html"
+          class="d-flex align-items-center my-3 sidebar"
+          role="button"
+          aria-label="search"
+        >
+          <i class="fa-solid fa-magnifying-glass me-2" aria-hidden="true"></i>
+          search
+        </a>
+        <a
+          href="http://localhost:3000/view/news.html"
+          class="d-flex align-items-center my-3 sidebar"
+          role="button"
+          aria-label="Economy"
+        >
+          <i class="fa-regular fa-newspaper me-2"></i> news
+        </a>
+        <a
+          href="http://localhost:3000/view/stocksLike.html"
+          class="d-flex align-items-center my-3 sidebar"
+          role="button"
+          aria-label="Analysis"
+        >
+          <i class="fas fa-chart-bar me-2" aria-hidden="true"></i> stocks
+        </a>
+        <a
+          href="http://localhost:3000/view/noticeBoard.html"
+          class="d-flex align-items-center my-3 sidebar"
+          role="button"
+          aria-label="Community"
+        >
+          <i class="fas fa-users me-2" aria-hidden="true"></i> Community
+        </a>
+        <a
+          href="http://localhost:3000/view/quiz.html"
+          class="d-flex align-items-center my-3 sidebar"
+          role="button"
+          aria-label="quiz"
+        >
+          <i class="fa-brands fa-square-pinterest me-2"></i> quiz
+        </a>
+      </nav>
+    </header>
 
-    <!-- 🔴 커뮤니티 메인  🔴 -->
-    <main>
+    <!-- 🔴 커뮤니티 메인  -->
+    <main class="board-container">
       <!-- 기본 Nav 메뉴 -->
       <ul class="nav nav-pills mt-5">
         <li class="nav-item">
@@ -140,7 +144,6 @@
           >
         </li>
       </ul>
-
       <!-- 게시판 내용 -->
       <div class="tab-content" id="boardTabsContent">
         <div
@@ -151,47 +154,26 @@
         >
           <div class="d-flex justify-content-between align-items-center my-4">
             <h2>자유게시판</h2>
-            <a
-              class="btn btn-primary"
-              href="http://localhost:3000/view/freeWriteBoard.html"
-              data-board="notice"
-              >글쓰기</a
-            >
-          </div>
-          <div class="d-flex justify-content-end align-items-center my-2">
-            <div class="form-check form-check-inline">
-              <input
-                class="form-check-input"
-                type="radio"
-                name="sortOption"
-                id="sortDefault"
-                value="default"
-                checked
-              />
-              <label class="form-check-label" for="sortDefault">기본</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input
-                class="form-check-input"
-                type="radio"
-                name="sortOption"
-                id="sortView"
-                value="view"
-              />
-              <label class="form-check-label" for="sortView">조회수순</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input
-                class="form-check-input"
-                type="radio"
-                name="sortOption"
-                id="sortLike"
-                value="like"
-              />
-              <label class="form-check-label" for="sortLike">좋아요순</label>
+            <div class="d-flex align-items-center">
+              <select
+                id="sortSelector"
+                onchange="onSortOptionChanged()"
+                class="me-2"
+              >
+                <option value="default" selected>기본</option>
+                <option value="view">조회수순</option>
+                <option value="like">좋아요순</option>
+                <option value="ranker">랭커유저</option>
+              </select>
+              <a
+                class="btn btn-primary"
+                href="http://localhost:3000/view/freeWriteBoard.html"
+                data-board="notice"
+                >글쓰기</a
+              >
             </div>
           </div>
-          <div class="list-group mt-4"></div>
+          <div class="list-group mt-2"></div>
         </div>
       </div>
 

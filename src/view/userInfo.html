@@ -18,197 +18,163 @@
   </head>
 
   <body>
-    <!-- 🔴 위쪽 Nav 🔴-->
-    <nav class="navbar navbar-expand-lg fixed-top-custom">
-      <div class="container-fluid">
-        <!-- 햄버거 메뉴 버튼 추가 -->
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#sidebarMenu"
-          aria-controls="sidebarMenu"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <a
-          class="navbar-brand text-light"
-          href="http://localhost:3000/view/index.html"
-        >
-          <i class="fa-brands fa-stack-overflow"> stock insight</i>
-        </a>
-        <!-- 알림,회원 -->
-        <div class="d-flex ms-auto">
-          <!-- 알림 -->
-          <button class="btn btn-outline-light me-2">
-            <i class="fas fa-bell fa-2x"></i>
-          </button>
-          <!-- 회원 -->
-          <button class="btn btn-outline-light" onclick="toggleProfile()">
-            <i class="fas fa-user fa-2x"></i>
-          </button>
-        </div>
-        <!-- 회원 상세 정보 영역 -->
-        <div class="user-details" id="userDetails">
-          <img
-            id="profileImage"
-            src="/static/photo/login.jpg"
-            alt="Profile Image"
-          />
-          <div class="user-info">
-            <div><strong>닉네임:</strong> <span id="nickname"></span></div>
-            <div><strong>이메일:</strong> <span id="email"></span></div>
-          </div>
-          <!-- 회원상세정보 버튼 -->
-          <a
-            href="http://localhost:3000/view/userInfo.html"
-            class="custom-button"
-            >회원상세정보</a
+    <!-- 🔴 메인 Nav 창 -->
+    <header>
+      <!--  위쪽 Nav -->
+      <nav class="navbar navbar-expand-lg fixed-top-custom">
+        <div class="container-fluid">
+          <!-- 햄버거 메뉴 버튼 추가 -->
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#sidebarMenu"
+            aria-controls="sidebarMenu"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
           >
-          <!-- 로그아웃 버튼 -->
-          <button onclick="logout()" class="custom-button">로그아웃</button>
-        </div>
-      </div>
-    </nav>
-
-    <!-- 🔴 왼쪽 Nav 🔴 -->
-    <nav
-      class="d-flex flex-column align-items-start bg-light p-4 d-none d-lg-block left-nav-border"
-    >
-      <a
-        href="http://localhost:3000/view/search.html"
-        class="d-flex align-items-center my-3 sidebar"
-        role="button"
-        aria-label="search"
-      >
-        <i class="fa-solid fa-magnifying-glass me-2" aria-hidden="true"></i>
-        search
-      </a>
-      <a
-        href="http://localhost:3000/view/news.html"
-        class="d-flex align-items-center my-3 sidebar"
-        role="button"
-        aria-label="Economy"
-      >
-        <i class="fa-regular fa-newspaper me-2"></i> news
-      </a>
-      <a
-        href="http://localhost:3000/view/stocksLike.html"
-        class="d-flex align-items-center my-3 sidebar"
-        role="button"
-        aria-label="Analysis"
-      >
-        <i class="fas fa-chart-bar me-2" aria-hidden="true"></i> stocks
-      </a>
-      <a
-        href="http://localhost:3000/view/noticeBoard.html"
-        class="d-flex align-items-center my-3 sidebar"
-        role="button"
-        aria-label="Community"
-      >
-        <i class="fas fa-users me-2" aria-hidden="true"></i> Community
-      </a>
-      <a
-        href="http://localhost:3000/view/quiz.html"
-        class="d-flex align-items-center my-3 sidebar"
-        role="button"
-        aria-label="quiz"
-      >
-        <i class="fa-brands fa-square-pinterest me-2"></i> quiz
-      </a>
-    </nav>
-
-    <!-- 🔴 유저 상세 메인 🔴 -->
-    <main class="userInfoMain">
-      <section class="user-details-section">
-        <!-- 프로필 이미지 영역 -->
-        <div class="text-center mb-4">
-          <img
-            id="mainProfileImage"
-            src="https://ifh.cc/g/P5Wo5H.png"
-            alt="사용자의 프로필 이미지"
-            class="img-fluid rounded-circle profile-image"
-          />
-
-          <!-- 이미지 첨부 -->
-          <div class="mt-2">
-            <input
-              type="file"
-              id="profileImageInput"
-              style="display: none"
-              onchange="uploadImageToServer();"
-            />
-            <button
-              class="btn btn-outline-primary"
-              onclick="document.getElementById('profileImageInput').click();"
-            >
-              이미지 첨부
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <a
+            class="navbar-brand text-light"
+            href="http://localhost:3000/view/index.html"
+          >
+            <i class="fa-brands fa-stack-overflow"> stock insight</i>
+          </a>
+          <!-- 알림,회원 -->
+          <div class="d-flex ms-auto">
+            <!-- 알림 -->
+            <button class="btn btn-outline-light me-2">
+              <i class="fas fa-bell fa-2x"></i>
+            </button>
+            <!-- 회원 -->
+            <button class="btn btn-outline-light" onclick="toggleProfile()">
+              <i class="fas fa-user fa-2x"></i>
             </button>
           </div>
-        </div>
-
-        <!-- 유저 상세 정보 -->
-        <div class="mb-4 h2">
-          <h4 class="mb-3"><i class="fa-solid fa-user"></i> 유저 정보</h4>
-          <div class="mb-2 h5">
-            <strong>닉네임:</strong>
-            <span id="mainNickname"></span>
-          </div>
-          <div class="mb-2 h5">
-            <strong>이메일:</strong>
-            <span id="mainEmail"></span>
-          </div>
-          <div class="mb-2 h5">
-            <strong>포인트:</strong>
-            <span id="mainPoint"></span>
-          </div>
-          <div class="mb-2 h5">
-            <strong>상태:</strong>
-            <span id="mainStatus"></span>
-          </div>
-        </div>
-
-        <!-- 비밀번호 변경 영역 -->
-        <!-- <div class="mb-4">
-          <h4 class="mb-3">비밀번호 변경</h4>
-          <div class="mb-3">
-            <label for="currentPassword" class="form-label"
-              >현재 비밀번호</label
+          <!-- 회원 상세 정보 영역 -->
+          <div class="user-details" id="userDetails">
+            <img
+              id="profileImage"
+              src="/static/photo/login.jpg"
+              alt="Profile Image"
+            />
+            <div class="user-info">
+              <div><strong>닉네임:</strong> <span id="nickname"></span></div>
+              <div><strong>이메일:</strong> <span id="email"></span></div>
+            </div>
+            <!-- 회원상세정보 버튼 -->
+            <a
+              href="http://localhost:3000/view/userInfo.html"
+              class="custom-button"
+              >회원상세정보</a
             >
-            <input
-              type="password"
-              class="form-control form-control-sm"
-              id="currentPassword"
-              placeholder="현재 비밀번호 입력"
-            />
+            <!-- 로그아웃 버튼 -->
+            <button onclick="logout()" class="custom-button">로그아웃</button>
           </div>
-          <div class="mb-3">
-            <label for="newPassword" class="form-label">새 비밀번호</label>
-            <input
-              type="password"
-              class="form-control form-control-sm"
-              id="newPassword"
-              placeholder="새 비밀번호 입력"
+        </div>
+      </nav>
+
+      <!--  왼쪽 Nav  -->
+      <nav
+        class="d-flex flex-column align-items-start bg-light p-4 d-none d-lg-block left-nav-border"
+      >
+        <a
+          href="http://localhost:3000/view/search.html"
+          class="d-flex align-items-center my-3 sidebar"
+          role="button"
+          aria-label="search"
+        >
+          <i class="fa-solid fa-magnifying-glass me-2" aria-hidden="true"></i>
+          search
+        </a>
+        <a
+          href="http://localhost:3000/view/news.html"
+          class="d-flex align-items-center my-3 sidebar"
+          role="button"
+          aria-label="Economy"
+        >
+          <i class="fa-regular fa-newspaper me-2"></i> news
+        </a>
+        <a
+          href="http://localhost:3000/view/stocksLike.html"
+          class="d-flex align-items-center my-3 sidebar"
+          role="button"
+          aria-label="Analysis"
+        >
+          <i class="fas fa-chart-bar me-2" aria-hidden="true"></i> stocks
+        </a>
+        <a
+          href="http://localhost:3000/view/noticeBoard.html"
+          class="d-flex align-items-center my-3 sidebar"
+          role="button"
+          aria-label="Community"
+        >
+          <i class="fas fa-users me-2" aria-hidden="true"></i> Community
+        </a>
+        <a
+          href="http://localhost:3000/view/quiz.html"
+          class="d-flex align-items-center my-3 sidebar"
+          role="button"
+          aria-label="quiz"
+        >
+          <i class="fa-brands fa-square-pinterest me-2"></i> quiz
+        </a>
+      </nav>
+    </header>
+
+    <!-- 🔴 유저 상세 메인  -->
+    <main class="userInfoMain">
+      <h3 class="mb-3"><i class="fa-solid fa-user"></i> 유저 정보</h3>
+      <div class="userInfo">
+        <div class="row">
+          <div class="col-md-4 text-center">
+            <img
+              id="mainProfileImage"
+              class="img-fluid rounded-circle profile-image"
             />
+            <div class="mt-2">
+              <input
+                type="file"
+                id="profileImageInput"
+                style="display: none"
+                onchange="uploadImageToServer();"
+              />
+              <button
+                class="btn btn-outline-primary"
+                onclick="document.getElementById('profileImageInput').click();"
+              >
+                이미지 첨부
+              </button>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="confirmNewPassword" class="form-label"
-              >새 비밀번호 확인</label
-            >
-            <input
-              type="password"
-              class="form-control form-control-sm"
-              id="confirmNewPassword"
-              placeholder="새 비밀번호 재입력"
-            />
+          <div class="col-md-8 mb-6 h4 fw-bold">
+            <div class="mb-2 m-3">
+              <div class="h6"><strong>닉네임</strong></div>
+              <div><span id="mainNickname"></span></div>
+            </div>
+            <div class="mb-2 m-3">
+              <div class="h6"><strong>이메일</strong></div>
+              <div><span id="mainEmail"></span></div>
+            </div>
+            <div class="mb-2 m-3">
+              <div class="h6"><strong>포인트</strong></div>
+              <div><span id="mainPoint"></span></div>
+            </div>
+            <div class="mb-2 m-3">
+              <div class="h6"><strong>상태</strong></div>
+              <div><span id="mainStatus"></span></div>
+            </div>
           </div>
-          <button class="btn btn-primary" onclick="changePassword()">
-            비밀번호 변경
-          </button>
-        </div> -->
-      </section>
+        </div>
+      </div>
+      <!-- 맞춘종목 -->
+      <h3 class="mb-3"><i class="fa-solid fa-pen"></i> 퀴즈 현황</h3>
+      <div class="userInfo">
+        <div class="row">
+          <div class="col-md-4 text-center"></div>
+        </div>
+      </div>
     </main>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

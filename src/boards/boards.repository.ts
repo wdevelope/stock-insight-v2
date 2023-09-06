@@ -174,4 +174,27 @@ export class BoardsRepository {
       throw new BadRequestException('REPOSITORY_ERROR');
     }
   }
+  // 랭커유저 정렬
+  async getBoardsOrderByRanker(
+    page: number,
+    take: number,
+  ): Promise<[Board[], number]> {
+    try {
+      const qb = this.boardsRepository
+        .createQueryBuilder('board')
+        .leftJoinAndSelect('board.user', 'user')
+        .select(['board', 'user.nickname', 'user.imgUrl', 'user.status'])
+        .where('user.status = :status', { status: 'ranker' })
+        .orderBy('board.created_at', 'DESC')
+        .skip((page - 1) * take)
+        .take(take);
+
+      const [boards, total] = await qb.getManyAndCount();
+
+      return [boards, total];
+    } catch (error) {
+      console.error('Error Details:', error);
+      throw new BadRequestException('REPOSITORY_ERROR');
+    }
+  }
 }

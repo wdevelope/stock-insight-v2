@@ -30,6 +30,7 @@ async function fetchBoardDetailsForEdit() {
 async function submitEdit() {
   const title = document.getElementById('titleInput').value;
   const description = document.getElementById('descriptionInput').value;
+
   try {
     const response = await fetch(
       `http://localhost:3000/api/boards/${freeEditBoardId}`,
@@ -42,6 +43,7 @@ async function submitEdit() {
         body: JSON.stringify({ title, description }),
       },
     );
+
     if (!response.ok) {
       if (response.status === 404) {
         alert('수정 권한이 없습니다.');
@@ -50,7 +52,6 @@ async function submitEdit() {
       }
       return;
     }
-    console.log('dsfasdfasdfasdf', freeBoardId);
     alert('게시글이 수정되었습니다.');
     window.location.href = `http://localhost:3000/view/freeBoardInfo.html?freeBoardId=${freeEditBoardId}`;
   } catch (error) {

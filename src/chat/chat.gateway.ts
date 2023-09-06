@@ -21,8 +21,9 @@ export class ChatGateway
 
   constructor() {
     this.redisClient = redis.createClient({
-      host: process.env.W_REDIS_HOST,
-      port: parseInt(process.env.W_REDIS_PORT),
+      host: process.env.HOST,
+      port: parseInt(process.env.REDIS_PORT),
+      password: process.env.PASSWORD,
     });
   }
 

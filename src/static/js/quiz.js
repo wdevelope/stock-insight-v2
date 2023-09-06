@@ -61,14 +61,23 @@ function createCards(stocks) {
     const card = `
                   <div class="col-md-3 mb-4">
                     <div class="card" style="height: 400px;">
-                      <div class="card-header">${stock.prdt_abrv_name}</div>
+                      <div class="card-header"><i class="fa-brands fa-square-pinterest me-2"></i>${
+                        stock.rprs_mrkt_kor_name
+                      }</div>
                       <div class="card-body" style="position: relative;">
-                        <h2 class="card-title" id="stock-name-title-${index}">${stock.prdt_abrv_name}</h2>
-                        <h4 class="card-subtitle mb-2 text-muted" id="stock-price-${index}">현재가 : ${stock.stck_prpr}원</h4>
-                        <p class="card-text lead">${stock.rprs_mrkt_kor_name}</p>
+                          <h3 class="card-title clickable-title" id="stock-name-title-${index}" onclick="navigateToStockDetail('${
+                            stock.id
+                          }')">${stock.prdt_abrv_name}</h3>
+                        <h4 class="card-subtitle mb-2 text-muted" id="stock-price-${index}">
+                          <span class="current-price-text">현재가</span> <br> 
+                          <span class="current-price-value">${parseInt(
+                            stock.stck_prpr,
+                          ).toLocaleString()}원</span>
+                        </h4>
+                      
                         <div class="buttons-container d-flex justify-content-between mt-4" style="position: absolute; bottom: 10px; width: 100%;">
-                          <button class="btn btn-outline-success btn-lg custom-btn me-1" id="up-button-${index}" onclick="submitQuiz('up', ${index})">
-                            <i class="fa-solid fa-arrow-trend-up"></i> 
+                          <button class="btn btn-outline-success btn-lg custom-btn me-2 " id="up-button-${index}" onclick="submitQuiz('up', ${index})">
+                          <i class="fa-solid fa-arrow-trend-up"></i> 
                           </button>
                           <button class="btn btn-outline-danger btn-lg custom-btn" id="down-button-${index}" onclick="submitQuiz('down', ${index})">
                             <i class="fa-solid fa-arrow-trend-down"></i> 
@@ -78,6 +87,7 @@ function createCards(stocks) {
                     </div>
                   </div>
                 `;
+
     cardRow.innerHTML += card;
   });
 }
@@ -111,4 +121,8 @@ async function submitQuiz(prediction, index) {
     console.error('Error submitting quiz:', error);
     alert('퀴즈 제출 중 오류가 발생했습니다.');
   }
+}
+
+function navigateToStockDetail(id) {
+  window.location.href = `stocksInfo.html?id=${id}`;
 }

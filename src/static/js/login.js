@@ -12,38 +12,39 @@ window.addEventListener('resize', () => {
   }
 });
 
-// 이메일 인증 상태를 저장하는 변수
+// 이메일 인증 상태 저장
 let emailVerified = false;
 
 // 🟢 이메일 인증 함수
-function sendVerificationCode() {
+async function verifyEmail() {
   const email = document.getElementById('signupEmail').value;
 
   const data = {
     email: email,
   };
 
-  fetch('http://localhost:3000/api/users/email', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  })
-    .then((response) => {
-      if (response.status === 201) {
-        alert('인증 코드를 이메일로 발송하였습니다.');
-      } else {
-        alert('인증 코드 발송에 실패하였습니다.');
-      }
-    })
-    .catch((error) => {
-      console.error('Error:', error);
+  try {
+    const response = await fetch('http://localhost:3000/api/users/email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
     });
+
+    if (response.status === 201) {
+      alert('인증 코드를 이메일로 발송하였습니다.');
+    } else {
+      alert('인증 코드 발송에 실패하였습니다.');
+    }
+  } catch (error) {
+    console.log('이메일인증 에러', err);
+    alert('인증 코드 발송 중 오류가 발생했습니다.');
+  }
 }
 
-// 🟢 이메일 인증 확인함수
-function checkVerificationCode() {
+// 🟢 이메일 인증코드 확인 함수
+async function checkEmailCode() {
   const email = document.getElementById('signupEmail').value;
   const randomCode = parseInt(
     document.getElementById('verificationCode').value,
@@ -55,24 +56,28 @@ function checkVerificationCode() {
     randomCode: randomCode,
   };
 
-  fetch('http://localhost:3000/api/users/verifyEmail', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  })
-    .then((response) => {
-      if (response.status === 201) {
-        alert('이메일 인증이 성공적으로 완료되었습니다.');
-        emailVerified = true; // 이메일 인증 상태 변경
-      } else {
-        alert('인증 코드가 올바르지 않습니다.');
-      }
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
+  try {
+    const response = await fetch(
+      'http://localhost:3000/api/users/verifyEmail',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      },
+    );
+
+    if (response.status === 201) {
+      alert('이메일 인증이 완료되었습니다.');
+      emailVerified = true;
+    } else {
+      alert('인증 코드가 올바르지 않습니다.');
+    }
+  } catch (error) {
+    console.log('이메일 인증코드 에러', err);
+    alert('이메일 인증 중 오류가 발생했습니다.');
+  }
 }
 
 // 🟠 로그인 함수
@@ -80,7 +85,7 @@ async function loginUser() {
   const email = document.getElementById('emailInput').value;
   const password = document.getElementById('passwordInput').value;
 
-  const loginData = {
+  const data = {
     email: email,
     password: password,
   };
@@ -91,12 +96,11 @@ async function loginUser() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(loginData),
+      body: JSON.stringify(data),
     });
 
     const result = await response.json();
 
-    // 메인페이지 이동
     if (response.status === 201) {
       alert('로그인이 성공했습니다.');
 
@@ -132,7 +136,7 @@ async function signup() {
     return;
   }
 
-  const signupData = {
+  const data = {
     email: email,
     nickname: nickname,
     password: password,
@@ -145,7 +149,7 @@ async function signup() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(signupData),
+      body: JSON.stringify(data),
     });
 
     const result = await response.json();

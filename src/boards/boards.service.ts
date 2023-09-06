@@ -69,6 +69,25 @@ export class BoardsService {
       },
     };
   }
+  //랭커유저 정렬
+  async getBoardsOrderByRanker(
+    page: number,
+    take: number,
+  ): Promise<{ data: Board[]; meta: any }> {
+    const [boards, total] = await this.boardsRepository.getBoardsOrderByRanker(
+      page,
+      take,
+    );
+
+    return {
+      data: boards,
+      meta: {
+        total,
+        page,
+        last_page: Math.ceil(total / take),
+      },
+    };
+  }
 
   async getBoardsByUserId(
     page: number,
