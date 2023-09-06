@@ -85,9 +85,6 @@ async function fetchAndRenderPosts(page = 1, orderBy = '') {
 
     boardElement.innerHTML = postHTML;
 
-    const boardContainer = document.querySelector('.board-container');
-    boardContainer.style.display = 'block';
-
     updatePaginationUI(meta);
   } catch (error) {
     console.error('Error fetching posts:', error);
