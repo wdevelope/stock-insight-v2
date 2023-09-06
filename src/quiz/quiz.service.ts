@@ -149,4 +149,27 @@ export class QuizService {
 
     return Math.round(downPercent);
   }
+
+  // 쿼리빌더 이용한 페이지네이션 구현
+  async getUserQuiz(userId: number, page: number = 1) {
+    const queryBuilder = await this.quizRepository.createQueryBuilder('q');
+    if (userId) {
+      queryBuilder.innerJoin('q.user', 'user').where('user.id = :id', {
+        id: userId,
+      });
+    }
+
+    const take = 5;
+    const pageIndex: number = (page as any) > 0 ? parseInt(page as any) : 1;
+    const total = await queryBuilder.getCount();
+
+    queryBuilder.skip((pageIndex - 1) * take).take(take);
+
+    return {
+      data: await queryBuilder.getMany(),
+      total,
+      pageIndex,
+      last_page: Math.ceil(total / take),
+    };
+  }
 }
