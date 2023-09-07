@@ -44,10 +44,6 @@
           </a>
           <!-- 알림,회원 -->
           <div class="d-flex ms-auto">
-            <!-- 알림 -->
-            <button class="btn btn-outline-light me-2">
-              <i class="fas fa-bell fa-2x"></i>
-            </button>
             <!-- 회원 -->
             <button class="btn btn-outline-light" onclick="toggleProfile()">
               <i class="fas fa-user fa-2x"></i>
@@ -81,15 +77,6 @@
         class="d-flex flex-column align-items-start bg-light p-4 d-none d-lg-block left-nav-border"
       >
         <a
-          href="http://localhost:3000/view/search.html"
-          class="d-flex align-items-center my-3 sidebar"
-          role="button"
-          aria-label="search"
-        >
-          <i class="fa-solid fa-magnifying-glass me-2" aria-hidden="true"></i>
-          search
-        </a>
-        <a
           href="http://localhost:3000/view/news.html"
           class="d-flex align-items-center my-3 sidebar"
           role="button"
@@ -106,20 +93,20 @@
           <i class="fas fa-chart-bar me-2" aria-hidden="true"></i> stocks
         </a>
         <a
-          href="http://localhost:3000/view/noticeBoard.html"
-          class="d-flex align-items-center my-3 sidebar"
-          role="button"
-          aria-label="Community"
-        >
-          <i class="fas fa-users me-2" aria-hidden="true"></i> Community
-        </a>
-        <a
           href="http://localhost:3000/view/quiz.html"
           class="d-flex align-items-center my-3 sidebar"
           role="button"
           aria-label="quiz"
         >
           <i class="fa-brands fa-square-pinterest me-2"></i> quiz
+        </a>
+        <a
+          href="http://localhost:3000/view/noticeBoard.html"
+          class="d-flex align-items-center my-3 sidebar"
+          role="button"
+          aria-label="Community"
+        >
+          <i class="fas fa-users me-2" aria-hidden="true"></i> Community
         </a>
       </nav>
     </header>
@@ -157,10 +144,10 @@
             <div class="d-flex align-items-center">
               <select
                 id="sortSelector"
-                onchange="onSortOptionChanged()"
+                onchange="handleSortChange()"
                 class="me-2"
               >
-                <option value="default" selected>기본</option>
+                <option value="default" selected>날짜순</option>
                 <option value="view">조회수순</option>
                 <option value="like">좋아요순</option>
                 <option value="ranker">랭커유저</option>
@@ -208,9 +195,9 @@
 
           <!-- 검색 버튼 -->
           <button
+            type="submit"
             class="btn btn-primary"
             style="margin-left: 10px"
-            onclick="freeBoardSearch()"
           >
             검색
           </button>

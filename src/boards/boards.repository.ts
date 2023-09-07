@@ -4,6 +4,7 @@ import { FindOneOptions, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { CreateBoardDto } from './dto/create-board.dto';
+import { BoardResponseDto } from './dto/board-response.dto';
 import { Users } from 'src/users/users.entity';
 import { EntityManager } from 'typeorm';
 
@@ -115,87 +116,54 @@ export class BoardsRepository {
     }
   }
 
-  async findAndCountWithPagination(
+  public async getBoardsWithSortingAndPagination(
     page: number,
     take: number,
-  ): Promise<[Board[], number]> {
+    order: { [key: string]: 'ASC' | 'DESC' },
+    additionalWhere?: { [key: string]: any },
+  ): Promise<[BoardResponseDto[], number]> {
     const qb = this.boardsRepository
       .createQueryBuilder('board')
-      .leftJoinAndSelect('board.user', 'user')
-      .select(['board', 'user.nickname', 'user.imgUrl', 'user.status']) // board와 user의 nickname,imgUrl 선택
-      .orderBy('board.created_at', 'DESC')
+      .leftJoin('board.user', 'user')
+      .select([
+        'board.id',
+        'board.title',
+        'board.description',
+        'board.image',
+        'board.likeCount',
+        'board.viewCount',
+        'board.created_at',
+        'board.updated_at',
+        'user.nickname',
+        'user.imgUrl',
+        'user.status',
+      ])
+      .orderBy(order)
       .skip((page - 1) * take)
       .take(take);
 
-    const [boards, total] = await qb.getManyAndCount();
-
-    return [boards, total];
-  }
-  // 조회수 정렬
-  async getBoardsOrderByViewCount(
-    page: number,
-    take: number,
-  ): Promise<[Board[], number]> {
-    try {
-      const qb = this.boardsRepository
-        .createQueryBuilder('board')
-        .leftJoinAndSelect('board.user', 'user')
-        .select(['board', 'user.nickname', 'user.imgUrl', 'user.status'])
-        .orderBy('board.viewCount', 'DESC')
-        .skip((page - 1) * take)
-        .take(take);
-
-      const [boards, total] = await qb.getManyAndCount();
-
-      return [boards, total];
-    } catch (error) {
-      console.error('Error fetching boards order by view count', error);
-      throw new BadRequestException('REPOSITORY_ERROR');
+    if (additionalWhere) {
+      for (const [key, value] of Object.entries(additionalWhere)) {
+        qb.andWhere(`${key} = :value`, { value });
+      }
     }
-  }
-  // 좋아요 정렬
-  async getBoardsOrderByLikeCount(
-    page: number,
-    take: number,
-  ): Promise<[Board[], number]> {
-    try {
-      const qb = this.boardsRepository
-        .createQueryBuilder('board')
-        .leftJoinAndSelect('board.user', 'user')
-        .select(['board', 'user.nickname', 'user.imgUrl', 'user.status'])
-        .orderBy('board.likeCount', 'DESC')
-        .skip((page - 1) * take)
-        .take(take);
 
-      const [boards, total] = await qb.getManyAndCount();
+    const [results, total] = await qb.getManyAndCount();
 
-      return [boards, total];
-    } catch (error) {
-      console.error('Error fetching boards order by view count', error);
-      throw new BadRequestException('REPOSITORY_ERROR');
-    }
-  }
-  // 랭커유저 정렬
-  async getBoardsOrderByRanker(
-    page: number,
-    take: number,
-  ): Promise<[Board[], number]> {
-    try {
-      const qb = this.boardsRepository
-        .createQueryBuilder('board')
-        .leftJoinAndSelect('board.user', 'user')
-        .select(['board', 'user.nickname', 'user.imgUrl', 'user.status'])
-        .where('user.status = :status', { status: 'ranker' })
-        .orderBy('board.created_at', 'DESC')
-        .skip((page - 1) * take)
-        .take(take);
+    const formattedBoards = results.map((result) => ({
+      id: result.id,
+      title: result.title,
+      description: result.description,
+      image: result.image,
+      likeCount: result.likeCount,
+      viewCount: result.viewCount,
+      created_at: result.created_at,
+      updated_at: result.updated_at,
+      nickname: result.user.nickname,
+      imgUrl: result.user.imgUrl,
+      status: result.user.status,
+    }));
 
-      const [boards, total] = await qb.getManyAndCount();
-
-      return [boards, total];
-    } catch (error) {
-      console.error('Error Details:', error);
-      throw new BadRequestException('REPOSITORY_ERROR');
-    }
+    return [formattedBoards, total];
   }
 }

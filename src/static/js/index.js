@@ -131,20 +131,6 @@ function toggleControlButtons() {
   }
 }
 
-// 🟠 페이지 네이션 다음페이지
-const nextGroup = () => {
-  currentGroup++;
-  updatePaginationUI();
-};
-
-// 🟠 페이지 네이션 이전페이지
-const prevGroup = () => {
-  if (currentGroup > 1) {
-    currentGroup--;
-    updatePaginationUI();
-  }
-};
-
 // 🟠 뒤로가기
 window.addEventListener('pageshow', (event) => {
   if (event.persisted) {

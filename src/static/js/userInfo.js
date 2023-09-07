@@ -1,4 +1,6 @@
-window.onload = renderUserDetails;
+document.addEventListener('DOMContentLoaded', () => {
+  renderUserDetails();
+});
 
 //🟡 유저 상세페이지 렌더링
 async function renderUserDetails() {
@@ -22,6 +24,9 @@ async function renderUserDetails() {
   userEmail.textContent = data.email;
   userPoint.textContent = data.point;
   userStatus.textContent = data.status;
+
+  const userId = data.id;
+  renderUserQuizzes(userId);
 }
 
 // 🟡 s3 이미지 생성
@@ -57,5 +62,54 @@ async function uploadImageToServer() {
     }
   } catch (error) {
     alert('업로드 중 오류 발생: ' + error);
+  }
+}
+
+async function fetchUserQuizzes(userId, page = 1) {
+  const baseUrl = 'http://localhost:3000/quiz/userQuiz';
+  const queryParams = `?page=${page}&userId=${userId}`;
+
+  try {
+    const response = await fetch(baseUrl + queryParams);
+    const data = await response.json();
+    console.log(data);
+
+    if (!response.ok) {
+      throw new Error(data.message || 'API 호출 중 오류가 발생했습니다.');
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Error fetching user quizzes:', error.message);
+    throw error;
+  }
+}
+
+async function renderUserQuizzes(userId) {
+  const quizContainer = document.getElementById('userQuizzes');
+
+  try {
+    const response = await fetchUserQuizzes(userId);
+    const quizzes = response.data;
+
+    quizContainer.innerHTML = '';
+
+    quizzes.forEach((quiz) => {
+      const quizItem = document.createElement('li');
+      quizItem.classList.add('list-group-item');
+
+      // 데이터를 문자열로 변환하여 렌더링
+      quizItem.innerHTML = `
+        <strong>주식 코드명 :</strong> ${quiz.stockId} 
+        <br>
+        <strong>예측:</strong> ${quiz.upANDdown} 
+        <strong>맞춤:</strong> ${quiz.correct === null ? 'null' : quiz.correct} 
+        <strong>날짜:</strong> ${quiz.updated_date}
+      `;
+
+      quizContainer.appendChild(quizItem);
+    });
+  } catch (error) {
+    console.error('Error rendering user quizzes:', error.message);
   }
 }

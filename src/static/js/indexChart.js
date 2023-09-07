@@ -68,7 +68,7 @@ function createDemoChart(canvasId, labelName) {
   const myChart = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
       datasets: [
         {
           label: labelName,
@@ -76,6 +76,8 @@ function createDemoChart(canvasId, labelName) {
           backgroundColor: backgroundColor,
           borderColor: borderColor,
           borderWidth: 1,
+          pointRadius: 0,
+          fill: true, // 이 설정은 라인 안의 영역을 채우는 것을 활성화합니다.
         },
       ],
     },
@@ -83,6 +85,10 @@ function createDemoChart(canvasId, labelName) {
       scales: {
         y: {
           beginAtZero: true,
+          display: false, // y축 눈금을 숨깁니다.
+        },
+        x: {
+          display: false, // x축 눈금을 숨깁니다.
         },
       },
     },

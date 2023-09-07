@@ -83,7 +83,9 @@ function renderStockDetail(data) {
   ).textContent = `${data.stock.rprs_mrkt_kor_name} `;
   document.getElementById(
     'stockPrice',
-  ).textContent = `주식 가격: ${formatNumberWithCommas(stockInfo.stck_prpr)}`;
+  ).textContent = `주식 가격: ${formatNumberWithCommas(
+    stockInfo.stck_prpr,
+  )} 원`;
   document.getElementById(
     'priceDifference',
   ).textContent = `전일 대비: ${formatNumberWithCommas(stockInfo.prdy_vrss)}`;
@@ -178,7 +180,7 @@ function renderChart(chartData) {
       labels: labels,
       datasets: [
         {
-          label: 'Stock Price',
+          label: 'Price',
           data: prices,
           borderWidth: 1,
           borderColor: 'blue',

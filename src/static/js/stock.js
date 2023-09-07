@@ -213,6 +213,20 @@ function updatePaginationUI() {
   }
 }
 
+// 🟠 페이지 네이션 다음페이지
+const nextGroup = () => {
+  currentGroup++;
+  updatePaginationUI();
+};
+
+// 🟠 페이지 네이션 이전페이지
+const prevGroup = () => {
+  if (currentGroup > 1) {
+    currentGroup--;
+    updatePaginationUI();
+  }
+};
+
 function updateURL(page) {
   const currentURL = window.location.href.split('?')[0];
   const newURL = `${currentURL}?page=${page}`;
