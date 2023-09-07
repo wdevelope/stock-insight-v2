@@ -108,17 +108,37 @@ function renderStockDetail(data) {
   const stockInfoContainer = document.getElementById('stockInfo');
 
   const otherInfoHTML = `
-        <p>기준가: ${formatNumberWithCommas(stockInfo.stck_sdpr)}</p>
-        <p>외국인 보유율: ${stockInfo.hts_frgn_ehrt}</p>
-        <p>가용 물량: ${formatNumberWithCommas(stockInfo.hts_avls)}</p>
-        <p>PER: ${stockInfo.per}</p>
-        <p>PBR: ${stockInfo.pbr}</p>
-        <p>52주 최고가: ${formatNumberWithCommas(stockInfo.w52_hgpr)}</p>
-        <p>52주 최저가: ${formatNumberWithCommas(stockInfo.w52_lwpr)}</p>
-        <p>전체 대출 잔액 비율: ${stockInfo.whol_loan_rmnd_rate}</p>
-        <p>한국 이름: ${stockInfo.bstp_kor_isnm}</p>
-        <p>상태 코드: ${stockInfo.iscd_stat_cls_code}</p>
-    `;
+  <div class="info-card"><i class="fas fa-balance-scale"></i><p>기준가: ${formatNumberWithCommas(
+    stockInfo.stck_sdpr,
+  )}</p></div>
+  <div class="info-card"><i class="fas fa-globe-asia"></i><p>외국인 보유율: ${
+    stockInfo.hts_frgn_ehrt
+  }</p></div>
+  <div class="info-card"><i class="fas fa-box"></i><p>가용 물량: ${formatNumberWithCommas(
+    stockInfo.hts_avls,
+  )}</p></div>
+  <div class="info-card"><i class="fas fa-chart-pie"></i><p>PER: ${
+    stockInfo.per
+  }</p></div>
+  <div class="info-card"><i class="fas fa-chart-area"></i><p>PBR: ${
+    stockInfo.pbr
+  }</p></div>
+  <div class="info-card"><i class="fas fa-arrow-up"></i><p>52주 최고가: ${formatNumberWithCommas(
+    stockInfo.w52_hgpr,
+  )}</p></div>
+  <div class="info-card"><i class="fas fa-arrow-down"></i><p>52주 최저가: ${formatNumberWithCommas(
+    stockInfo.w52_lwpr,
+  )}</p></div>
+  <div class="info-card"><i class="fas fa-credit-card"></i><p>전체 대출 잔액 비율: ${
+    stockInfo.whol_loan_rmnd_rate
+  }</p></div>
+  <div class="info-card"><i class="fas fa-flag"></i><p>한국 이름: ${
+    stockInfo.bstp_kor_isnm
+  }</p></div>
+  <div class="info-card"><i class="fas fa-info-circle"></i><p>상태 코드: ${
+    stockInfo.iscd_stat_cls_code
+  }</p></div>
+`;
 
   stockInfoContainer.innerHTML = otherInfoHTML;
 }
@@ -151,31 +171,36 @@ async function addFavoriteStock(stockId) {
 
 // 🟤 주식 차트를 그리는 함수
 function renderChart(chartData) {
-  const ctx = document.getElementById('myChart');
-
+  const canvas = document.getElementById('myChart');
+  const ctx = canvas.getContext('2d');
   // 차트 데이터를 역순으로 정렬
   chartData = chartData.reverse();
 
-  // 차트 데이터에서 날짜와 가격 분리, 날짜에 5시간 40분 더함
   const labels = chartData.map((data) => {
     const date = new Date(data.date);
-    date.setHours(date.getHours() + 5);
-    date.setMinutes(date.getMinutes() + 40);
-    return date.toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true,
-    });
+    date.setHours(date.getHours() + 18);
+    date.setMinutes(date.getMinutes() + 30);
+    return date.toISOString().slice(11, 16);
   });
+
   const prices = chartData.map((data) => data.price);
 
-  // 가격 데이터의 최대값과 최소값을 구하고, 여유분을 둔 범위 설정
   const maxPrice = Math.max(...prices);
   const minPrice = Math.min(...prices);
-  const padding = (maxPrice - minPrice) * 0.05; // 예: 전체 범위의 5%를 여유분으로 설정
+  const padding = (maxPrice - minPrice) * 0.05;
+
+  const firstPrice = parseFloat(chartData[0].price);
+  const lastPrice = parseFloat(chartData[chartData.length - 1].price);
+  const isRising = lastPrice >= firstPrice;
+
+  // 상승 또는 하락에 따른 색상 설정
+  const borderColor = isRising ? 'red' : 'blue';
+  const backgroundColor = isRising
+    ? 'rgba(255, 0, 0, 0.1)'
+    : 'rgba(0, 0, 255, 0.1)';
 
   new Chart(ctx, {
-    type: 'line', // 선형 차트 사용
+    type: 'line',
     data: {
       labels: labels,
       datasets: [
@@ -183,19 +208,46 @@ function renderChart(chartData) {
           label: 'Price',
           data: prices,
           borderWidth: 1,
-          borderColor: 'blue',
+          borderColor: borderColor,
           fill: true,
-          backgroundColor: 'rgba(0, 0, 255, 0.1)',
+          backgroundColor: backgroundColor,
           pointRadius: 0,
         },
       ],
     },
     options: {
+      responsive: true,
+      tooltips: {
+        mode: 'index',
+        intersect: false,
+      },
+      hover: {
+        mode: 'nearest',
+        intersect: true,
+      },
       scales: {
         y: {
           min: minPrice - padding,
           max: maxPrice + padding,
+          gridLines: {
+            drawBorder: false,
+            color: 'rgba(255, 255, 255, 0.1)',
+            zeroLineColor: 'rgba(255, 255, 255, 0.5)',
+          },
         },
+        x: {
+          gridLines: {
+            drawBorder: false,
+            color: 'rgba(255, 255, 255, 0.1)',
+          },
+        },
+      },
+      legend: {
+        display: false,
+      },
+      animation: {
+        duration: 1000,
+        easing: 'easeOutBounce',
       },
     },
   });

@@ -6,9 +6,12 @@
 #autocompleteContainer {
   display: none; /* 초기 상태에서는 숨김 */
   border: 1px solid #ccc;
+  width: 250px;
+  margin-left: 5px;
 }
-#autocompleteContainer:hover {
+#autocompleteContainer > div:hover {
   cursor: pointer;
+  background-color: rgb(208, 208, 208);
 }
 
 #totalStocks {

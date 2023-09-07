@@ -113,26 +113,39 @@
 
     <!-- 🔴 주식 상세 메인  -->
     <main>
-      <div class="stock-detail-container">
-        <button id="favoriteButton" class="star-btn">
-          <i class="far fa-star"> 종목 찜하기</i>
+      <div class="stock-detail-container border p-3 rounded">
+        <button id="favoriteButton" class="star-btn btn">
+          <i class="far fa-star"></i> 종목 찜하기
         </button>
-        <h1 id="stock-name">종목명</h1>
+        <h3 id="stock-name" class="display-4">종목명</h3>
         <div class="stock-header">
           <div class="stock-title">
-            <h2 id="stockId">종목코드: -</h2>
-            <p id="stockPrice">주식 가격: -</p>
-            <p id="priceDifference">전일 대비: -</p>
+            <h4 id="stockId" class="h4 mb-2">종목코드: -</h4>
+            <p id="stockPrice" class="mb-1">주식 가격: -</p>
+            <p id="priceDifference" class="mb-1">전일 대비: -</p>
           </div>
+
           <div class="stock-highlights">
-            <p id="highPrice">고가: -</p>
-            <p id="lowPrice">저가: -</p>
-            <p id="volume">거래량: -</p>
-            <p id="volumePrice">거래대금: -</p>
+            <div class="info-card">
+              <i class="fas fa-chart-line"></i>
+              <p id="highPrice">고가: -</p>
+            </div>
+            <div class="info-card">
+              <i class="fas fa-chart-bar"></i>
+              <p id="lowPrice">저가: -</p>
+            </div>
+            <div class="info-card">
+              <i class="fas fa-exchange-alt"></i>
+              <p id="volume">거래량: -</p>
+            </div>
+            <div class="info-card">
+              <i class="fas fa-hand-holding-usd"></i>
+              <p id="volumePrice">거래대금: -</p>
+            </div>
           </div>
         </div>
         <div class="stock-main-content">
-          <div class="stock-chart">
+          <div class="stock-chart mb-4">
             <canvas id="myChart"></canvas>
           </div>
           <div class="stock-info" id="stockInfo"></div>

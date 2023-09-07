@@ -36,9 +36,9 @@ function displayFavoriteStocks(stocks) {
     const priceChange = stock.prdy_ctrt;
     let priceChangeColor;
     if (priceChange > 0) {
-      priceChangeColor = '#a3cef1';
-    } else if (priceChange < 0) {
       priceChangeColor = '#f3722ca5';
+    } else if (priceChange < 0) {
+      priceChangeColor = '#a3cef1';
     } else {
       priceChangeColor = '#b0b5c2b7';
     }

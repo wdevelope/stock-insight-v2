@@ -33,9 +33,10 @@ export class BoardsService {
           'board.created_at': 'DESC',
         },
       );
+    const lastPage = Math.ceil(totalCount / take);
     return {
       data: boards,
-      meta: { totalCount },
+      meta: { totalCount, lastPage },
     };
   }
 
@@ -52,9 +53,10 @@ export class BoardsService {
           'board.viewCount': 'DESC', // DESC로 변경하여 조회수가 많은 게시물부터 내림차순으로 가져옵니다.
         },
       );
+    const lastPage = Math.ceil(totalCount / take);
     return {
       data: boards,
-      meta: { totalCount },
+      meta: { totalCount, lastPage },
     };
   }
 
@@ -71,9 +73,10 @@ export class BoardsService {
           'board.likeCount': 'DESC',
         },
       );
+    const lastPage = Math.ceil(totalCount / take);
     return {
       data: boards,
-      meta: { totalCount },
+      meta: { totalCount, lastPage },
     };
   }
 
@@ -93,9 +96,10 @@ export class BoardsService {
           'user.status': 'ranker',
         },
       );
+    const lastPage = Math.ceil(totalCount / take);
     return {
       data: boards,
-      meta: { totalCount },
+      meta: { totalCount, lastPage },
     };
   }
 

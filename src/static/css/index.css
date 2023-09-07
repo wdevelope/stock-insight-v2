@@ -165,10 +165,10 @@ ul.nav .nav-item .nav-link.active {
 }
 
 /* 🔥 퀴즈 */
-.clickable-title:hover {
+.quiz-bodyclik:hover {
   cursor: pointer;
-  font-weight: bold;
-  color: navy;
+  color: #007bff;
+  transform: scale(1.02);
 }
 
 .custom-btn {

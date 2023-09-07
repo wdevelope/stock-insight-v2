@@ -65,19 +65,22 @@ function createCards(stocks) {
                         stock.rprs_mrkt_kor_name
                       }</div>
                       <div class="card-body" style="position: relative;">
-                          <h4 class="card-title clickable-title" id="stock-name-title-${index}" onclick="navigateToStockDetail('${
-                            stock.id
-                          }')">${stock.prdt_abrv_name}</h4>
-                        <h4 class="card-subtitle mb-2 text-muted" id="stock-price-${index}">
-                          <span class="current-price-text">현재가</span> <br> 
-                          <span class="current-price-value">${parseInt(
-                            stock.stck_prpr,
-                          ).toLocaleString()}원</span>
-
-                          <span class="change-price-value" style="color:${
-                            stock.prdy_vrss_sign === '5' ? 'red' : 'green'
-                          };"> (${stock.prdy_ctrt}%)</span>
-
+                        <div class="quiz-bodyclik" onclick="navigateToStockDetail('${
+                          stock.id
+                        }')">
+                            <h4 class="card-title clickable-title" id="stock-name-title-${index}" >${
+                              stock.prdt_abrv_name
+                            }</h4>
+                          <h4 class="card-subtitle mb-2 text-muted" id="stock-price-${index}">
+                            <span class="current-price-text">현재가</span> <br> 
+                            <span class="current-price-value">${parseInt(
+                              stock.stck_prpr,
+                            ).toLocaleString()}원</span>
+                        
+                            <span class="change-price-value" style="color:${
+                              stock.prdy_vrss_sign === '5' ? 'red' : 'green'
+                            };"> (${stock.prdy_ctrt}%)</span>
+                          </div>
                         </h4>
                       
                         <div class="buttons-container d-flex justify-content-between mt-4" style="position: absolute; bottom: 10px; width: 100%;">

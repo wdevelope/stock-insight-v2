@@ -1,3 +1,31 @@
+// 🟢 이메일 인증 함수
+async function verifyEmail() {
+  const email = document.getElementById('signupEmail').value;
+
+  const data = {
+    email: email,
+  };
+
+  try {
+    const response = await fetch(`${API_URL}/api/users/email`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (response.status === 201) {
+      alert('인증 코드를 이메일로 발송하였습니다.');
+    } else {
+      alert('인증 코드 발송에 실패하였습니다.');
+    }
+  } catch (error) {
+    console.log('이메일인증 에러', error);
+    alert('인증 코드 발송 중 오류가 발생했습니다.');
+  }
+}
+
 // 로그인 배경
 window.addEventListener('resize', () => {
   width = canvas.width = window.innerWidth;

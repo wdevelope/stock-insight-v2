@@ -8,7 +8,7 @@ window.onload = async function () {
       radio.addEventListener('change', onSortOptionChanged);
     });
 
-  const meta = await fetchAndRenderPosts(page); // meta를 반환받습니다.
+  const meta = await fetchAndRenderPosts(page);
 
   document
     .getElementById('pagination')
@@ -67,7 +67,6 @@ async function fetchAndRenderPosts(
 
     const { data, meta } = await response.json();
     const today = new Date().toISOString().split('T')[0];
-
     data.sort((a, b) => {
       return new Date(b.created_at) - new Date(a.created_at);
     });
@@ -109,7 +108,6 @@ async function fetchAndRenderPosts(
     }
 
     boardElement.innerHTML = postHTML;
-
     updatePaginationUI(meta);
     return meta;
   } catch (error) {
@@ -140,8 +138,7 @@ function updatePaginationUI(meta) {
 
   buttons.forEach((button) => button.classList.remove('active'));
 
-  const totalPageCount = meta.last_page;
-
+  const totalPageCount = meta.lastPage;
   for (let i = 0; i < buttons.length; i++) {
     let pageNum = i + 1 + 5 * (currentGroup - 1);
 
