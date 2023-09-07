@@ -134,14 +134,14 @@ export class UsersController {
     summary: '퀴즈 API',
   })
   @ApiBody({ type: [PointDto] })
-  @Patch('/point')
+  @Post('/point')
   async userPoint() {
     return await this.usersService.updatePoint();
   }
 
   // 유저 스텟 변동 http://localhost:3000/api/users/status
   @ApiOperation({ summary: '유저 스테이터스 변경 API' })
-  @Patch('/status')
+  @Post('/status')
   async userStatus() {
     return await this.usersService.updateUserStatus();
   }
@@ -184,5 +184,10 @@ export class UsersController {
   @Patch('/resetPassword')
   async resetPassword(@Body() body: EmailDto) {
     return await this.emailService.resetPassword(body);
+  }
+
+  @Get('getQuizDay')
+  async getQuizDay() {
+    return await this.usersService.getQuizDay();
   }
 }
