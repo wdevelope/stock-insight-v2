@@ -12,7 +12,6 @@ import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
 import { Users } from 'src/users/users.entity';
-import { MyStock } from './entities/myStock.entity';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 
 @ApiTags('stock')
@@ -86,6 +85,12 @@ export class StockController {
   async getStockPage(@Query('page') page: number = 1): Promise<any> {
     return await this.stockService.getStockPage(page);
   }
+  //http://localhost:3000/api/stocks/rank/
+  @ApiOperation({ summary: '' })
+  @Get('/rank')
+  async getStockRank(): Promise<any> {
+    return await this.stockService.getStockRank();
+  }
   //http://localhost:3000/api/stocks/search/(?query=검색어)
   @ApiOperation({ summary: '' })
   @Get('search')
@@ -119,7 +124,7 @@ export class StockController {
   @ApiOperation({ summary: '' })
   @UseGuards(JwtAuthGuard)
   @Get('mystock')
-  getMyStock(@CurrentUser() user: Users): Promise<MyStock[]> {
+  getMyStock(@CurrentUser() user: Users): Promise<any> {
     return this.stockService.getMyStock(user);
   }
 }
