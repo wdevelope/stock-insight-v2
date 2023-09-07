@@ -86,19 +86,20 @@ export class BoardsRepository {
 
   async update(updateBoardDto: UpdateBoardDto, boardId: number): Promise<void> {
     try {
-      console.log(updateBoardDto);
-      await this.boardsRepository
-        .createQueryBuilder()
-        .update(Board)
-        .set({
-          title: updateBoardDto.title,
-          description: updateBoardDto.description,
-          image: updateBoardDto.image,
-          likeCount: updateBoardDto.likeCount,
-          viewCount: updateBoardDto.viewCount,
-        })
-        .where('id=:id', { id: boardId })
-        .execute();
+      await this.boardsRepository.manager.transaction(async (transaction) => {
+        await transaction
+          .createQueryBuilder()
+          .update(Board)
+          .set({
+            title: updateBoardDto.title,
+            description: updateBoardDto.description,
+            image: updateBoardDto.image,
+            likeCount: updateBoardDto.likeCount,
+            viewCount: updateBoardDto.viewCount,
+          })
+          .where('id=:id', { id: boardId })
+          .execute();
+      });
     } catch (error) {
       throw new BadRequestException('REPOSITORY_ERROR');
     }
