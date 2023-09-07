@@ -30,8 +30,8 @@ export class QuizService {
     const updated_date = today;
 
     const quizId = await this.quizRepository.find({ where: { updated_date } });
-    // console.log(quizId[0].id);
-    console.log(quizId[0].user.id);
+    // console.log('1', quizId[0].id);
+    // console.log('3', quizId[1].id);
 
     for (const ele of quizId) {
       const id = ele.id;
