@@ -100,41 +100,39 @@ export class UsersService {
   }
   // answer가 true 면 point 를 얻고, keep은 그대로, false 면 point를 잃는다. 대신 0점 밑으로는 내려가지 않는다.
   async updatePoint() {
-    const userId = await this.usersRepository.getQuizDay();
-    for (const ele of userId) {
-      const id = ele.u_id;
-      const user = await this.usersRepository.findOne({ where: { id } });
-      const answer = user.quiz[0].correct;
+    const userQuiz = await this.usersRepository.getQuizDay();
+    userQuiz.forEach(async (userQuiz) => {
+      const id = userQuiz.u_id;
+      const point = userQuiz.u_point;
+      const answer = userQuiz.quiz_correct;
+      // console.log('id', id);
 
       let newPoint: number;
       if (answer === 'false') {
-        if (user.point > 0) {
-          newPoint = user.point - 5;
+        if (point > 0) {
+          newPoint = point - 5;
         } else {
-          newPoint = user.point;
+          newPoint = point;
         }
       } else if (answer === 'true') {
-        newPoint = user.point + 10;
+        newPoint = point + 10;
       } else if (answer === 'keep') {
-        newPoint = user.point;
+        newPoint = point;
       }
+      // console.log('newPoint', newPoint);
+      const user = await this.usersRepository.findOne({ where: { id } });
 
       await this.usersRepository.updatePoint(user, {
         point: newPoint,
       });
-
-      return {
-        statusCode: 201,
-        message: '포인트 수정 성공',
-      };
-    }
+    });
   }
 
   // 포인트에 따라서 유저의 스테이터스가 변화한다.
   async updateUserStatus() {
     const userId = await this.usersRepository.getQuizDay();
-    for (const ele of userId) {
-      const id = ele.u_id;
+    userId.forEach(async (userId) => {
+      const id = userId.u_id;
       const user = await this.usersRepository.findOne({ where: { id } });
 
       let newStatus: string;
@@ -147,12 +145,7 @@ export class UsersService {
       await this.usersRepository.updateUserStatus(user, {
         status: newStatus,
       });
-
-      return {
-        statusCode: 201,
-        message: '유저랭킹 수정 성공',
-      };
-    }
+    });
   }
 
   //페이지네이션

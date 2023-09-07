@@ -86,6 +86,7 @@ export class UsersRepository extends Repository<Users> {
 
     const user = await this.createQueryBuilder('u')
       .select('u.id')
+      .addSelect('u.point')
       .leftJoinAndSelect('u.quiz', 'quiz')
       .where('quiz.updated_date = :updated_date', {
         updated_date: updated_date,
