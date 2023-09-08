@@ -15,8 +15,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
   socket.on('connect', () => {
     console.log('connected');
-
-    // 서버로부터 메시지를 받습니다.
   });
 
   chatForm.addEventListener('submit', function (event) {

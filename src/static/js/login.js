@@ -38,7 +38,6 @@ async function verifyEmail() {
       alert('인증 코드 발송에 실패하였습니다.');
     }
   } catch (error) {
-    console.log('이메일인증 에러', err);
     alert('인증 코드 발송 중 오류가 발생했습니다.');
   }
 }
@@ -72,7 +71,6 @@ async function checkEmailCode() {
       alert('인증 코드가 올바르지 않습니다.');
     }
   } catch (error) {
-    console.log('이메일 인증코드 에러', err);
     alert('이메일 인증 중 오류가 발생했습니다.');
   }
 }
@@ -150,18 +148,15 @@ async function signup() {
     });
 
     const result = await response.json();
-
-    // 회원가입 성공 시
     if (response.status === 201) {
       alert('회원가입 성공!');
       $('#signupModal').modal('hide'); // 모달 창 닫기
     } else {
-      console.error('Signup response:', response); // 실패 콘솔
-      alert(result.message || '회원가입 실패');
+      throw new Error(result.response.message[0] || '회원가입 실패');
     }
   } catch (error) {
-    console.error('회원가입 중 에러 발생:', error);
-    alert('회원가입 중 에러 발생');
+    console.error('회원가입 중 에러 발생:', error.message);
+    alert(error.message);
   }
 }
 

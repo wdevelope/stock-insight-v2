@@ -21,7 +21,6 @@ async function fetchPostDetails() {
     const defaultImageUrl = 'https://ifh.cc/g/a2Sg64.png';
     const authorImage = freeBoard.imgUrl || defaultImageUrl;
 
-    console.log('자유게시판 상세 렌더링 테스트', freeBoard);
     const boardContainer = document.querySelector('.board-container');
 
     // 자유 게시글 상세페이지
@@ -152,7 +151,6 @@ async function fetchComments(freeBoardId) {
     }
 
     const comments = await response.json();
-    console.log('댓글 조회 렌더링 테스트:', comments);
 
     return comments;
   } catch (error) {

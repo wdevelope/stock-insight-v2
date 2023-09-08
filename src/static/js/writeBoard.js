@@ -101,7 +101,6 @@ async function saveAskBoard() {
 async function saveAskBoardReply() {
   const title = document.getElementById('postTitle').value;
   const description = document.getElementById('postContent').value;
-  console.log(title, description);
 
   try {
     const response = await fetch(`/api/askboards/${askReplyBoardId}/replies`, {

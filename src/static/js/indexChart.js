@@ -14,7 +14,6 @@ async function fetchStockData() {
     }
 
     const data = await response.json();
-    console.log(data);
     displayStockData(data);
   } catch (error) {
     console.error('Error fetching stock data:', error);

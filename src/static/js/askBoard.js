@@ -16,7 +16,6 @@ async function RenderAskPosts() {
     }
 
     const data = await response.json();
-    console.log('문의게시판 데이터 렌더링 테스트', data);
 
     data.sort((a, b) => {
       return new Date(b.created_at) - new Date(a.created_at);

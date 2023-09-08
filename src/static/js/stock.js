@@ -69,7 +69,6 @@ async function fetchStocks(page) {
     }
 
     const data = await response.json();
-    console.log('stock 데이터 테스트', data);
     renderStocks(data.data); // 'data' 키에 해당하는 배열 사용
     updateStockCount(data.meta.total);
     updateURL(page);

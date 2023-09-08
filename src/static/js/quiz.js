@@ -32,8 +32,6 @@ async function getRandomStock() {
     const data = await response.json();
     const stocks = data.data;
 
-    console.log(data);
-
     if (stocks) {
       currentStocks = stocks;
       createCards(stocks);

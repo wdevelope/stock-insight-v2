@@ -204,3 +204,16 @@ ul.nav .nav-item .nav-link.active {
 #chattingNickname {
   margin-top: 10px;
 }
+
+.pagination-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+#userQuizzes .list-group-item {
+  background-color: #f7f5f5;
+  margin-bottom: 5px;
+  border: 1px solid #e2e2e2;
+}

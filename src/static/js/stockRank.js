@@ -28,8 +28,6 @@ async function getStockRank() {
       }
     });
 
-    console.log(data);
-
     populateStockList(data);
   } catch (error) {
     console.log(error);
