@@ -15,6 +15,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
     />
     <link rel="stylesheet" href="/static/css/index.css" />
+    <link rel="stylesheet" href="/static/css/news.css" />
   </head>
 
   <body>
@@ -105,52 +106,26 @@
 
     <!-- 🔴 메인  -->
     <main>
-      <!-- 뉴스 헤드라인 -->
+      <!-- 뉴스 리스트 섹션 -->
       <section>
         <h1 class="display-5 mb-4">
-          <i class="fa-solid fa-circle-info"></i> 뉴스 헤드라인
+          <i class="fa-solid fa-circle-info"></i> 뉴스
         </h1>
-        <div class="row">
-          <div class="col-lg-8 mb-4">
-            <a href="#" target="_blank"
-              ><img src="" alt="Main News Image" class="img-fluid"
-            /></a>
-            <h2><a href="#">주요 뉴스 제목</a></h2>
-            <p>주요 뉴스 요약...</p>
-          </div>
-          <div class="col-lg-4">
-            <h3 class="mb-3">가장 많이 본 뉴스</h3>
-            <ul class="list-unstyled"></ul>
-          </div>
+        <div class="row news-list">
+          <!-- JS에서 여기에 뉴스 항목-->
         </div>
       </section>
 
-      <!-- 카테고리별 뉴스 섹션 -->
-      <section class="mt-5">
-        <h2 class="mb-4">최신 주식 뉴스</h2>
-        <div class="row" id="stock-news-section"></div>
-      </section>
-
-      <!-- 페이지네이션 -->
-      <div class="text-center mt-5 mb-5">
-        <button class="btn mx-2 prev-page"><<</button>
-        <!-- 큰 버튼을 위한 btn-lg 클래스, 간격을 위한 mx-2 클래스 -->
-        <button class="btn btn-outline-primary mx-1 page-button" data-page="1">
-          1
-        </button>
-        <button class="btn btn-outline-primary mx-1 page-button" data-page="2">
-          2
-        </button>
-        <button class="btn btn-outline-primary mx-1 page-button" data-page="3">
-          3
-        </button>
-        <button class="btn btn-outline-primary mx-1 page-button" data-page="4">
-          4
-        </button>
-        <button class="btn btn-outline-primary mx-1 page-button" data-page="5">
-          5
-        </button>
-        <button class="btn mx-2 next-page">>></button>
+      <!-- 페이지네이션 부분 -->
+      <div id="pagination">
+        <button onclick="prevGroup()"><<</button>
+        <!-- 페이지네이션 버튼들 -->
+        <button onclick="fetchNews(1)">1</button>
+        <button onclick="fetchNews(2)">2</button>
+        <button onclick="fetchNews(3)">3</button>
+        <button onclick="fetchNews(4)">4</button>
+        <button onclick="fetchNews(5)">5</button>
+        <button onclick="nextGroup()">>></button>
       </div>
     </main>
 
