@@ -13,14 +13,65 @@ export class QuizService {
     private readonly stockService: StockService,
     private schedulerRegistry: SchedulerRegistry,
   ) {}
-  // up, down 퀴즈 제출
+  // 퀴즈 제출 : 한 사람당 10회 제한
   async createQuiz(user: Users, data: CreateQuizDto) {
-    await this.quizRepository.createQuiz(user, data);
+    const id = user.id;
+    const stockId = data.stockId;
 
-    return {
-      statusCode: 201,
-      message: '퀴즈제출 성공',
-    };
+    const currentTime = new Date();
+    currentTime.setHours(currentTime.getHours() + 9);
+    const today = currentTime.toISOString().substring(0, 10).replace(/-/g, '');
+    const updated_date = today;
+
+    const existQuiz = await this.quizRepository
+      .createQueryBuilder('q')
+      .select('q.stockId')
+      .addSelect('q.updated_date')
+      .innerJoin('q.user', 'user')
+      .addSelect('user.id')
+      .where('q.updated_date = :updated_date', {
+        updated_date: updated_date,
+      })
+      .andWhere('q.stockId = :stockId', {
+        stockId: stockId,
+      })
+      .andWhere('user.id = :id', {
+        id: id,
+      })
+      .getRawMany();
+
+    // console.log(existQuiz);
+
+    const existQuizNumber = await this.quizRepository
+      .createQueryBuilder('q')
+      .select('COUNT(*)', 'count')
+      .innerJoin('q.user', 'user')
+      .where('q.updated_date = :updated_date', {
+        updated_date: updated_date,
+      })
+      .andWhere('user.id = :id', {
+        id: id,
+      })
+      .getRawOne();
+
+    const quizNumber = Number(existQuizNumber.count);
+    console.log(quizNumber);
+    console.log(existQuiz[0]);
+
+    if (quizNumber > 9) {
+      return {
+        message: '오늘 제출 횟수를 초과하셨습니다.',
+      };
+    } else {
+      if (existQuiz[0] === undefined) {
+        await this.quizRepository.createQuiz(user, data);
+        return {
+          message: '퀴즈제출 성공',
+        };
+      } else {
+        return { message: '이미 제출 하셨습니다' };
+      }
+    }
   }
   // 퀴즈 확인
   async updateQuiz(): Promise<any> {
@@ -150,9 +201,12 @@ export class QuizService {
     return Math.round(downPercent);
   }
 
-  // 쿼리빌더 이용한 페이지네이션 구현
+  // 쿼리빌더 이용한 페이지네이션 구현 (주식명 추가)
   async getUserQuiz(userId: number, page: number = 1) {
-    const queryBuilder = await this.quizRepository.createQueryBuilder('q');
+    const queryBuilder = await this.quizRepository
+      .createQueryBuilder('q')
+      .innerJoin('q.stock', 'stock')
+      .addSelect('stock.prdt_abrv_name');
     if (userId) {
       queryBuilder.innerJoin('q.user', 'user').where('user.id = :id', {
         id: userId,
