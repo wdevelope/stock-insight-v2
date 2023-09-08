@@ -1,0 +1,30 @@
+.stock-header {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+.stock-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.stock-id,
+.stock-price,
+.stock-change,
+.stock-market {
+  flex: 1;
+  text-align: right;
+}
+
+.stock-rank-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.stock-name {
+  flex: 2;
+}

@@ -26,6 +26,22 @@ main {
   padding-left: 260px;
 }
 
+/* 메인 설명 */
+.mainDescription {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.features-title {
+  text-align: center;
+}
+
+.mainDescription details summary {
+  text-align: left;
+  font-size: 1.2rem;
+}
+
 /* 🔥 메뉴 nav바 */
 .navbar {
   background-color: #01161e;
@@ -149,10 +165,10 @@ ul.nav .nav-item .nav-link.active {
 }
 
 /* 🔥 퀴즈 */
-.clickable-title:hover {
+.quiz-bodyclik:hover {
   cursor: pointer;
-  font-weight: bold;
-  color: navy;
+  color: #007bff;
+  transform: scale(1.02);
 }
 
 .custom-btn {
@@ -163,11 +179,16 @@ ul.nav .nav-item .nav-link.active {
 }
 
 .current-price-text {
-  font-size: 1rem;
+  font-size: 0.8rem;
 }
 
 .current-price-value {
-  color: red;
+  color: black;
+  font-size: 1.3rem;
+}
+
+.change-price-value {
+  font-size: 0.9rem;
 }
 /* 🔥 채팅박스 */
 #chat-box {

@@ -25,6 +25,8 @@ export class BoardSearchService {
           created_at: board.created_at,
           updated_at: board.updated_at,
           nickname: board.user.nickname,
+          imgUrl: board.user.imgUrl,
+          status: board.user.status,
         },
       });
     }
@@ -56,7 +58,7 @@ export class BoardSearchService {
     findBoardDto: FindBoardDto,
   ): Promise<{ data: Board[]; meta: any }> {
     const { title, description, nickname } = findBoardDto;
-    const take = 20; // 한 페이지당 가져올 문서 개수
+    const take = 15; // 한 페이지당 가져올 문서 개수
     const from = (page - 1) * take; // 시작 위치 계산
 
     const mustClauses = [];

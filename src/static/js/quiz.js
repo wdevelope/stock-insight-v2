@@ -18,15 +18,12 @@ function getRandomPage() {
 async function getRandomStock() {
   const randomPage = getRandomPage();
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/stocks/?page=${randomPage}`,
-      {
-        headers: {
-          'content-type': 'application/json',
-          Authorization: token,
-        },
+    const response = await fetch(`/api/stocks/?page=${randomPage}`, {
+      headers: {
+        'content-type': 'application/json',
+        Authorization: token,
       },
-    );
+    });
 
     if (!response.ok) {
       throw new Error('Failed to fetch stocks.');
@@ -60,19 +57,27 @@ function createCards(stocks) {
   stocks.forEach((stock, index) => {
     const card = `
                   <div class="col-md-3 mb-4">
-                    <div class="card" style="height: 400px;">
+                    <div class="card" style="height: 300px;">
                       <div class="card-header"><i class="fa-brands fa-square-pinterest me-2"></i>${
                         stock.rprs_mrkt_kor_name
                       }</div>
                       <div class="card-body" style="position: relative;">
-                          <h3 class="card-title clickable-title" id="stock-name-title-${index}" onclick="navigateToStockDetail('${
-                            stock.id
-                          }')">${stock.prdt_abrv_name}</h3>
-                        <h4 class="card-subtitle mb-2 text-muted" id="stock-price-${index}">
-                          <span class="current-price-text">현재가</span> <br> 
-                          <span class="current-price-value">${parseInt(
-                            stock.stck_prpr,
-                          ).toLocaleString()}원</span>
+                        <div class="quiz-bodyclik" onclick="navigateToStockDetail('${
+                          stock.id
+                        }')">
+                            <h4 class="card-title clickable-title" id="stock-name-title-${index}" >${
+                              stock.prdt_abrv_name
+                            }</h4>
+                          <h4 class="card-subtitle mb-2 text-muted" id="stock-price-${index}">
+                            <span class="current-price-text">현재가</span> <br> 
+                            <span class="current-price-value">${parseInt(
+                              stock.stck_prpr,
+                            ).toLocaleString()}원</span>
+                        
+                            <span class="change-price-value" style="color:${
+                              stock.prdy_vrss_sign === '5' ? 'red' : 'green'
+                            };"> (${stock.prdy_ctrt}%)</span>
+                          </div>
                         </h4>
                       
                         <div class="buttons-container d-flex justify-content-between mt-4" style="position: absolute; bottom: 10px; width: 100%;">
@@ -102,7 +107,7 @@ async function submitQuiz(prediction, index) {
   };
 
   try {
-    const response = await fetch('http://localhost:3000/quiz/submit', {
+    const response = await fetch('/quiz/submit', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

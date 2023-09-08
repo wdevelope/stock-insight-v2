@@ -32,18 +32,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  const token = getCookie('Authorization');
-
   if (!token) {
     alert('로그인이 필요합니다.');
-    window.location.href = 'http://localhost:3000';
+    window.location.href = '';
   }
 });
 
 // 🟠 유저 디테일 불러오기
 async function fetchUserDetails() {
   try {
-    const response = await fetch('http://localhost:3000/api/users', {
+    const response = await fetch('/api/users', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -100,7 +98,7 @@ function logout() {
   }
   deleteCookie('Authorization');
   alert('로그아웃 완료');
-  window.location.href = 'http://localhost:3000';
+  window.location.href = '';
 }
 
 // 🟠 query url에서 Id값들 가져오는 코드들
@@ -132,20 +130,6 @@ function toggleControlButtons() {
     controlButtons.style.display = 'none';
   }
 }
-
-// 🟠 페이지 네이션 다음페이지
-const nextGroup = () => {
-  currentGroup++;
-  updatePaginationUI();
-};
-
-// 🟠 페이지 네이션 이전페이지
-const prevGroup = () => {
-  if (currentGroup > 1) {
-    currentGroup--;
-    updatePaginationUI();
-  }
-};
 
 // 🟠 뒤로가기
 window.addEventListener('pageshow', (event) => {

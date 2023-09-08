@@ -24,7 +24,7 @@ async function verifyEmail() {
   };
 
   try {
-    const response = await fetch('http://localhost:3000/api/users/email', {
+    const response = await fetch('/api/users/email', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -57,16 +57,13 @@ async function checkEmailCode() {
   };
 
   try {
-    const response = await fetch(
-      'http://localhost:3000/api/users/verifyEmail',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+    const response = await fetch('/api/users/verifyEmail', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    );
+      body: JSON.stringify(data),
+    });
 
     if (response.status === 201) {
       alert('이메일 인증이 완료되었습니다.');
@@ -91,7 +88,7 @@ async function loginUser() {
   };
 
   try {
-    const response = await fetch('http://localhost:3000/api/users/login', {
+    const response = await fetch('/api/users/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -107,7 +104,7 @@ async function loginUser() {
       // 토큰을 쿠키에 저장
       setCookie('Authorization', `Bearer ${result.token}`, 3); // 3은 시간설정
 
-      window.location.href = 'http://localhost:3000/view/index.html';
+      window.location.href = '/view/index.html';
     } else {
       alert(result.message || '로그인 실패');
     }
@@ -144,7 +141,7 @@ async function signup() {
   };
 
   try {
-    const response = await fetch('http://localhost:3000/api/users', {
+    const response = await fetch('/api/users', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

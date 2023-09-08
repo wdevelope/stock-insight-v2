@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
+import { BoardResponseDto } from './dto/board-response.dto';
 import { Board } from './entities/board.entity';
 import { Users } from 'src/users/users.entity';
 import { BoardsRepository } from './boards.repository';
@@ -19,20 +20,23 @@ export class BoardsService {
     private readonly boardSearchService: BoardSearchService,
   ) {}
 
-  async paginate(page: number = 1): Promise<{ data: Board[]; meta: any }> {
-    /**페이지 상 보일 개수*/
-    const take = 15;
-
-    const [boards, total] =
-      await this.boardsRepository.findAndCountWithPagination(page, take);
-
+  // 페이지네이션 조회
+  async findAndCountWithPagination(
+    page: number,
+    take: number,
+  ): Promise<{ data: BoardResponseDto[]; meta: any }> {
+    const [boards, totalCount] =
+      await this.boardsRepository.getBoardsWithSortingAndPagination(
+        page,
+        take,
+        {
+          'board.created_at': 'DESC',
+        },
+      );
+    const lastPage = Math.ceil(totalCount / take);
     return {
       data: boards,
-      meta: {
-        total,
-        page,
-        last_page: Math.ceil(total / take),
-      },
+      meta: { totalCount, lastPage },
     };
   }
 
@@ -40,56 +44,66 @@ export class BoardsService {
   async getBoardsOrderByViewCount(
     page: number,
     take: number,
-  ): Promise<{ data: Board[]; meta: any }> {
-    const [boards, total] =
-      await this.boardsRepository.getBoardsOrderByViewCount(page, take);
-
+  ): Promise<{ data: BoardResponseDto[]; meta: any }> {
+    const [boards, totalCount] =
+      await this.boardsRepository.getBoardsWithSortingAndPagination(
+        page,
+        take,
+        {
+          'board.viewCount': 'DESC', // DESC로 변경하여 조회수가 많은 게시물부터 내림차순으로 가져옵니다.
+        },
+      );
+    const lastPage = Math.ceil(totalCount / take);
     return {
       data: boards,
-      meta: {
-        total,
-        page,
-        last_page: Math.ceil(total / take),
-      },
+      meta: { totalCount, lastPage },
     };
   }
+
   // 좋아요 정렬
   async getBoardsOrderByLikeCount(
     page: number,
     take: number,
-  ): Promise<{ data: Board[]; meta: any }> {
-    const [boards, total] =
-      await this.boardsRepository.getBoardsOrderByLikeCount(page, take);
-
+  ): Promise<{ data: BoardResponseDto[]; meta: any }> {
+    const [boards, totalCount] =
+      await this.boardsRepository.getBoardsWithSortingAndPagination(
+        page,
+        take,
+        {
+          'board.likeCount': 'DESC',
+        },
+      );
+    const lastPage = Math.ceil(totalCount / take);
     return {
       data: boards,
-      meta: {
-        total,
-        page,
-        last_page: Math.ceil(total / take),
-      },
+      meta: { totalCount, lastPage },
     };
   }
-  //랭커유저 정렬
+
+  // 랭커유저 정렬
   async getBoardsOrderByRanker(
     page: number,
     take: number,
-  ): Promise<{ data: Board[]; meta: any }> {
-    const [boards, total] = await this.boardsRepository.getBoardsOrderByRanker(
-      page,
-      take,
-    );
-
+  ): Promise<{ data: BoardResponseDto[]; meta: any }> {
+    const [boards, totalCount] =
+      await this.boardsRepository.getBoardsWithSortingAndPagination(
+        page,
+        take,
+        {
+          'board.created_at': 'DESC',
+        },
+        {
+          'user.status': 'ranker',
+        },
+      );
+    const lastPage = Math.ceil(totalCount / take);
     return {
       data: boards,
-      meta: {
-        total,
-        page,
-        last_page: Math.ceil(total / take),
-      },
+      meta: { totalCount, lastPage },
     };
   }
 
+  // 보드 유저아이디 찾기
   async getBoardsByUserId(
     page: number,
     findBoardDto: FindBoardDto,
