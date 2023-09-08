@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, MoreThanOrEqual, Not, Repository } from 'typeorm';
+import { In, Like, MoreThanOrEqual, Not, Repository } from 'typeorm';
 import axios from 'axios';
 import { StockPrice } from './entities/stockPrice.entity';
 import { Stock } from './entities/stock.entity';
@@ -337,6 +337,50 @@ export class StockService {
         page,
         last_page: Math.ceil(total / take),
       },
+    };
+  }
+
+  async getStockQuiz(): Promise<any> {
+    const stockCodes = [
+      '005930',
+      '373220',
+      '207940',
+      '005490',
+      '005380',
+      '035420',
+      '105560',
+      '086520',
+      '091990',
+      '277810',
+      '035900',
+      '263750',
+    ];
+    const stocks = await this.stockRepository.find({
+      where: {
+        id: In(stockCodes),
+      },
+      relations: ['stockPrices'],
+    });
+    return {
+      data: stocks.map((stock) => {
+        const latestPrice = stock.stockPrices.reduce((latest, price) => {
+          if (!latest || price.created_at > latest.created_at) {
+            return price;
+          }
+          return latest;
+        }, null);
+
+        return {
+          id: stock.id,
+          prdt_abrv_name: stock.prdt_abrv_name,
+          rprs_mrkt_kor_name: stock.rprs_mrkt_kor_name,
+          stck_prpr: latestPrice.stck_prpr,
+          prdy_vrss: latestPrice.prdy_vrss,
+          prdy_vrss_sign: latestPrice.prdy_vrss_sign,
+          prdy_ctrt: latestPrice.prdy_ctrt,
+          hts_avls: latestPrice.hts_avls,
+        };
+      }),
     };
   }
   async getStockRank(): Promise<any> {
