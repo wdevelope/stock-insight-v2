@@ -8,6 +8,7 @@ import { UpdateNoticeboardDto } from './dto/update-noticeboard.dto';
 import { NoticeBoard } from './entities/noticeboard.entity';
 import { Users } from 'src/users/users.entity';
 import { NoticeBoardsRepository } from './noticeboards.repository';
+import { NoticeBoardResponseDto } from './dto/noticeboard-response.dto';
 
 @Injectable()
 export class NoticeboardsService {
@@ -23,6 +24,26 @@ export class NoticeboardsService {
     } catch (error) {
       throw new BadRequestException('SERVICE_ERROR');
     }
+  }
+
+  // 페이지네이션 조회
+  async findAndCountWithPagination(
+    page: number,
+    take: number,
+  ): Promise<{ data: NoticeBoardResponseDto[]; meta: any }> {
+    const [boards, totalCount] =
+      await this.noticeBoardRepository.getBoardsWithSortingAndPagination(
+        page,
+        take,
+        {
+          'board.created_at': 'DESC',
+        },
+      );
+    const lastPage = Math.ceil(totalCount / take);
+    return {
+      data: boards,
+      meta: { totalCount, lastPage },
+    };
   }
 
   async findOne(noticeBoardId: number): Promise<NoticeBoard> {

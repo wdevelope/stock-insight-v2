@@ -5,6 +5,7 @@ import { FindOneOptions, Repository } from 'typeorm';
 import { Users } from 'src/users/users.entity';
 import { CreateNoticeboardDto } from './dto/create-noticeboard.dto';
 import { UpdateNoticeboardDto } from './dto/update-noticeboard.dto';
+import { NoticeBoardResponseDto } from './dto/noticeboard-response.dto';
 
 @Injectable()
 export class NoticeBoardsRepository {
@@ -23,6 +24,53 @@ export class NoticeBoardsRepository {
     } catch (error) {
       throw new BadRequestException('REPOSITORY_ERROR');
     }
+  }
+
+  public async getBoardsWithSortingAndPagination(
+    page: number,
+    take: number,
+    order: { [key: string]: 'ASC' | 'DESC' },
+    additionalWhere?: { [key: string]: any },
+  ): Promise<[NoticeBoardResponseDto[], number]> {
+    const qb = this.noticeBoardsRepository
+      .createQueryBuilder('board')
+      .leftJoin('board.user', 'user')
+      .select([
+        'board.id',
+        'board.title',
+        'board.description',
+        'board.image',
+        'board.likeCount',
+        'board.viewCount',
+        'board.created_at',
+        'board.updated_at',
+        'user.nickname',
+        'user.imgUrl',
+        'user.status',
+      ])
+      .orderBy(order)
+      .skip((page - 1) * take)
+      .take(take);
+
+    if (additionalWhere) {
+      for (const [key, value] of Object.entries(additionalWhere)) {
+        qb.andWhere(`${key} = :value`, { value });
+      }
+    }
+
+    const [results, total] = await qb.getManyAndCount();
+
+    const formattedBoards = results.map((result) => ({
+      id: result.id,
+      title: result.title,
+      description: result.description,
+      image: result.image,
+      created_at: result.created_at,
+      updated_at: result.updated_at,
+      nickname: result.user.nickname,
+    }));
+
+    return [formattedBoards, total];
   }
 
   async findOne(
