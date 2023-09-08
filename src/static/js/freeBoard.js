@@ -79,7 +79,7 @@ async function fetchAndRenderPosts(
     for (const post of data) {
       const postDate = post.created_at.split('T')[0];
       const isNewPost =
-        postDate === today ? '<i class="fa-solid fa-n"></i>' : '';
+        postDate === today ? '<span class="newFreePost">N</span>' : '';
       const likesCount = post.likeCount;
       const viewsCount = post.viewCount;
       const userImageUrl = post.imgUrl || DEFAULT_IMAGE_URL;

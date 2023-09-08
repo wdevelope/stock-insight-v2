@@ -86,8 +86,13 @@ export class AskboardsController {
   async createReply(
     @Param('askBoardId') askBoardId: number,
     @Body(ValidationPipe) createReplyDto: CreateReplyDto,
+    @CurrentUser() user: Users,
   ) {
-    return await this.askboardsService.createReply(askBoardId, createReplyDto);
+    return await this.askboardsService.createReply(
+      askBoardId,
+      createReplyDto,
+      user,
+    );
   }
 
   // 문의게시판 답글 조회

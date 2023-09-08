@@ -73,6 +73,7 @@ export class AskboardsRepository {
     }
     return updatedAskboard;
   }
+
   // 문의 게시글 저장
   async save(createAskboardDto: CreateAskboardDto, user: Users): Promise<void> {
     try {

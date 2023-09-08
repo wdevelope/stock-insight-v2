@@ -39,7 +39,7 @@ async function fetchStockDetail() {
     const response = await fetch(`/api/stocks/price/${id}`);
     const data = await response.json();
     renderStockDetail(data);
-
+    console.log(data);
     const chartData = data.prices.map((item) => ({
       date: new Date(item.time),
       price: parseFloat(item.price),
@@ -171,8 +171,8 @@ function renderChart(chartData) {
 
   const labels = chartData.map((data) => {
     const date = new Date(data.date);
-    date.setHours(date.getHours() + 18);
-    date.setMinutes(date.getMinutes() + 30);
+    date.setHours(date.getHours() + 9);
+    date.setMinutes(date.getMinutes());
     return date.toISOString().slice(11, 16);
   });
 
