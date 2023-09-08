@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 async function fetchFavoriteStocks() {
   try {
-    const response = await fetch('http://localhost:3000/api/stocks/mystock', {
+    const response = await fetch('/api/stocks/mystock', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -23,64 +23,128 @@ async function fetchFavoriteStocks() {
   }
 }
 
+// 즐겨찾기 카드 렌더링
 function displayFavoriteStocks(stocks) {
-  const stockListContainer = document.getElementById('favoriteStockList');
-  stockListContainer.innerHTML = ''; // 기존 목록 초기화
+  const cardsContainer = document.querySelector('.cards-container');
+  cardsContainer.innerHTML = '';
 
-  stocks.map((stock) => {
-    const stockCard = document.createElement('div');
-    stockCard.className = 'card text-white bg-dark mb-4 col-md-3 mx-2';
-    stockCard.style.maxWidth = '18rem';
+  const cardRow = document.createElement('div');
+  cardRow.className = 'row';
+  cardsContainer.appendChild(cardRow);
 
-    const cardHeader = document.createElement('div');
-    cardHeader.className = 'card-header';
+  stocks.forEach((stock, index) => {
+    const priceChange = stock.prdy_ctrt;
+    let priceChangeColor;
+    if (priceChange > 0) {
+      priceChangeColor = '#f3722ca5';
+    } else if (priceChange < 0) {
+      priceChangeColor = '#a3cef1';
+    } else {
+      priceChangeColor = '#b0b5c2b7';
+    }
 
-    const stockIdText = document.createElement('span');
-    stockIdText.textContent = stock.stockId; // 종목 코드를 설정
+    const card = `
+                  <div class="col-md-3 mb-4">
+                      <div class="card" style="height: 400px; background-color:${priceChangeColor}; border: none;" onclick="navigateToStockDetail('${
+                        stock.stockId
+                      }')">
+                      <div class="card-header">
+                        ${stock.prdt_abrv_name} <br>(${stock.stockId})
+                        <span class="delete-button" style="position: absolute; top: 5px; right: 5px; cursor: pointer;" onclick="event.stopPropagation(); deleteMyStock('${
+                          stock.stockId
+                        }');">❌</span>
 
-    const deleteButton = document.createElement('span');
-    deleteButton.innerHTML = '❌';
-    deleteButton.className = 'delete-button'; // CSS 클래스 적용
-    deleteButton.onclick = (e) => {
-      e.stopPropagation(); // 상위 요소로의 이벤트 전파를 막음
-      deleteMyStock(stock.stockId);
-    };
+                      </div>
+                      <div class="card-body" style="position: relative;">                
+                        <canvas id="stock-chart-${index}" style="position: relative; height: 60%; width: 100%;"></canvas>
+                        <h4 class="card-subtitle mb-2 text-muted" id="stock-price-${index}">
+                        <br>
+                          <span class="current-price-text">현재가</span> 
+                          <br/>
+                          <span class="current-price-value">${parseInt(
+                            stock.stck_prpr,
+                            10,
+                          ).toLocaleString()} 원</span>
+                          <span class="current-price-value">(${priceChange.toLocaleString()}%)</span> 
+                        </h4>
+                      </div>
+                    </div>
+                  </div>
+                `;
 
-    cardHeader.appendChild(stockIdText);
-    cardHeader.appendChild(deleteButton);
-
-    const cardBody = document.createElement('div');
-    cardBody.className = 'card-body';
-
-    const cardTitle = document.createElement('h5');
-    cardTitle.className = 'card-title';
-    cardTitle.textContent = stock.prdt_abrv_name; // 종목명을 카드 제목으로 설정
-
-    cardBody.appendChild(cardTitle);
-
-    stockCard.appendChild(cardHeader);
-    stockCard.appendChild(cardBody);
-
-    stockListContainer.appendChild(stockCard);
-
-    stockCard.onclick = () => {
-      window.location.href = `http://localhost:3000/view/stocksInfo.html?id=${stock.stockId}`;
-    };
+    cardRow.innerHTML += card;
+    setTimeout(() => {
+      const canvasElement = document.getElementById(`stock-chart-${index}`);
+      renderChartForFavorite(canvasElement, stock.prices);
+    }, 0);
   });
 }
 
-async function deleteMyStock(stockId) {
-  try {
-    const response = await fetch(
-      `http://localhost:3000/api/stocks/mystock/${stockId}`,
-      {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token,
+// 차트 만들기
+function renderChartForFavorite(canvasElement, chartData) {
+  chartData = chartData.reverse();
+
+  const labels = chartData.map((data) => {
+    const date = new Date(data.date);
+    date.setHours(date.getHours() + 5);
+    date.setMinutes(date.getMinutes() + 40);
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    });
+  });
+  const prices = chartData.map((data) => data.price);
+
+  const maxPrice = Math.max(...prices);
+  const minPrice = Math.min(...prices);
+  const padding = (maxPrice - minPrice) * 0.05;
+
+  new Chart(canvasElement, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          data: prices,
+          borderWidth: 1,
+          borderColor: 'white',
+          fill: true,
+          pointRadius: 0,
+          showLine: true,
+          label: '',
+        },
+      ],
+    },
+    options: {
+      plugins: {
+        legend: {
+          display: false,
         },
       },
-    );
+      scales: {
+        x: {
+          display: false,
+        },
+        y: {
+          min: minPrice - padding,
+          max: maxPrice + padding,
+        },
+      },
+    },
+  });
+}
+
+// 즐겨찾기 종목 지우기
+async function deleteMyStock(stockId) {
+  try {
+    const response = await fetch(`/api/stocks/mystock/${stockId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+    });
 
     if (!response.ok) {
       throw new Error('Failed to delete the stock from favorites.');
@@ -91,4 +155,8 @@ async function deleteMyStock(stockId) {
   } catch (error) {
     console.error('Error:', error);
   }
+}
+
+function navigateToStockDetail(id) {
+  window.location.href = `stocksInfo.html?id=${id}`;
 }

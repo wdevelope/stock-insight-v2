@@ -5,14 +5,11 @@ document.addEventListener('DOMContentLoaded', function () {
 // ⚪ 자유게시판 상세페이지 렌더링
 async function fetchPostDetails() {
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/boards/${freeBoardId}`,
-      {
-        headers: {
-          Authorization: token,
-        },
+    const response = await fetch(`/api/boards/${freeBoardId}`, {
+      headers: {
+        Authorization: token,
       },
-    );
+    });
 
     if (!response.ok) {
       throw new Error('패치 응답 에러');
@@ -24,7 +21,6 @@ async function fetchPostDetails() {
     const defaultImageUrl = 'https://ifh.cc/g/a2Sg64.png';
     const authorImage = freeBoard.imgUrl || defaultImageUrl;
 
-    console.log('자유게시판 상세 렌더링 테스트', freeBoard);
     const boardContainer = document.querySelector('.board-container');
 
     // 자유 게시글 상세페이지
@@ -34,7 +30,7 @@ async function fetchPostDetails() {
                                             <div class="d-flex justify-content-between align-items-center position-relative"> 
                                                 <h3>${freeBoard.title}</h3>
                                                 <div class="putdelbutton position-absolute end-0" style="top: 100%;"> 
-                                                  <a href="http://localhost:3000/view/freeEditBoard.html?freeEditBoardId=${freeBoard.id}" class="btn btn-secondary edit-post">수정</a>
+                                                  <a href="/view/freeEditBoard.html?freeEditBoardId=${freeBoard.id}" class="btn btn-secondary edit-post">수정</a>
                                                   <button class="btn btn-secondary delete-post" onclick="deleteFreePost()">삭제</button>
                                                 </div>
                                                 <button
@@ -119,23 +115,20 @@ async function fetchPostDetails() {
 //⚪ 게시글 삭제 함수
 async function deleteFreePost() {
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/boards/${freeBoardId}`,
-      {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token,
-        },
+    const response = await fetch(`/api/boards/${freeBoardId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
       },
-    );
+    });
 
     if (!response.ok) {
       throw new Error('삭제 권한이 없습니다.');
     }
 
     alert('게시글이 삭제되었습니다.');
-    window.location.href = 'http://localhost:3000/view/freeBoard.html';
+    window.location.href = '/view/freeBoard.html';
   } catch (error) {
     alert('게시글 삭제에 실패했습니다.');
     console.error('Error deleting post:', error);
@@ -145,23 +138,19 @@ async function deleteFreePost() {
 // ⚪ 댓글 조회
 async function fetchComments(freeBoardId) {
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/boards/${freeBoardId}/comments`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token,
-        },
+    const response = await fetch(`/api/boards/${freeBoardId}/comments`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
       },
-    );
+    });
 
     if (!response.ok) {
       throw new Error('Failed to fetch comments');
     }
 
     const comments = await response.json();
-    console.log('댓글 조회 렌더링 테스트:', comments);
 
     return comments;
   } catch (error) {
@@ -176,17 +165,14 @@ async function createComment() {
   const commentContent = commentBox.value;
 
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/boards/${freeBoardId}/comments`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token,
-        },
-        body: JSON.stringify({ comment: commentContent }),
+    const response = await fetch(`/api/boards/${freeBoardId}/comments`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
       },
-    );
+      body: JSON.stringify({ comment: commentContent }),
+    });
 
     if (!response.ok) {
       throw new Error('Failed to post comment');
@@ -204,7 +190,7 @@ async function createComment() {
 async function deleteComment(commentId) {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/boards/${freeBoardId}/comments/${commentId}`,
+      `/api/boards/${freeBoardId}/comments/${commentId}`,
       {
         method: 'DELETE',
         headers: {
@@ -229,16 +215,13 @@ async function deleteComment(commentId) {
 // ⚪ 좋아요 기능
 async function handleLikeClick() {
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/likes/${freeBoardId}`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: token,
-          'Content-Type': 'application/json',
-        },
+    const response = await fetch(`/api/likes/${freeBoardId}`, {
+      method: 'POST',
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json',
       },
-    );
+    });
 
     if (response.status === 201) {
       await fetchPostDetails();

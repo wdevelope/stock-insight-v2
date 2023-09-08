@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // 🟢 공지사항 게시글 랜더링 함수
 async function RenderNoticePosts() {
   try {
-    const response = await fetch('http://localhost:3000/api/noticeboards', {
+    const response = await fetch('/api/noticeboards', {
       headers: {
         Authorization: token,
       },
@@ -16,7 +16,6 @@ async function RenderNoticePosts() {
     }
 
     const data = await response.json();
-    console.log('공지게시판 데이터 렌더링 테스트', data);
     data.sort((a, b) => {
       return new Date(b.created_at) - new Date(a.created_at);
     });
@@ -31,7 +30,7 @@ async function RenderNoticePosts() {
       const userImageUrl = post.user.imgUrl || DEFAULT_IMAGE_URL;
 
       postHTML += `
-                    <a href="http://localhost:3000/view/noticeBoardInfo.html?noticeBoardId=${post.id}" class="list-group-item list-group-item-action"
+                    <a href="/view/noticeBoardInfo.html?noticeBoardId=${post.id}" class="list-group-item list-group-item-action"
                     onclick="handleBoardItemClick(${post.id})">
 
                       <div class="d-flex justify-content-between align-items-center">
@@ -58,7 +57,7 @@ async function RenderNoticePosts() {
 // 🟢 조회수 불러오기
 async function viewsRender(boardId) {
   try {
-    const response = await fetch(`http://localhost:3000/api/views/${boardId}`, {
+    const response = await fetch(`/api/views/${boardId}`, {
       method: 'GET',
       headers: {
         Authorization: token,
@@ -81,7 +80,7 @@ async function viewsRender(boardId) {
 // 🟢 좋아요 불러오기
 async function likesRender(boardId) {
   try {
-    const response = await fetch(`http://localhost:3000/api/likes/${boardId}`, {
+    const response = await fetch(`/api/likes/${boardId}`, {
       method: 'GET',
       headers: {
         Authorization: token,
@@ -103,7 +102,7 @@ async function likesRender(boardId) {
 
 // 🟢 게시판 항목 클릭 이벤트 핸들러
 function handleBoardItemClick(boardId) {
-  fetch(`http://localhost:3000/api/views/${boardId}`, {
+  fetch(`/api/views/${boardId}`, {
     method: 'POST',
     headers: {
       Authorization: token, // 필요한 경우 인증 토큰 포함

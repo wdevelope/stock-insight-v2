@@ -36,18 +36,11 @@
           >
             <span class="navbar-toggler-icon"></span>
           </button>
-          <a
-            class="navbar-brand text-light"
-            href="http://localhost:3000/view/index.html"
-          >
+          <a class="navbar-brand text-light" href="/view/index.html">
             <i class="fa-brands fa-stack-overflow"> stock insight</i>
           </a>
           <!-- 알림,회원 -->
           <div class="d-flex ms-auto">
-            <!-- 알림 -->
-            <button class="btn btn-outline-light me-2">
-              <i class="fas fa-bell fa-2x"></i>
-            </button>
             <!-- 회원 -->
             <button class="btn btn-outline-light" onclick="toggleProfile()">
               <i class="fas fa-user fa-2x"></i>
@@ -65,11 +58,7 @@
               <div><strong>이메일:</strong> <span id="email"></span></div>
             </div>
             <!-- 회원상세정보 버튼 -->
-            <a
-              href="http://localhost:3000/view/userInfo.html"
-              class="custom-button"
-              >회원상세정보</a
-            >
+            <a href="/view/userInfo.html" class="custom-button">회원상세정보</a>
             <!-- 로그아웃 버튼 -->
             <button onclick="logout()" class="custom-button">로그아웃</button>
           </div>
@@ -81,16 +70,7 @@
         class="d-flex flex-column align-items-start bg-light p-4 d-none d-lg-block left-nav-border"
       >
         <a
-          href="http://localhost:3000/view/search.html"
-          class="d-flex align-items-center my-3 sidebar"
-          role="button"
-          aria-label="search"
-        >
-          <i class="fa-solid fa-magnifying-glass me-2" aria-hidden="true"></i>
-          search
-        </a>
-        <a
-          href="http://localhost:3000/view/news.html"
+          href="/view/news.html"
           class="d-flex align-items-center my-3 sidebar"
           role="button"
           aria-label="Economy"
@@ -98,7 +78,7 @@
           <i class="fa-regular fa-newspaper me-2"></i> news
         </a>
         <a
-          href="http://localhost:3000/view/stocksLike.html"
+          href="/view/stocksLike.html"
           class="d-flex align-items-center my-3 sidebar"
           role="button"
           aria-label="Analysis"
@@ -106,20 +86,20 @@
           <i class="fas fa-chart-bar me-2" aria-hidden="true"></i> stocks
         </a>
         <a
-          href="http://localhost:3000/view/noticeBoard.html"
-          class="d-flex align-items-center my-3 sidebar"
-          role="button"
-          aria-label="Community"
-        >
-          <i class="fas fa-users me-2" aria-hidden="true"></i> Community
-        </a>
-        <a
-          href="http://localhost:3000/view/quiz.html"
+          href="/view/quiz.html"
           class="d-flex align-items-center my-3 sidebar"
           role="button"
           aria-label="quiz"
         >
           <i class="fa-brands fa-square-pinterest me-2"></i> quiz
+        </a>
+        <a
+          href="/view/noticeBoard.html"
+          class="d-flex align-items-center my-3 sidebar"
+          role="button"
+          aria-label="Community"
+        >
+          <i class="fas fa-users me-2" aria-hidden="true"></i> Community
         </a>
       </nav>
     </header>
@@ -129,19 +109,13 @@
       <!-- 기본 Nav 메뉴 -->
       <ul class="nav nav-pills mt-5">
         <li class="nav-item">
-          <a class="nav-link" href="http://localhost:3000/view/noticeBoard.html"
-            >공지사항</a
-          >
+          <a class="nav-link" href="/view/noticeBoard.html">공지사항</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="http://localhost:3000/view/freeBoard.html"
-            >자유게시판</a
-          >
+          <a class="nav-link" href="/view/freeBoard.html">자유게시판</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="http://localhost:3000/view/askBoard.html"
-            >문의</a
-          >
+          <a class="nav-link" href="/view/askBoard.html">문의</a>
         </li>
       </ul>
       <!-- 게시판 내용 -->
@@ -157,17 +131,17 @@
             <div class="d-flex align-items-center">
               <select
                 id="sortSelector"
-                onchange="onSortOptionChanged()"
+                onchange="handleSortChange()"
                 class="me-2"
               >
-                <option value="default" selected>기본</option>
+                <option value="default" selected>날짜순</option>
                 <option value="view">조회수순</option>
                 <option value="like">좋아요순</option>
                 <option value="ranker">랭커유저</option>
               </select>
               <a
                 class="btn btn-primary"
-                href="http://localhost:3000/view/freeWriteBoard.html"
+                href="/view/freeWriteBoard.html"
                 data-board="notice"
                 >글쓰기</a
               >
@@ -208,9 +182,9 @@
 
           <!-- 검색 버튼 -->
           <button
+            type="submit"
             class="btn btn-primary"
             style="margin-left: 10px"
-            onclick="freeBoardSearch()"
           >
             검색
           </button>

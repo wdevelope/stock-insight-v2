@@ -13,6 +13,7 @@ import {
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
+import { BoardResponseDto } from './dto/board-response.dto';
 import { Board } from './entities/board.entity';
 import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
@@ -50,6 +51,7 @@ export class BoardsController {
     }
   }
 
+  // 보드 검색
   @Get('find')
   @ApiOperation({
     summary: '게시물 조회 API(title & description).',
@@ -80,8 +82,8 @@ export class BoardsController {
   @Get('/page')
   async all(
     @Query('page') page: number = 1,
-  ): Promise<{ data: Board[]; meta: any }> {
-    return await this.boardsService.paginate(page);
+  ): Promise<{ data: BoardResponseDto[]; meta: any }> {
+    return await this.boardsService.findAndCountWithPagination(page, 15);
   }
 
   // 조회수 정렬
@@ -92,9 +94,8 @@ export class BoardsController {
   })
   async getBoardsOrderByViewCount(
     @Query('page') page: number = 1,
-    @Query('take') take: number = 15,
-  ): Promise<{ data: Board[]; meta: any }> {
-    return await this.boardsService.getBoardsOrderByViewCount(page, take);
+  ): Promise<{ data: BoardResponseDto[]; meta: any }> {
+    return await this.boardsService.getBoardsOrderByViewCount(page, 15);
   }
 
   // 좋아요 정렬
@@ -105,9 +106,8 @@ export class BoardsController {
   })
   async getBoardsOrderByLikeCount(
     @Query('page') page: number = 1,
-    @Query('take') take: number = 15,
-  ): Promise<{ data: Board[]; meta: any }> {
-    return await this.boardsService.getBoardsOrderByLikeCount(page, take);
+  ): Promise<{ data: BoardResponseDto[]; meta: any }> {
+    return await this.boardsService.getBoardsOrderByLikeCount(page, 15);
   }
 
   // 랭커유저 정렬
@@ -118,9 +118,8 @@ export class BoardsController {
   })
   async getBoardsOrderByRanker(
     @Query('page') page: number = 1,
-    @Query('take') take: number = 15,
-  ): Promise<{ data: Board[]; meta: any }> {
-    return await this.boardsService.getBoardsOrderByRanker(page, take);
+  ): Promise<{ data: BoardResponseDto[]; meta: any }> {
+    return await this.boardsService.getBoardsOrderByRanker(page, 15);
   }
 
   //보드 상세조회

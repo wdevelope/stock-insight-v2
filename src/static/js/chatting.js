@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', (event) => {
-  const socket = io('http://localhost:3000');
+  const socket = io('');
   event.preventDefault();
 
   const chatBox = document.getElementById('chat-box');
@@ -15,8 +15,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
   socket.on('connect', () => {
     console.log('connected');
-
-    // 서버로부터 메시지를 받습니다.
   });
 
   chatForm.addEventListener('submit', function (event) {

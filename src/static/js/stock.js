@@ -41,16 +41,13 @@ function createAutocompleteContainer() {
 // 주식 이름으로 API 호출하여 검색 (디바운스 적용되는 api)
 async function fetchStocksByQuery(query) {
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/stocks/search?query=${query}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token,
-        },
+    const response = await fetch(`/api/stocks/search?query=${query}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
       },
-    );
+    });
     if (!response.ok) {
       throw new Error('Failed to fetch stock search results.');
     }
@@ -65,16 +62,13 @@ async function fetchStocksByQuery(query) {
 // 페이지 번호를 이용하여 주식 정보 API 호출
 async function fetchStocks(page) {
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/stocks/?page=${page}`,
-    );
+    const response = await fetch(`/api/stocks/?page=${page}`);
 
     if (!response.ok) {
       throw new Error('Failed to fetch stocks.');
     }
 
     const data = await response.json();
-    console.log('stock 데이터 테스트', data);
     renderStocks(data.data); // 'data' 키에 해당하는 배열 사용
     updateStockCount(data.meta.total);
     updateURL(page);
@@ -212,6 +206,20 @@ function updatePaginationUI() {
     }
   }
 }
+
+// 🟠 페이지 네이션 다음페이지
+const nextGroup = () => {
+  currentGroup++;
+  updatePaginationUI();
+};
+
+// 🟠 페이지 네이션 이전페이지
+const prevGroup = () => {
+  if (currentGroup > 1) {
+    currentGroup--;
+    updatePaginationUI();
+  }
+};
 
 function updateURL(page) {
   const currentURL = window.location.href.split('?')[0];

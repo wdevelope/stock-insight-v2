@@ -5,20 +5,16 @@ document.addEventListener('DOMContentLoaded', function () {
 // 🟢 공지게시판 상세페이지 렌더링
 async function fetchNoticePostDetails() {
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/noticeBoards/${noticeBoardId}`,
-      {
-        headers: {
-          Authorization: token,
-        },
+    const response = await fetch(`/api/noticeBoards/${noticeBoardId}`, {
+      headers: {
+        Authorization: token,
       },
-    );
+    });
 
     if (!response.ok) {
       throw new Error('패치 응답 에러');
     }
     const noticeBoard = await response.json();
-    console.log('공지게시판 데이터 테스트', noticeBoard);
     const defaultImageUrl = 'https://ifh.cc/g/a2Sg64.png';
     const authorImage = noticeBoard.user.imgUrl || defaultImageUrl;
 
@@ -56,21 +52,18 @@ async function fetchNoticePostDetails() {
 // 🟢 공지 게시글 삭제 함수
 async function deleteNoticePost() {
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/noticeboards/${noticeBoardId}`,
-      {
-        method: 'DELETE',
-        headers: {
-          Authorization: token,
-        },
+    const response = await fetch(`/api/noticeboards/${noticeBoardId}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: token,
       },
-    );
+    });
     if (!response.ok) {
       throw new Error('Failed to delete the post');
     }
 
     alert('게시글이 삭제되었습니다.');
-    window.location.href = 'http://localhost:3000/view/noticeBoard.html';
+    window.location.href = '/view/noticeBoard.html';
   } catch (error) {
     alert('게시글 삭제에 실패했습니다.');
     console.error('Error deleting post:', error);
@@ -83,17 +76,14 @@ async function createComment() {
   const commentContent = commentBox.value;
 
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/boards/${freeBoardId}/comments`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token,
-        },
-        body: JSON.stringify({ comment: commentContent }),
+    const response = await fetch(`/api/boards/${freeBoardId}/comments`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
       },
-    );
+      body: JSON.stringify({ comment: commentContent }),
+    });
 
     if (!response.ok) {
       throw new Error('Failed to post comment');
@@ -110,16 +100,13 @@ async function createComment() {
 // 🟢 좋아요 기능
 async function handleLikeClick() {
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/likes/${freeBoardId}`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: token,
-          'Content-Type': 'application/json',
-        },
+    const response = await fetch(`/api/likes/${freeBoardId}`, {
+      method: 'POST',
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json',
       },
-    );
+    });
 
     if (response.status === 201) {
       // 좋아요 처리가 성공하면 게시글 상세 정보를 다시 불러옵니다.

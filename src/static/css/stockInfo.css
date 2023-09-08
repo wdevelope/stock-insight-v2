@@ -1,95 +1,96 @@
-body {
-  font-family: 'Arial', sans-serif;
-  background-color: #f7f7f7;
-}
-
 .stock-detail-container {
-  border: 1px solid #e0e0e0;
+  border: 1px solid #29265a;
   padding: 30px;
   max-width: 1000px;
-  margin: 50px auto; /* center the container */
+  margin: 50px auto;
   background-color: #ffffff;
   box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
 }
 
-h1 {
-  font-size: 2.5em;
-  margin-bottom: 20px;
-  color: #333;
-}
-
 .stock-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   border-bottom: 1px solid #e0e0e0;
   padding-bottom: 20px;
-  margin-bottom: 20px;
+  position: relative;
 }
 
-.stock-title h2 {
-  font-size: 1.4em;
+#favoriteButton {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  align-self: center;
+}
+
+.stock-title h4 {
   color: #000000;
   font-weight: bold;
 }
 
 .stock-title p {
-  font-size: 1.2em;
   color: #ff0000;
   font-weight: bold;
-}
-.stock-title p:first-of-type {
-  margin-top: 40px;
+  margin-top: 10px;
 }
 
 .stock-highlights p {
   margin-right: 40px;
-  font-size: 1.2em;
 }
 
 .stock-main-content {
   display: flex;
-  margin-top: 20px;
   flex-wrap: nowrap;
 }
 
 .stock-chart {
-  flex: 1.2;
-  display: flex; /* 이것을 추가합니다. */
-  border: 1px solid #ddd;
-  justify-content: center; /* 가로 중앙 정렬 */
-  align-items: center; /* 세로 중앙 정렬 */
-  height: 370px; /* 또는 원하는 높이값 */
+  flex: 1.6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 450px;
   border-radius: 8px;
-  overflow: hidden;
   padding: 20px;
-  margin-top: 40px;
   margin-right: 10px;
 }
 
 .stock-info {
   flex: 0.6;
   padding: 20px;
-  border-radius: 8px;
-  background-color: #ffffff;
 }
 
-.stock-info > p {
-  font-size: 1.1em;
-  color: #000000;
-  margin-left: 30px;
+#stockInfo > div > i {
+  margin-top: -20px;
 }
-/* 🔥 찜하기 */
 .star-btn {
-  background-color: transparent;
   border: none;
-  font-size: 24px; /* 별의 크기 조정 */
+  font-size: 24px;
   cursor: pointer;
   transition: color 0.3s;
-  margin-bottom: 30px;
-  float: right;
 }
 
 .star-btn.filled {
-  color: gold; /* 채워진 별의 색상 */
+  color: gold;
+}
+
+.info-card {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  margin-bottom: -10px;
+}
+
+.info-card i {
+  font-size: 15px;
+  margin-right: 15px;
+}
+
+.stock-highlights {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.stock-highlights > div > i {
+  margin-bottom: 15px;
 }

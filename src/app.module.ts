@@ -23,6 +23,7 @@ import { HttpExceptionFilter } from './exception/http-exception.filter';
 import { ExceptionModule } from './exception/exception.module';
 import { SearchModule } from './search/search.module';
 import { ChatGateway } from './chat/chat.gateway';
+import { NewsModule } from './news/news.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { ChatGateway } from './chat/chat.gateway';
     AskboardsModule,
     ExceptionModule,
     SearchModule,
+    NewsModule,
   ],
   controllers: [AppController],
   providers: [

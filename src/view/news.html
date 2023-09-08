@@ -15,6 +15,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
     />
     <link rel="stylesheet" href="/static/css/index.css" />
+    <link rel="stylesheet" href="/static/css/news.css" />
   </head>
 
   <body>
@@ -35,18 +36,11 @@
           >
             <span class="navbar-toggler-icon"></span>
           </button>
-          <a
-            class="navbar-brand text-light"
-            href="http://localhost:3000/view/index.html"
-          >
+          <a class="navbar-brand text-light" href="/view/index.html">
             <i class="fa-brands fa-stack-overflow"> stock insight</i>
           </a>
           <!-- 알림,회원 -->
           <div class="d-flex ms-auto">
-            <!-- 알림 -->
-            <button class="btn btn-outline-light me-2">
-              <i class="fas fa-bell fa-2x"></i>
-            </button>
             <!-- 회원 -->
             <button class="btn btn-outline-light" onclick="toggleProfile()">
               <i class="fas fa-user fa-2x"></i>
@@ -64,11 +58,7 @@
               <div><strong>이메일:</strong> <span id="email"></span></div>
             </div>
             <!-- 회원상세정보 버튼 -->
-            <a
-              href="http://localhost:3000/view/userInfo.html"
-              class="custom-button"
-              >회원상세정보</a
-            >
+            <a href="/view/userInfo.html" class="custom-button">회원상세정보</a>
             <!-- 로그아웃 버튼 -->
             <button onclick="logout()" class="custom-button">로그아웃</button>
           </div>
@@ -80,16 +70,7 @@
         class="d-flex flex-column align-items-start bg-light p-4 d-none d-lg-block left-nav-border"
       >
         <a
-          href="http://localhost:3000/view/search.html"
-          class="d-flex align-items-center my-3 sidebar"
-          role="button"
-          aria-label="search"
-        >
-          <i class="fa-solid fa-magnifying-glass me-2" aria-hidden="true"></i>
-          search
-        </a>
-        <a
-          href="http://localhost:3000/view/news.html"
+          href="/view/news.html"
           class="d-flex align-items-center my-3 sidebar"
           role="button"
           aria-label="Economy"
@@ -97,7 +78,7 @@
           <i class="fa-regular fa-newspaper me-2"></i> news
         </a>
         <a
-          href="http://localhost:3000/view/stocksLike.html"
+          href="/view/stocksLike.html"
           class="d-flex align-items-center my-3 sidebar"
           role="button"
           aria-label="Analysis"
@@ -105,72 +86,46 @@
           <i class="fas fa-chart-bar me-2" aria-hidden="true"></i> stocks
         </a>
         <a
-          href="http://localhost:3000/view/noticeBoard.html"
-          class="d-flex align-items-center my-3 sidebar"
-          role="button"
-          aria-label="Community"
-        >
-          <i class="fas fa-users me-2" aria-hidden="true"></i> Community
-        </a>
-        <a
-          href="http://localhost:3000/view/quiz.html"
+          href="/view/quiz.html"
           class="d-flex align-items-center my-3 sidebar"
           role="button"
           aria-label="quiz"
         >
           <i class="fa-brands fa-square-pinterest me-2"></i> quiz
         </a>
+        <a
+          href="/view/noticeBoard.html"
+          class="d-flex align-items-center my-3 sidebar"
+          role="button"
+          aria-label="Community"
+        >
+          <i class="fas fa-users me-2" aria-hidden="true"></i> Community
+        </a>
       </nav>
     </header>
 
     <!-- 🔴 메인  -->
     <main>
-      <!-- 뉴스 헤드라인 -->
+      <!-- 뉴스 리스트 섹션 -->
       <section>
         <h1 class="display-5 mb-4">
-          <i class="fa-solid fa-circle-info"></i> 뉴스 헤드라인
+          <i class="fa-solid fa-circle-info"></i> 뉴스
         </h1>
-        <div class="row">
-          <div class="col-lg-8 mb-4">
-            <a href="#" target="_blank"
-              ><img src="" alt="Main News Image" class="img-fluid"
-            /></a>
-            <h2><a href="#">주요 뉴스 제목</a></h2>
-            <p>주요 뉴스 요약...</p>
-          </div>
-          <div class="col-lg-4">
-            <h3 class="mb-3">가장 많이 본 뉴스</h3>
-            <ul class="list-unstyled"></ul>
-          </div>
+        <div class="row news-list">
+          <!-- JS에서 여기에 뉴스 항목-->
         </div>
       </section>
 
-      <!-- 카테고리별 뉴스 섹션 -->
-      <section class="mt-5">
-        <h2 class="mb-4">최신 주식 뉴스</h2>
-        <div class="row" id="stock-news-section"></div>
-      </section>
-
-      <!-- 페이지네이션 -->
-      <div class="text-center mt-5 mb-5">
-        <button class="btn mx-2 prev-page"><<</button>
-        <!-- 큰 버튼을 위한 btn-lg 클래스, 간격을 위한 mx-2 클래스 -->
-        <button class="btn btn-outline-primary mx-1 page-button" data-page="1">
-          1
-        </button>
-        <button class="btn btn-outline-primary mx-1 page-button" data-page="2">
-          2
-        </button>
-        <button class="btn btn-outline-primary mx-1 page-button" data-page="3">
-          3
-        </button>
-        <button class="btn btn-outline-primary mx-1 page-button" data-page="4">
-          4
-        </button>
-        <button class="btn btn-outline-primary mx-1 page-button" data-page="5">
-          5
-        </button>
-        <button class="btn mx-2 next-page">>></button>
+      <!-- 페이지네이션 부분 -->
+      <div id="pagination">
+        <button onclick="prevGroup()"><<</button>
+        <!-- 페이지네이션 버튼들 -->
+        <button onclick="fetchNews(1)">1</button>
+        <button onclick="fetchNews(2)">2</button>
+        <button onclick="fetchNews(3)">3</button>
+        <button onclick="fetchNews(4)">4</button>
+        <button onclick="fetchNews(5)">5</button>
+        <button onclick="nextGroup()">>></button>
       </div>
     </main>
 

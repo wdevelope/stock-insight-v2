@@ -8,25 +8,44 @@ const riseButton = document.getElementById('rise-button');
 const fallButton = document.getElementById('fall-button');
 const TOTAL_PAGES = 87;
 
-document.addEventListener('DOMContentLoaded', () => getRandomStock());
+document.addEventListener('DOMContentLoaded', () => {
+  const savedDate = localStorage.getItem('quizDate');
+  const todayDate = new Date().toISOString().slice(0, 10); // YYYY-MM-DD format
 
-function getRandomPage() {
-  return Math.floor(Math.random() * TOTAL_PAGES) + 1;
+  if (savedDate && savedDate === todayDate) {
+    const savedStocks = JSON.parse(localStorage.getItem('quizStocks'));
+    if (savedStocks && savedStocks.length > 0) {
+      currentStocks = savedStocks;
+      createCards(savedStocks);
+    } else {
+      getRandomStock();
+    }
+  } else {
+    getRandomStock();
+  }
+});
+
+function getPageByDate() {
+  const today = new Date();
+  const startOfYear = new Date(today.getFullYear(), 0, 1);
+
+  const millisecondsPerDay = 24 * 60 * 60 * 1000;
+  const dayOfYear = Math.floor((today - startOfYear) / millisecondsPerDay) + 1;
+
+  return (dayOfYear % TOTAL_PAGES) + 1;
 }
 
 // 🟢 주식 종목 가져오기
 async function getRandomStock() {
-  const randomPage = getRandomPage();
+  const page = getPageByDate();
+
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/stocks/?page=${randomPage}`,
-      {
-        headers: {
-          'content-type': 'application/json',
-          Authorization: token,
-        },
+    const response = await fetch(`/api/stocks/?page=${page}`, {
+      headers: {
+        'content-type': 'application/json',
+        Authorization: token,
       },
-    );
+    });
 
     if (!response.ok) {
       throw new Error('Failed to fetch stocks.');
@@ -35,11 +54,13 @@ async function getRandomStock() {
     const data = await response.json();
     const stocks = data.data;
 
-    console.log(data);
-
     if (stocks) {
       currentStocks = stocks;
       createCards(stocks);
+
+      const todayDate = new Date().toISOString().slice(0, 10); // YYYY-MM-DD format
+      localStorage.setItem('quizDate', todayDate);
+      localStorage.setItem('quizStocks', JSON.stringify(stocks));
     } else {
       console.error('주식 정보를 가져오는데 실패했습니다.');
     }
@@ -60,19 +81,27 @@ function createCards(stocks) {
   stocks.forEach((stock, index) => {
     const card = `
                   <div class="col-md-3 mb-4">
-                    <div class="card" style="height: 400px;">
+                    <div class="card" style="height: 300px;">
                       <div class="card-header"><i class="fa-brands fa-square-pinterest me-2"></i>${
                         stock.rprs_mrkt_kor_name
                       }</div>
                       <div class="card-body" style="position: relative;">
-                          <h3 class="card-title clickable-title" id="stock-name-title-${index}" onclick="navigateToStockDetail('${
-                            stock.id
-                          }')">${stock.prdt_abrv_name}</h3>
-                        <h4 class="card-subtitle mb-2 text-muted" id="stock-price-${index}">
-                          <span class="current-price-text">현재가</span> <br> 
-                          <span class="current-price-value">${parseInt(
-                            stock.stck_prpr,
-                          ).toLocaleString()}원</span>
+                        <div class="quiz-bodyclik" onclick="navigateToStockDetail('${
+                          stock.id
+                        }')">
+                            <h4 class="card-title clickable-title" id="stock-name-title-${index}" >${
+                              stock.prdt_abrv_name
+                            }</h4>
+                          <h4 class="card-subtitle mb-2 text-muted" id="stock-price-${index}">
+                            <span class="current-price-text">현재가</span> <br> 
+                            <span class="current-price-value">${parseInt(
+                              stock.stck_prpr,
+                            ).toLocaleString()}원</span>
+                        
+                            <span class="change-price-value" style="color:${
+                              stock.prdy_vrss_sign === '5' ? 'red' : 'green'
+                            };"> (${stock.prdy_ctrt}%)</span>
+                          </div>
                         </h4>
                       
                         <div class="buttons-container d-flex justify-content-between mt-4" style="position: absolute; bottom: 10px; width: 100%;">
@@ -102,7 +131,7 @@ async function submitQuiz(prediction, index) {
   };
 
   try {
-    const response = await fetch('http://localhost:3000/quiz/submit', {
+    const response = await fetch('/quiz/submit', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
