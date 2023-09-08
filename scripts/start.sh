@@ -7,7 +7,7 @@ TIME_NOW=$(date +%c)
 
 cd $PROJECT_ROOT
 cp ../.env ./
-sudo pm2 delete $APP_NAME
-sudo pm2 start npm --name $APP_NAME -- run start:prod
+pm2 delete $APP_NAME
+pm2 start npm --name $APP_NAME -- run start:prod
 
 echo "$TIME_NOW > Deploy has been completed"
