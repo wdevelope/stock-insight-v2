@@ -12,4 +12,5 @@ export const TypeOrmConfig: TypeOrmModuleOptions = {
   entities: [__dirname + '/../**/*.entity.{js,ts}'],
   synchronize: true,
   autoLoadEntities: true,
+  timezone: 'UTC',
 };

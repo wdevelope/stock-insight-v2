@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Not, Repository } from 'typeorm';
+import { Like, MoreThanOrEqual, Not, Repository } from 'typeorm';
 import axios from 'axios';
 import { StockPrice } from './entities/stockPrice.entity';
 import { Stock } from './entities/stock.entity';
@@ -258,11 +258,30 @@ export class StockService {
   }
 
   async getStockPrice(id: string): Promise<any> {
-    const stock = await this.stockRepository.findOne({
-      where: { id: id },
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    let stock = await this.stockRepository.findOne({
+      where: {
+        id,
+        stockPrices: {
+          created_at: MoreThanOrEqual(today),
+        },
+      },
       relations: ['stockPrices'],
       order: { stockPrices: { created_at: 'DESC' } },
     });
+
+    if (!stock) {
+      stock = await this.stockRepository.findOne({
+        where: { id },
+        relations: ['stockPrices'],
+        order: { stockPrices: { created_at: 'DESC' } },
+      });
+      if (!stock) {
+        throw new NotFoundException('stock not found');
+      }
+    }
+
     const prices = stock.stockPrices.map((StockPrice) => ({
       price: StockPrice.stck_prpr,
       time: StockPrice.created_at,
