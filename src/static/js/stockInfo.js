@@ -38,7 +38,6 @@ async function fetchStockDetail() {
   try {
     const response = await fetch(`/api/stocks/price/${id}`);
     const data = await response.json();
-    console.log('주식상세정보 데이터 테스트', data);
     renderStockDetail(data);
 
     const chartData = data.prices.map((item) => ({
@@ -152,7 +151,6 @@ async function addFavoriteStock(stockId) {
     });
 
     if (response.status === 201) {
-      console.log('찜한 종목에 추가되었습니다!');
       return response;
     } else if (response.status === 409) {
       alert('이 주식은 이미 찜한 종목에 추가되어 있습니다.');

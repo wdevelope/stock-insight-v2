@@ -15,7 +15,6 @@ async function fetchNoticePostDetails() {
       throw new Error('패치 응답 에러');
     }
     const noticeBoard = await response.json();
-    console.log('공지게시판 데이터 테스트', noticeBoard);
     const defaultImageUrl = 'https://ifh.cc/g/a2Sg64.png';
     const authorImage = noticeBoard.user.imgUrl || defaultImageUrl;
 

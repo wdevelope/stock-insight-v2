@@ -17,7 +17,6 @@ async function fetchAskePostDetails() {
     }
 
     const askBoard = await response.json();
-    console.log('문의게시판 데이터 테스트', askBoard);
 
     const defaultImageUrl = 'https://ifh.cc/g/a2Sg64.png';
     const userImage = askBoard.user.imgUrl || defaultImageUrl;
