@@ -13,4 +13,6 @@ export class UpdateBoardDto extends PartialType(CreateBoardDto) {
   likeCount?: number;
   @ApiProperty({ description: '조회수' })
   viewCount?: number;
+  @ApiProperty({ description: '인덱싱' })
+  is_checked?: boolean;
 }

@@ -29,7 +29,11 @@ export class BoardsRepository {
 
   async findBy(option: FindOneOptions<Board>): Promise<Board[] | undefined> {
     try {
-      return this.boardsRepository.find(option);
+      const optionsWithRelations: FindOneOptions<Board> = {
+        ...option,
+        relations: ['user'], // 'user'는 관련 엔티티의 속성 이름으로 변경해야 할 수 있습니다.
+      };
+      return this.boardsRepository.find(optionsWithRelations);
     } catch (error) {
       throw new BadRequestException('REPOSITORY_ERROR');
     }
@@ -97,8 +101,29 @@ export class BoardsRepository {
             image: updateBoardDto.image,
             likeCount: updateBoardDto.likeCount,
             viewCount: updateBoardDto.viewCount,
+            is_checked: updateBoardDto.is_checked,
           })
           .where('id=:id', { id: boardId })
+          .execute();
+      });
+    } catch (error) {
+      throw new BadRequestException('REPOSITORY_ERROR');
+    }
+  }
+
+  async updateChecked(
+    updateBoardDto: UpdateBoardDto,
+    boardId: number[],
+  ): Promise<void> {
+    try {
+      await this.boardsRepository.manager.transaction(async (transaction) => {
+        await transaction
+          .createQueryBuilder()
+          .update(Board)
+          .set({
+            is_checked: updateBoardDto.is_checked,
+          })
+          .whereInIds(boardId)
           .execute();
       });
     } catch (error) {
