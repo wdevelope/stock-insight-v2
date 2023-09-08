@@ -130,12 +130,21 @@ export class BoardsService {
     }
   }
 
-  @Cron('0 */3 * * * *')
+  @Cron('0 */5 * * * *')
   async indexing(): Promise<void> {
-    const boards: Board[] = await this.boardsRepository.find();
+    const updateBoardDto: UpdateBoardDto = new UpdateBoardDto();
+    updateBoardDto.is_checked = true;
+    const boards: Board[] = await this.boardsRepository.findBy({
+      where: { is_checked: false },
+    });
+
     try {
+      const boardId = boards.map((board) => board.id);
+      await this.boardsRepository.updateChecked(updateBoardDto, boardId);
+
       await this.boardSearchService.indexData(boards);
     } catch (error) {
+      console.log(error);
       throw new BadRequestException('SERVICE_ERROR');
     }
   }
