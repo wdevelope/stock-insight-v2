@@ -47,6 +47,10 @@ export class Board {
   @UpdateDateColumn()
   updated_at: Date;
 
+  @ApiProperty({ description: '인덱싱 체크' })
+  @Column({ default: false })
+  is_checked: boolean;
+
   @ManyToOne(() => Users, (user) => user.board)
   user: Users;
 
