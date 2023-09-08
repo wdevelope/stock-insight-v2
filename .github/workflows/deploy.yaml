@@ -55,6 +55,8 @@ jobs:
           --source .
 
       # (6) S3 버킷에 있는 파일을 대상으로 CodeDeploy 실행
+      - name: Set execute permission on script
+        run: chmod +x /home/ubuntu/app/scripts/start.sh
       - name: Deploy to AWS EC2 from S3
         run: |
           aws deploy create-deployment \
