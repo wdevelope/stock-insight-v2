@@ -85,6 +85,12 @@ export class StockController {
   async getStockPage(@Query('page') page: number = 1): Promise<any> {
     return await this.stockService.getStockPage(page);
   }
+  //http://localhost:3000/api/stocks/quiz
+  @ApiOperation({ summary: '' })
+  @Get('/quiz')
+  async getStockQuiz(): Promise<any> {
+    return await this.stockService.getStockQuiz();
+  }
   //http://localhost:3000/api/stocks/rank/
   @ApiOperation({ summary: '' })
   @Get('/rank')
