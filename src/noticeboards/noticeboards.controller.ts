@@ -9,6 +9,7 @@ import {
   UseGuards,
   ValidationPipe,
   BadRequestException,
+  Query,
 } from '@nestjs/common';
 import { NoticeboardsService } from './noticeboards.service';
 import { CreateNoticeboardDto } from './dto/create-noticeboard.dto';
@@ -19,6 +20,7 @@ import { NoticeBoard } from './entities/noticeboard.entity';
 import { UpdateBoardDto } from 'src/boards/dto/update-board.dto';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiBody } from '@nestjs/swagger';
 import { error } from 'console';
+import { NoticeBoardResponseDto } from './dto/noticeboard-response.dto';
 
 @UseGuards(JwtAuthGuard)
 @ApiTags('noticeboards')
@@ -59,6 +61,17 @@ export class NoticeboardsController {
     } catch (error) {
       throw new BadRequestException('CONTROLLER_ERROR');
     }
+  }
+
+  @ApiOperation({
+    summary: '게시물 조회 API.',
+    description: '게시물을 조회한다.',
+  })
+  @Get('/page')
+  async all(
+    @Query('page') page: number = 1,
+  ): Promise<{ data: NoticeBoardResponseDto[]; meta: any }> {
+    return await this.noticeboardsService.findAndCountWithPagination(page, 15);
   }
 
   @ApiOperation({
