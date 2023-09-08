@@ -1,24 +1,30 @@
 let currentPage = 1;
 const PAGE_SIZE = 14;
+const MAX_PAGES_PER_GROUP = 5;
+let totalNews = 0;
+
+document.addEventListener('DOMContentLoaded', () => {
+  fetchNews();
+});
 
 async function fetchNews(pageNumber = 1) {
-  const API_KEY = 'b66e7dd9acba4b4ba841ef0e6634a6f6'; // NewsAPI의 API 키
-
-  const endDate = new Date();
-  const startDate = new Date();
-  startDate.setDate(endDate.getDate() - 1);
-
-  const START_DATE = startDate.toISOString().slice(0, 10);
-  const END_DATE = endDate.toISOString().slice(0, 10);
-
+  currentPage = pageNumber;
   try {
-    const response = await $.ajax({
-      url: `https://newsapi.org/v2/top-headlines?category=business&country=kr&pageSize=${PAGE_SIZE}&page=${pageNumber}&apiKey=${API_KEY}`,
-      method: 'GET',
-    });
+    const response = await fetch(
+      `http://localhost:3000/search/news?query=${encodeURIComponent(
+        '주식',
+      )}&page=${pageNumber}&pageSize=${PAGE_SIZE}`,
+    );
 
-    if (response.status === 'ok' && response.articles.length > 0) {
-      displayNews(response.articles);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+
+    if (data.items && data.items.length > 0) {
+      displayNews(data.items);
+      updatePaginationButtons(data.total);
     } else {
       console.log('no news');
     }
@@ -28,89 +34,75 @@ async function fetchNews(pageNumber = 1) {
 }
 
 function displayNews(articles) {
-  const mainArticle = articles[0];
-  const defaultImage =
-    'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fE5FV1N8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60';
+  const newsList = document.querySelector('.news-list');
+  newsList.innerHTML = ''; // Clear existing news
 
-  $('.col-lg-8 img').attr('src', mainArticle.urlToImage || defaultImage);
-  $('.col-lg-8 h2').html(
-    `<a href="${mainArticle.url}" target="_blank">${mainArticle.title}</a>`,
-  );
-  $('.col-lg-8 p').text(mainArticle.description);
+  articles.forEach((article, index) => {
+    let newsItem = `
+      <div class="col-lg-${index === 0 ? '12' : '4'} mb-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title"><a href="${article.link}" target="_blank">${
+              article.title
+            }</a></h5>
+            <p class="card-text">${article.description}</p>
+          </div>
+        </div>
+      </div>`;
 
-  $('.col-lg-8 img').wrap(`<a href="${mainArticle.url}" target="_blank"></a>`);
-
-  const mostViewedNews = $('.col-lg-4 ul');
-  mostViewedNews.empty(); // 기존 뉴스 지우기
-  articles.slice(1, 7).forEach((article) => {
-    const imageUrl = article.urlToImage || defaultImage;
-    mostViewedNews.append(`
-                            <li class="mb-3">
-                                <a href="${article.url}" target="_blank"><img src="${imageUrl}" alt="${article.title}" class="img-fluid" style="width: 120px"></a>
-                                <a href="${article.url}" target="_blank">${article.title}</a>
-                            </li>
-                          `);
-  });
-
-  // 최신 주식 뉴스 섹션에 뉴스 추가
-  const stockNewsSection = $('#stock-news-section');
-  stockNewsSection.empty(); // 기존 뉴스 지우기
-  articles.slice(7, 10).forEach((article) => {
-    const imageUrl = article.urlToImage || defaultImage;
-    stockNewsSection.append(`
-                                <div class="col-md-4 mb-4">
-                                    <a href="${article.url}" target="_blank"><img src="${imageUrl}" alt="${article.title}" class="img-fluid"></a>
-                                    <h4 class="mt-2"><a href="${article.url}" target="_blank">${article.title}</a></h4>
-                                    <p>${article.description}</p>
-                                </div>
-                            `);
+    newsList.innerHTML += newsItem;
   });
 }
 
-// 페이지네이션
-function updatePaginationButtons() {
-  // 현재 페이지 그룹 확인 (예: 1-5, 6-10)
-  const group = Math.ceil(currentPage / 5);
+function updatePaginationButtons(total) {
+  totalNews = total || totalNews;
+  const totalPages = Math.ceil(totalNews / PAGE_SIZE);
+  const totalGroups = Math.ceil(totalPages / MAX_PAGES_PER_GROUP);
+  const currentGroup = Math.ceil(currentPage / MAX_PAGES_PER_GROUP);
 
-  // 페이지 버튼에 해당 페이지 번호 할당
-  for (let i = 0; i < 5; i++) {
-    const pageNumber = (group - 1) * 5 + i + 1;
-    $(`.page-button[data-page="${i + 1}"]`).text(pageNumber);
+  for (let i = 1; i <= MAX_PAGES_PER_GROUP; i++) {
+    const pageNumber = (currentGroup - 1) * MAX_PAGES_PER_GROUP + i;
+    const button = document.querySelector(`button[onclick="fetchNews(${i})"]`);
+
+    if (pageNumber <= totalPages) {
+      button.textContent = pageNumber;
+      button.style.display = 'inline-block';
+    } else {
+      button.style.display = 'none';
+    }
+
+    button.classList.remove('btn-primary', 'btn-outline-primary');
+    if (pageNumber === currentPage) {
+      button.classList.add('btn-primary');
+    } else {
+      button.classList.add('btn-outline-primary');
+    }
   }
 
-  // 현재 페이지 강조
-  $('.page-button').removeClass('btn-primary').addClass('btn-outline-primary');
-  $(`.page-button:contains("${currentPage}")`)
-    .removeClass('btn-outline-primary')
-    .addClass('btn-primary');
+  const prevButton = document.querySelector('button[onclick="prevGroup()"]');
+  const nextButton = document.querySelector('button[onclick="nextGroup()"]');
+
+  prevButton.disabled = currentGroup <= 1;
+  nextButton.disabled = currentGroup >= totalGroups;
 }
 
-$('.prev-page').on('click', function () {
+function fetchAndRenderPosts(pageNumber) {
+  currentPage = pageNumber;
+  fetchNews(pageNumber);
+}
+
+function prevGroup() {
   if (currentPage > 1) {
-    currentPage -= 5; // 이전 페이지 그룹으로 이동
-    if (currentPage < 1) currentPage = 1; // 페이지를 음수로 설정하지 않기 위해
-    fetchNews(currentPage);
-    updatePaginationButtons();
-    $('.current-page').text(currentPage);
+    currentPage -= MAX_PAGES_PER_GROUP;
+    fetchAndRenderPosts(currentPage);
   }
-});
+}
 
-$('.next-page').on('click', function () {
-  currentPage += 5; // 다음 페이지 그룹으로 이동
-  fetchNews(currentPage);
-  updatePaginationButtons();
-  $('.current-page').text(currentPage);
-});
+function nextGroup() {
+  const totalGroups = Math.ceil(totalNews / PAGE_SIZE / MAX_PAGES_PER_GROUP);
 
-$('.page-button').on('click', function () {
-  currentPage = parseInt($(this).text());
-  fetchNews(currentPage);
-  updatePaginationButtons();
-  $('.current-page').text(currentPage);
-});
-
-// 페이지 로드 시 뉴스 데이터 가져오기
-$(document).ready(function () {
-  fetchNews();
-  updatePaginationButtons();
-});
+  if (currentPage / MAX_PAGES_PER_GROUP < totalGroups) {
+    currentPage += MAX_PAGES_PER_GROUP;
+    fetchAndRenderPosts(currentPage);
+  }
+}
