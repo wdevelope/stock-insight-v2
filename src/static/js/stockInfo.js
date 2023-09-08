@@ -36,9 +36,7 @@ async function fetchStockDetail() {
   }
 
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/stocks/price/${id}`,
-    );
+    const response = await fetch(`/api/stocks/price/${id}`);
     const data = await response.json();
     console.log('주식상세정보 데이터 테스트', data);
     renderStockDetail(data);
@@ -145,16 +143,13 @@ function renderStockDetail(data) {
 // 🟤 주식을 찜하기에 추가하는 함수
 async function addFavoriteStock(stockId) {
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/stocks/mystock/${stockId}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token,
-        },
+    const response = await fetch(`/api/stocks/mystock/${stockId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
       },
-    );
+    });
 
     if (response.status === 201) {
       console.log('찜한 종목에 추가되었습니다!');

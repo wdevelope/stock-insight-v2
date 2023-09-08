@@ -5,14 +5,11 @@ document.addEventListener('DOMContentLoaded', function () {
 //⚪ 게시글 수정 기존 정보 렌더링
 async function fetchBoardDetailsForEdit() {
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/boards/${freeEditBoardId}`,
-      {
-        headers: {
-          Authorization: token,
-        },
+    const response = await fetch(`/api/boards/${freeEditBoardId}`, {
+      headers: {
+        Authorization: token,
       },
-    );
+    });
 
     if (!response.ok) {
       throw new Error('패치 응답 에러');
@@ -32,17 +29,14 @@ async function submitEdit() {
   const description = document.getElementById('descriptionInput').value;
 
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/boards/${freeEditBoardId}`,
-      {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token,
-        },
-        body: JSON.stringify({ title, description }),
+    const response = await fetch(`/api/boards/${freeEditBoardId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
       },
-    );
+      body: JSON.stringify({ title, description }),
+    });
 
     if (!response.ok) {
       if (response.status === 404) {
@@ -53,7 +47,7 @@ async function submitEdit() {
       return;
     }
     alert('게시글이 수정되었습니다.');
-    window.location.href = `http://localhost:3000/view/freeBoardInfo.html?freeBoardId=${freeEditBoardId}`;
+    window.location.href = `/view/freeBoardInfo.html?freeBoardId=${freeEditBoardId}`;
   } catch (error) {
     console.log(err);
   }

@@ -34,22 +34,22 @@ async function fetchAndRenderPosts(
 ) {
   window.history.pushState(null, null, `?page=${page}`);
 
-  let url = `http://localhost:3000/api/boards/page?page=${page}`;
+  let url = `/api/boards/page?page=${page}`;
 
   if (orderBy === 'view') {
-    url = `http://localhost:3000/api/boards/orderbyviewcount?page=${page}`;
+    url = `/api/boards/orderbyviewcount?page=${page}`;
   } else if (orderBy === 'like') {
-    url = `http://localhost:3000/api/boards/orderbylikecount?page=${page}`;
+    url = `/api/boards/orderbylikecount?page=${page}`;
   } else if (orderBy === 'ranker') {
-    url = `http://localhost:3000/api/boards/orderbyRanker?page=${page}`;
+    url = `/api/boards/orderbyRanker?page=${page}`;
   }
 
   if (searchOption === 'titleContent') {
-    url = `http://localhost:3000/api/boards/find?page=${page}&title=${encodeURIComponent(
+    url = `/api/boards/find?page=${page}&title=${encodeURIComponent(
       searchValue,
     )}&description=${encodeURIComponent(searchValue)}`;
   } else if (searchOption === 'nickname') {
-    url = `http://localhost:3000/api/boards/find?page=${page}&nickname=${encodeURIComponent(
+    url = `/api/boards/find?page=${page}&nickname=${encodeURIComponent(
       searchValue,
     )}`;
   }
@@ -86,7 +86,7 @@ async function fetchAndRenderPosts(
       const rankerStar = post.status === 'ranker' ? '⭐️' : '';
 
       postHTML += `
-                  <a href="http://localhost:3000/view/freeBoardInfo.html?freeBoardId=${post.id}" class="list-group-item list-group-item-action"                  
+                  <a href="/view/freeBoardInfo.html?freeBoardId=${post.id}" class="list-group-item list-group-item-action"                  
                   onclick="handleBoardItemClick(${post.id})">
                     <div class="d-flex justify-content-between align-items-center">
                       <div>
@@ -176,7 +176,7 @@ const prevGroup = (meta) => {
 // 🟠 게시글 조회수
 async function handleBoardItemClick(boardId) {
   try {
-    const response = await fetch(`http://localhost:3000/api/views/${boardId}`, {
+    const response = await fetch(`/api/views/${boardId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

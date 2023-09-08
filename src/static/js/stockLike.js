@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 async function fetchFavoriteStocks() {
   try {
-    const response = await fetch('http://localhost:3000/api/stocks/mystock', {
+    const response = await fetch('/api/stocks/mystock', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -138,16 +138,13 @@ function renderChartForFavorite(canvasElement, chartData) {
 // 즐겨찾기 종목 지우기
 async function deleteMyStock(stockId) {
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/stocks/mystock/${stockId}`,
-      {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token,
-        },
+    const response = await fetch(`/api/stocks/mystock/${stockId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
       },
-    );
+    });
 
     if (!response.ok) {
       throw new Error('Failed to delete the stock from favorites.');

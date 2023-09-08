@@ -18,15 +18,12 @@ function getRandomPage() {
 async function getRandomStock() {
   const randomPage = getRandomPage();
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/stocks/?page=${randomPage}`,
-      {
-        headers: {
-          'content-type': 'application/json',
-          Authorization: token,
-        },
+    const response = await fetch(`/api/stocks/?page=${randomPage}`, {
+      headers: {
+        'content-type': 'application/json',
+        Authorization: token,
       },
-    );
+    });
 
     if (!response.ok) {
       throw new Error('Failed to fetch stocks.');
@@ -110,7 +107,7 @@ async function submitQuiz(prediction, index) {
   };
 
   try {
-    const response = await fetch('http://localhost:3000/quiz/submit', {
+    const response = await fetch('/quiz/submit', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

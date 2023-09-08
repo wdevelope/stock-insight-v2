@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // 🟠 문의게시판 글 랜더링 함수
 async function RenderAskPosts() {
   try {
-    const response = await fetch('http://localhost:3000/api/askboards', {
+    const response = await fetch('/api/askboards', {
       headers: {
         Authorization: token,
       },
@@ -32,7 +32,7 @@ async function RenderAskPosts() {
       const userImageUrl = post.user.imgUrl || defaultImage;
 
       postHTML += `
-                      <a href="http://localhost:3000/view/askBoardInfo.html?askBoardId=${post.id}" class="list-group-item list-group-item-action"                  
+                      <a href="/view/askBoardInfo.html?askBoardId=${post.id}" class="list-group-item list-group-item-action"                  
                       onclick="handleBoardItemClick(${post.id})">
                         <div class="d-flex justify-content-between align-items-center">
                           <div>
@@ -59,7 +59,7 @@ async function RenderAskPosts() {
 // 🟠 문의 게시글 답글 조회
 // async function getRepliesForPost(postId) {
 //   const response = await fetch(
-//     `http://localhost:3000/api/askboards/${postId}/replies`,
+//     `/api/askboards/${postId}/replies`,
 //     {
 //       headers: {
 //         Authorization: token,

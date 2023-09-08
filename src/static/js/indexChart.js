@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // 🟢 코스피 코스닥 불러오기
 async function fetchStockData() {
   try {
-    const response = await fetch('http://localhost:3000/api/stocks/index');
+    const response = await fetch('/api/stocks/index');
 
     if (!response.ok) {
       throw new Error('Failed to fetch stock data.');

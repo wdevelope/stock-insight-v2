@@ -8,7 +8,7 @@ function formatNumberWithCommas(x) {
 
 async function getStockRank() {
   try {
-    const response = await fetch('http://localhost:3000/api/stocks/rank', {
+    const response = await fetch('/api/stocks/rank', {
       headers: {
         'content-type': 'application/json',
         Authorization: token,

@@ -16,7 +16,7 @@ async function saveFreeBoard() {
   const description = document.getElementById('postContent').value;
 
   try {
-    const response = await fetch('http://localhost:3000/api/boards', {
+    const response = await fetch('/api/boards', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ async function saveFreeBoard() {
       throw new Error('Failed to save the post');
     }
     alert('글 작성이 완료되었습니다.');
-    window.location = 'http://localhost:3000/view/freeBoard.html';
+    window.location = '/view/freeBoard.html';
   } catch (error) {
     console.error('Error saving post:', error);
   }
@@ -44,7 +44,7 @@ async function saveNoticeBoard() {
   const description = document.getElementById('postContent').value;
 
   try {
-    const response = await fetch('http://localhost:3000/api/noticeboards', {
+    const response = await fetch('/api/noticeboards', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -59,10 +59,10 @@ async function saveNoticeBoard() {
 
     if (response.status === 400) {
       alert('글 작성 권한이 없습니다.');
-      window.location = 'http://localhost:3000/view/noticeBoard.html';
+      window.location = '/view/noticeBoard.html';
     } else {
       alert('글 작성이 완료되었습니다.');
-      window.location = 'http://localhost:3000/view/noticeBoard.html';
+      window.location = '/view/noticeBoard.html';
     }
   } catch (error) {
     console.error('Error saving post:', error);
@@ -75,7 +75,7 @@ async function saveAskBoard() {
   const description = document.getElementById('postContent').value;
 
   try {
-    const response = await fetch('http://localhost:3000/api/askboards', {
+    const response = await fetch('/api/askboards', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ async function saveAskBoard() {
       throw new Error('Failed to save the post');
     }
     alert('글 작성이 완료되었습니다.');
-    window.location = 'http://localhost:3000/view/askBoard.html';
+    window.location = '/view/askBoard.html';
   } catch (error) {
     console.error('Error saving post:', error);
   }
@@ -104,25 +104,22 @@ async function saveAskBoardReply() {
   console.log(title, description);
 
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/askboards/${askReplyBoardId}/replies`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token,
-        },
-        body: JSON.stringify({
-          title: title,
-          description: description,
-        }),
+    const response = await fetch(`/api/askboards/${askReplyBoardId}/replies`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
       },
-    );
+      body: JSON.stringify({
+        title: title,
+        description: description,
+      }),
+    });
     if (!response.ok) {
       throw new Error('Failed to save the post');
     }
     alert('답글 작성이 완료되었습니다');
-    window.location.href = 'http://localhost:3000/view/askBoard.html';
+    window.location.href = '/view/askBoard.html';
   } catch (error) {
     console.log('답글 생성중 에러', error);
   }

@@ -1,31 +1,3 @@
-// 🟢 이메일 인증 함수
-async function verifyEmail() {
-  const email = document.getElementById('signupEmail').value;
-
-  const data = {
-    email: email,
-  };
-
-  try {
-    const response = await fetch(`${API_URL}/api/users/email`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (response.status === 201) {
-      alert('인증 코드를 이메일로 발송하였습니다.');
-    } else {
-      alert('인증 코드 발송에 실패하였습니다.');
-    }
-  } catch (error) {
-    console.log('이메일인증 에러', error);
-    alert('인증 코드 발송 중 오류가 발생했습니다.');
-  }
-}
-
 // 로그인 배경
 window.addEventListener('resize', () => {
   width = canvas.width = window.innerWidth;
@@ -52,7 +24,7 @@ async function verifyEmail() {
   };
 
   try {
-    const response = await fetch('http://localhost:3000/api/users/email', {
+    const response = await fetch('/api/users/email', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -85,16 +57,13 @@ async function checkEmailCode() {
   };
 
   try {
-    const response = await fetch(
-      'http://localhost:3000/api/users/verifyEmail',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+    const response = await fetch('/api/users/verifyEmail', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    );
+      body: JSON.stringify(data),
+    });
 
     if (response.status === 201) {
       alert('이메일 인증이 완료되었습니다.');
@@ -119,7 +88,7 @@ async function loginUser() {
   };
 
   try {
-    const response = await fetch('http://localhost:3000/api/users/login', {
+    const response = await fetch('/api/users/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -135,7 +104,7 @@ async function loginUser() {
       // 토큰을 쿠키에 저장
       setCookie('Authorization', `Bearer ${result.token}`, 3); // 3은 시간설정
 
-      window.location.href = 'http://localhost:3000/view/index.html';
+      window.location.href = '/view/index.html';
     } else {
       alert(result.message || '로그인 실패');
     }
@@ -172,7 +141,7 @@ async function signup() {
   };
 
   try {
-    const response = await fetch('http://localhost:3000/api/users', {
+    const response = await fetch('/api/users', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -41,16 +41,13 @@ function createAutocompleteContainer() {
 // 주식 이름으로 API 호출하여 검색 (디바운스 적용되는 api)
 async function fetchStocksByQuery(query) {
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/stocks/search?query=${query}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token,
-        },
+    const response = await fetch(`/api/stocks/search?query=${query}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
       },
-    );
+    });
     if (!response.ok) {
       throw new Error('Failed to fetch stock search results.');
     }
@@ -65,9 +62,7 @@ async function fetchStocksByQuery(query) {
 // 페이지 번호를 이용하여 주식 정보 API 호출
 async function fetchStocks(page) {
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/stocks/?page=${page}`,
-    );
+    const response = await fetch(`/api/stocks/?page=${page}`);
 
     if (!response.ok) {
       throw new Error('Failed to fetch stocks.');
