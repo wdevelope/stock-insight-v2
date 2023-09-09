@@ -5,21 +5,13 @@ files:
   - source: /
     destination: /home/ubuntu/app
     overwrite: yes
-  - source: ./start.sh
-    destination: /home/ubuntu/app/scripts
 
 permissions:
-  - object: /
+  - object: /home/ubuntu/app/scripts
     pattern: '**'
     owner: ubuntu
     group: ubuntu
-  - - object: /home/ubuntu/app/scripts
-    pattern: "**"
-    owner: adm
-    group: wheel
     mode: 777
-    type:
-      - file
 
 hooks:
   AfterInstall:
