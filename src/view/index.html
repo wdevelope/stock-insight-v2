@@ -16,6 +16,7 @@
     />
 
     <link rel="stylesheet" href="/static/css/index.css" />
+    <link rel="stylesheet" href="/static/css/stock.css" />
   </head>
 
   <body>
@@ -96,76 +97,59 @@
     <!-- 🔴 메인  -->
     <main>
       <div class="container mt-5">
-        <h1 class="text-center mb-4">시장 현황</h1>
+        <h1 class="text-center mb-4 index-title">시장 현황</h1>
         <div class="row">
-          <!-- KOSPI 정보 카드 -->
-          <div class="col-md-6 mb-4">
-            <div class="card">
-              <div class="card-header">KOSPI</div>
-              <div class="card-body">
-                <div class="stock-chart">
-                  <canvas id="kospiChart"></canvas>
-                </div>
-                <h5 class="card-title" id="kospi-price"></h5>
-                <p class="card-text" id="kospi-change"></p>
-              </div>
+          <!-- 당일 급등종목 -->
+          <div class="col-md-6">
+            <div class="stock-rank-container">
+              <h2>당일 급등종목</h2>
+              <br />
+              <ul id="stockRankList">
+                <li class="stock-header">
+                  <span class="stock-name">종목명</span>
+                  <span class="stock-id">ID</span>
+                  <span class="stock-price">가격</span>
+                  <span class="stock-change">등락률</span>
+                  <span class="stock-market">시장</span>
+                </li>
+              </ul>
             </div>
           </div>
-
-          <!-- KOSDAQ 정보 카드 -->
+          <!-- KOSPI, KOSDAQ 정보 카드 -->
           <div class="col-md-6">
-            <div class="card">
-              <div class="card-header">KOSDAQ</div>
-              <div class="card-body">
-                <div class="stock-chart">
-                  <canvas id="kosdaqChart"></canvas>
+            <!-- KOSPI 정보 카드 -->
+            <div class="mb-4">
+              <div class="card">
+                <div class="card-header">KOSPI</div>
+                <div class="card-body">
+                  <div class="stock-chart">
+                    <canvas id="kospiChart"></canvas>
+                  </div>
+                  <br />
+                  <h5 class="card-title" id="kospi-price"></h5>
+                  <p class="card-text" id="kospi-change"></p>
                 </div>
-                <h5 class="card-title" id="kosdaq-price"></h5>
-                <p class="card-text" id="kosdaq-change"></p>
+              </div>
+            </div>
+
+            <!-- KOSDAQ 정보 카드 -->
+            <div class="mb-4">
+              <div class="card">
+                <div class="card-header">KOSDAQ</div>
+                <div class="card-body">
+                  <div class="stock-chart">
+                    <canvas id="kosdaqChart"></canvas>
+                  </div>
+                  <br />
+                  <h5 class="card-title" id="kosdaq-price"></h5>
+                  <p class="card-text" id="kosdaq-change"></p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
       <br />
-      <!-- 주요 기능 -->
-      <div class="mainDescription">
-        <h2 class="features-title">💡 플랫폼 주요 기능</h2>
-        <br />
-        <details>
-          <summary>
-            news : <뉴스> 투자 관련 기사, 리포트, 등의 자료를 조회할 수
-            있습니다.
-          </summary>
-          <br />
-        </details>
-        <br />
-        <details>
-          <summary>
-            stocks : <실시간 주식 정보 조회> 주요 지수, 개별 종목의 실시간 가격
-            및 차트를 제공합니다.
-          </summary>
-          <br />
-        </details>
-        <br />
-
-        <details>
-          <summary>
-            quiz : <주가 예측> 유저는 당일의 주가 예측 퀴즈를 통해, 랭커로
-            진급이 가능합니다.
-          </summary>
-          <br />
-        </details>
-        <br />
-        <details>
-          <summary>
-            community : <사용자 커뮤니티> 주식 투자에 대한 의견, 전략, 분석을
-            공유하고 토론할 수 있는 공간이 있습니다.
-          </summary>
-          <br />
-        </details>
-        <br />
-      </div>
     </main>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

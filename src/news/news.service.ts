@@ -11,8 +11,11 @@ export class NewsService {
 
   constructor(private readonly httpService: HttpService) {}
 
-  async searchNews(query: string): Promise<AxiosResponse> {
-    const url = `${this.api_url}&query=${encodeURI(query)}&sort=sim`;
+  async searchNews(query: string, page: number = 1): Promise<AxiosResponse> {
+    const start = (page - 1) * 30 + 1; // 페이지가 1인 경우 start는 1, 페이지가 2인 경우 start는 31
+    const url = `${this.api_url}&query=${encodeURI(
+      query,
+    )}&sort=sim&start=${start}`;
     const headers = {
       'X-Naver-Client-Id': this.client_id,
       'X-Naver-Client-Secret': this.client_secret,

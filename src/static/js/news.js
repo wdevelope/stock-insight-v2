@@ -13,7 +13,6 @@ async function fetchNews() {
     }
 
     const data = await response.json();
-
     if (data.items && data.items.length > 0) {
       displayNews(data.items);
     } else {
@@ -45,5 +44,3 @@ function displayNews(articles) {
     newsList.innerHTML += newsItem;
   });
 }
-
-const PAGE_SIZE = 10;

@@ -153,6 +153,18 @@ ul.nav .nav-item .nav-link.active {
   z-index: 1;
   border-radius: 4px;
 }
+
+.stock-chart {
+  height: 300px;
+}
+
+.index-title {
+  background-color: #f2f2f2; /* 회색 배경 */
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 /* 🔥 페이지 네이션 */
 .page-item .page-link {
   color: black;

@@ -97,7 +97,7 @@ function logout() {
   }
   deleteCookie('Authorization');
   alert('로그아웃 완료');
-  window.location.href = '';
+  window.location.href = '/';
 }
 
 // 🟠 query url에서 Id값들 가져오는 코드들

@@ -44,6 +44,7 @@ document.getElementById('nextPage').addEventListener('click', function () {
   renderUserQuizzes(userId, currentPage);
 });
 
+// 🟢 퀴즈 현황 렌더링
 async function fetchUserQuizzes(userId, page = 1) {
   const baseUrl = '/quiz/userQuiz';
   const queryParams = `?page=${page}&userId=${userId}`;
@@ -51,7 +52,6 @@ async function fetchUserQuizzes(userId, page = 1) {
   try {
     const response = await fetch(baseUrl + queryParams);
     const data = await response.json();
-
     if (!response.ok) {
       throw new Error(data.message || 'API 호출 중 오류가 발생했습니다.');
     }
@@ -62,7 +62,7 @@ async function fetchUserQuizzes(userId, page = 1) {
   }
 }
 
-// 퀴즈 현황 렌더링
+// 🟢 퀴즈 현황 렌더링
 async function renderUserQuizzes(userId, page = 1) {
   const quizContainer = document.getElementById('userQuizzes');
 
@@ -70,6 +70,7 @@ async function renderUserQuizzes(userId, page = 1) {
     const response = await fetchUserQuizzes(userId, page);
     const quizzes = response.data;
     const lastPage = response.last_page;
+    const totalQuizSubmissions = response.total;
 
     quizContainer.innerHTML = '';
 
@@ -97,6 +98,9 @@ async function renderUserQuizzes(userId, page = 1) {
 
     // 페이지 번호 업데이트
     document.getElementById('currentPage').textContent = currentPage;
+    document.getElementById(
+      'totalQuizzes',
+    ).textContent = `총 퀴즈 제출 개수: ${totalQuizSubmissions}`; // 총 퀴즈 제출 개수를 화면에 표시
 
     // 페이지 버튼 활성화/비활성화
     document.getElementById('prevPage').disabled = currentPage === 1;
