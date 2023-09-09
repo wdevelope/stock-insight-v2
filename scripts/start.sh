@@ -5,8 +5,9 @@ APP_NAME="project"
 TIME_NOW=$(date +%c)
 
 cd $PROJECT_ROOT
- 
- 
+
+npm install
+
 cp ../.env ./
 pm2 delete $APP_NAME
 pm2 start npm --name $APP_NAME -- run start:prod
