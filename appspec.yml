@@ -5,19 +5,20 @@ files:
   - source: /
     destination: /home/ubuntu/app
     overwrite: yes
+  - source: ./start.sh
+    destination: /home/ubuntu/app/scripts
 
 permissions:
   - object: /
     pattern: '**'
     owner: ubuntu
     group: ubuntu
+  - object: /home/ubuntu/app/scripts
+    pattern: '**'
+    owner: ubuntu
+    mode: 777
 
 hooks:
-  AfterInstall:
-    - location: scripts/start.chmod.sh
-      timeout: 60
-      runas: ubuntu
-
   ApplicationStart:
     - location: scripts/start.sh
       timeout: 60
