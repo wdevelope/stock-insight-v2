@@ -65,4 +65,4 @@ jobs:
 
           # (7) 스크립트 파일에 실행 권한 설정
       - name: Set execute permission on script
-        run: ls
+        run: chmod +x /scripts/start.sh
