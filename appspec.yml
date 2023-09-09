@@ -13,6 +13,11 @@ permissions:
     group: ubuntu
 
 hooks:
+  BeforeInstall:
+    - location: scripts/change_permissions.sh
+      timeout: 60
+      runas: ubuntu
+
   ApplicationStart:
     - location: scripts/start.sh
       timeout: 60
