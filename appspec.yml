@@ -6,16 +6,20 @@ files:
     destination: /home/ubuntu/app
     overwrite: yes
   - source: ./start.sh
-    destination: /home/ubuntu/app/scripts/start.sh
+    destination: /home/ubuntu/app/scripts
 
 permissions:
   - object: /
     pattern: '**'
     owner: ubuntu
     group: ubuntu
-  - object: /home/ubuntu/app/scripts/start.sh
-    owner: ubuntu
-    mode: '777'
+  - - object: /home/ubuntu/app/scripts
+    pattern: "**"
+    owner: adm
+    group: wheel
+    mode: 777
+    type:
+      - file
 
 hooks:
   AfterInstall:
