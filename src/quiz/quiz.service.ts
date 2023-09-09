@@ -58,8 +58,8 @@ export class QuizService {
 
     // 제출 가능한 시간대 설정 완료 (평일 9시부터 16시까지 제출 불가능)
     switch (day) {
-      case 1:
-      case 7:
+      case 0:
+      case 6:
         if (quizNumber > 9) {
           return {
             message: '오늘 제출 횟수를 초과하셨습니다.',
@@ -75,11 +75,11 @@ export class QuizService {
           }
         }
 
+      case 1:
       case 2:
       case 3:
       case 4:
       case 5:
-      case 6:
         if (8 < time && time < 16) {
           return {
             message: '제출 가능한 시간이 아닙니다.',
