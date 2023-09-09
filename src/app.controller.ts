@@ -4,6 +4,15 @@ import { Response } from 'express';
 
 @Controller()
 export class AppController {
+  // @Get(':pageName')
+  // renderPage(@Param('pageName') pageName: string, @Res() res: Response) {
+  //   res.sendFile(join(process.cwd(), 'src', 'view', `${pageName}.html`));
+  // }
+  @Get()
+  renderHomePage(@Res() res: Response) {
+    res.sendFile(join(process.cwd(), 'src', 'view', 'login.html'));
+  }
+
   @Get('askBoard')
   renderAskBoard(@Res() res: Response) {
     res.sendFile(join(process.cwd(), 'src', 'view', 'askBoard.html'));
@@ -42,16 +51,6 @@ export class AppController {
   @Get('freeWriteBoard')
   renderFreeWriteBoard(@Res() res: Response) {
     res.sendFile(join(process.cwd(), 'src', 'view', 'freeWriteBoard.html'));
-  }
-
-  @Get()
-  renderHomePage(@Res() res: Response) {
-    res.sendFile(join(process.cwd(), 'src', 'view', 'index.html'));
-  }
-
-  @Get('login')
-  renderLogin(@Res() res: Response) {
-    res.sendFile(join(process.cwd(), 'src', 'view', 'login.html'));
   }
 
   @Get('news')
