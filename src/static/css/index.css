@@ -205,6 +205,17 @@ ul.nav .nav-item .nav-link.active {
   margin-top: 10px;
 }
 
+.chat-time {
+  font-size: 0.8em;
+  color: grey;
+}
+
+.chat-notification {
+  font-size: 0.9em;
+  color: #d9534f;
+  margin-bottom: 10px;
+}
+
 .pagination-buttons {
   display: flex;
   justify-content: center;

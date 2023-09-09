@@ -31,7 +31,7 @@ async function renderUserDetails() {
 
 let currentPage = 1;
 let userId;
-
+// 페이지네이션
 document.getElementById('prevPage').addEventListener('click', function () {
   if (currentPage > 1) {
     currentPage--;
