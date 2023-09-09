@@ -17,10 +17,11 @@ async function fetchAskePostDetails() {
     }
 
     const askBoard = await response.json();
+
     console.log(askBoard);
     const defaultImageUrl = 'https://ifh.cc/g/a2Sg64.png';
     const userImage = askBoard.user.imgUrl || defaultImageUrl;
-
+    const postDate = toKoreanTime(askBoard.created_at).split('T')[0];
     const boardContainer = document.querySelector('main');
     const askBoardContainer = boardContainer.querySelector('.post-content');
     askBoardContainer.innerHTML = `
@@ -39,7 +40,7 @@ async function fetchAskePostDetails() {
                                   </div>         
                                   <p class="text-muted post-info">
                                   <img src="${userImage}" alt="Author's Image" style="width: 30px; height: 30px; border-radius: 50%;"> 
-                                   <span class="author">${askBoard.user.nickname}</span> | 날짜: <span class="date">${askBoard.created_at}</span>
+                                   <span class="author">${askBoard.user.nickname}</span> | 날짜: <span class="date">${postDate}</span>
                                   </p>
                                   <p>${askBoard.description}</p>
                                   <br/><br/>
@@ -53,11 +54,12 @@ async function fetchAskePostDetails() {
       repliesContainer.className = 'replies-section';
       replies.forEach((reply) => {
         const replyEl = document.createElement('div');
+        const replyDate = toKoreanTime(reply.created_at).split('T')[0];
         replyEl.className = 'reply';
         replyEl.innerHTML = `
                              <h4>${reply.title}</h4>
                              <p class="text-muted">
-                               <span class="author">${reply.user.nickname}</span> | 날짜: <span class="date">${reply.created_at}</span>
+                               <span class="author">${reply.user.nickname}</span> | 날짜: <span class="date">${replyDate}</span>
                              </p>
                              <p>${reply.description}</p>
                              <hr/>`;

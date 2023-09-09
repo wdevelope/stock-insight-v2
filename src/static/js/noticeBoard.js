@@ -16,7 +16,7 @@ async function RenderNoticePosts() {
     }
 
     const data = await response.json();
-    const today = new Date().toISOString().split('T')[0];
+    const today = toKoreanTime(new Date().toISOString()).split('T')[0];
 
     data.sort((a, b) => {
       return new Date(b.created_at) - new Date(a.created_at);
@@ -28,7 +28,7 @@ async function RenderNoticePosts() {
     const DEFAULT_IMAGE_URL = 'https://ifh.cc/g/a2Sg64.png';
 
     for (const post of data) {
-      const postDate = post.created_at.split('T')[0];
+      const postDate = toKoreanTime(post.created_at).split('T')[0];
       const userImageUrl = post.user.imgUrl || DEFAULT_IMAGE_URL;
       const isNewPost =
         postDate === today ? '<span class="newFreePost">N</span>' : '';

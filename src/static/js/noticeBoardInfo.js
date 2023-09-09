@@ -17,6 +17,7 @@ async function fetchNoticePostDetails() {
     const noticeBoard = await response.json();
     const defaultImageUrl = 'https://ifh.cc/g/a2Sg64.png';
     const authorImage = noticeBoard.user.imgUrl || defaultImageUrl;
+    const postDate = toKoreanTime(noticeBoard.created_at).split('T')[0];
 
     const boardContainer = document.querySelector('.board-container');
     // 공지 게시글 상세페이지
@@ -38,7 +39,7 @@ async function fetchNoticePostDetails() {
                                           </div>         
                                           <p class="text-muted post-info">
                                           <img src="${authorImage}" alt="Author's Image" style="width: 30px; height: 30px; border-radius: 50%;"> <!-- 작성자의 이미지 추가 -->
-                                             <span class="author">${noticeBoard.user.nickname}</span> | 날짜: <span class="date">${noticeBoard.created_at}</span>
+                                             <span class="author">${noticeBoard.user.nickname}</span> | 날짜: <span class="date">${postDate}</span>
                                           </p>
                                           <p>${noticeBoard.description}</p>
                                       `;
