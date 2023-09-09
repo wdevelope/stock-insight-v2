@@ -58,6 +58,7 @@ export class AskboardsService {
   async createReply(
     askBoardId: number,
     replyDto: CreateReplyDto,
+    user: Users,
   ): Promise<Reply> {
     const askboard = await this.askboardRepository.findOneWith(askBoardId);
     if (!askboard) {
@@ -65,15 +66,29 @@ export class AskboardsService {
     }
 
     const reply = this.replyRepository.create(replyDto);
+
     reply.askboard = askboard;
+
+    reply.user = user;
+
     return await this.replyRepository.save(reply);
   }
 
   // 문의글 답글 조회
   async getReplies(askBoardId: number): Promise<Reply[]> {
-    return await this.replyRepository.find({
-      where: { askboard: { id: askBoardId } },
-      relations: ['user'], // 사용자의 정보를 포함하여 답글을 가져옴
-    });
+    return await this.replyRepository
+      .createQueryBuilder('reply')
+      .select([
+        'reply.id',
+        'reply.title',
+        'reply.description',
+        'reply.created_at',
+        'reply.updated_at',
+        'reply.askboard',
+        'user.nickname',
+      ])
+      .innerJoin('reply.user', 'user')
+      .where('reply.askboardId = :askBoardId', { askBoardId })
+      .getMany();
   }
 }

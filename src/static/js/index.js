@@ -130,6 +130,13 @@ function toggleControlButtons() {
   }
 }
 
+// 한국 시간 설정
+function toKoreanTime(dateString) {
+  const date = new Date(dateString);
+  date.setHours(date.getHours() + 9);
+  return date.toISOString();
+}
+
 // 🟠 뒤로가기
 window.addEventListener('pageshow', (event) => {
   if (event.persisted) {

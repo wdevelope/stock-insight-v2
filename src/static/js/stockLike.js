@@ -86,8 +86,8 @@ function renderChartForFavorite(canvasElement, chartData) {
 
   const labels = chartData.map((data) => {
     const date = new Date(data.date);
-    date.setHours(date.getHours() + 5);
-    date.setMinutes(date.getMinutes() + 40);
+    date.setHours(date.getHours() + 9);
+    date.setMinutes(date.getMinutes());
     return date.toLocaleTimeString('en-US', {
       hour: '2-digit',
       minute: '2-digit',

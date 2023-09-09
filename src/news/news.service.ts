@@ -9,10 +9,7 @@ export class NewsService {
   private readonly api_url =
     'https://openapi.naver.com/v1/search/news?display=30&query=';
 
-  constructor(private readonly httpService: HttpService) {
-    console.log('Client ID:', this.client_id);
-    console.log('Client Secret:', this.client_secret);
-  }
+  constructor(private readonly httpService: HttpService) {}
 
   async searchBlog(query: string): Promise<AxiosResponse> {
     const url = `${this.api_url}${encodeURI(query)}`;

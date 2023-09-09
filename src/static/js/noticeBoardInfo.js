@@ -17,6 +17,7 @@ async function fetchNoticePostDetails() {
     const noticeBoard = await response.json();
     const defaultImageUrl = 'https://ifh.cc/g/a2Sg64.png';
     const authorImage = noticeBoard.user.imgUrl || defaultImageUrl;
+    const postDate = toKoreanTime(noticeBoard.created_at).split('T')[0];
 
     const boardContainer = document.querySelector('.board-container');
     // 공지 게시글 상세페이지
@@ -38,10 +39,9 @@ async function fetchNoticePostDetails() {
                                           </div>         
                                           <p class="text-muted post-info">
                                           <img src="${authorImage}" alt="Author's Image" style="width: 30px; height: 30px; border-radius: 50%;"> <!-- 작성자의 이미지 추가 -->
-                                             <span class="author">${noticeBoard.user.nickname}</span> | 날짜: <span class="date">${noticeBoard.created_at}</span>
+                                             <span class="author">${noticeBoard.user.nickname}</span> | 날짜: <span class="date">${postDate}</span>
                                           </p>
                                           <p>${noticeBoard.description}</p>
-                                          <button class="btn btn-primary" onclick="handleLikeClick()">👍 (0)</button>
                                       `;
     boardContainer.style.display = 'block';
   } catch (error) {
@@ -67,33 +67,6 @@ async function deleteNoticePost() {
   } catch (error) {
     alert('게시글 삭제에 실패했습니다.');
     console.error('Error deleting post:', error);
-  }
-}
-
-// 🟢 댓글 생성
-async function createComment() {
-  const commentBox = document.querySelector('textarea');
-  const commentContent = commentBox.value;
-
-  try {
-    const response = await fetch(`/api/boards/${freeBoardId}/comments`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: token,
-      },
-      body: JSON.stringify({ comment: commentContent }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to post comment');
-    }
-
-    commentBox.value = ''; // clear the comment box
-    fetchPostDetails();
-    alert('댓글 작성이 성공했습니다.');
-  } catch (error) {
-    console.error('Error posting comment:', error);
   }
 }
 
