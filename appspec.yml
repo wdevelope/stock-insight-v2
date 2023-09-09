@@ -12,6 +12,11 @@ permissions:
     owner: ubuntu
     group: ubuntu
 
+  - object: scripts/start.sh .
+    owner: ubuntu
+    group: ubuntu
+    mode: '0755'
+
 hooks:
   ApplicationStart:
     - location: scripts/start.sh
