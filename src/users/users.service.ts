@@ -7,15 +7,11 @@ import { UsersRepository } from './users.repository';
 import * as bcrypt from 'bcrypt';
 import { SignUpDto } from './dto/signUp.dto';
 import { UpdateRequestDto } from './dto/updateRequest.dto';
-import { CronJob } from 'cron';
-import { SchedulerRegistry } from '@nestjs/schedule';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    private readonly usersRepository: UsersRepository,
-    private schedulerRegistry: SchedulerRegistry,
-  ) {}
+  constructor(private readonly usersRepository: UsersRepository) {}
 
   async signUp(body: SignUpDto) {
     const { email, password, confirm, nickname } = body;
@@ -99,13 +95,13 @@ export class UsersService {
     };
   }
   // answer가 true 면 point 를 얻고, keep은 그대로, false 면 point를 잃는다. 대신 0점 밑으로는 내려가지 않는다.
+  @Cron('15 9 * * 1-5')
   async updatePoint() {
     const userQuiz = await this.usersRepository.getQuizDay();
     userQuiz.forEach(async (userQuiz) => {
       const id = userQuiz.u_id;
       const point = userQuiz.u_point;
       const answer = userQuiz.quiz_correct;
-      // console.log('id', id);
 
       let newPoint: number;
       if (answer === 'false') {
@@ -119,7 +115,7 @@ export class UsersService {
       } else if (answer === 'keep') {
         newPoint = point;
       }
-      // console.log('newPoint', newPoint);
+
       const user = await this.usersRepository.findOne({ where: { id } });
 
       await this.usersRepository.updatePoint(user, {
@@ -129,6 +125,7 @@ export class UsersService {
   }
 
   // 포인트에 따라서 유저의 스테이터스가 변화한다.
+  @Cron('20 9 * * 1-5')
   async updateUserStatus() {
     const userId = await this.usersRepository.getQuizDay();
     userId.forEach(async (userId) => {
@@ -171,48 +168,6 @@ export class UsersService {
         last_page: Math.ceil(total / take),
       },
     };
-  }
-
-  // update-point 스케줄러 (시작)
-  async startUpdatePoint() {
-    const job = new CronJob(
-      '0 */60 19-20 * * 1-5',
-      () => {
-        console.log('start');
-        this.updatePoint();
-      },
-      null,
-      false,
-      'Asia/Seoul',
-    );
-    await this.schedulerRegistry.addCronJob('updatePoint', job);
-    job.start();
-  }
-  // update-point 스케줄러 (종료)
-  async stopUpdatePoint() {
-    const job = await this.schedulerRegistry.getCronJob('updatePoint');
-    job.stop();
-  }
-
-  // 스테이터스 스케줄러 (시작)
-  async startUpdateStatus() {
-    const job = new CronJob(
-      '0 */60 20-21 * * 1-5',
-      () => {
-        console.log('start');
-        this.updateUserStatus();
-      },
-      null,
-      false,
-      'Asia/Seoul',
-    );
-    await this.schedulerRegistry.addCronJob('updateUserStatus', job);
-    job.start();
-  }
-  // 스테이터스 스케줄러 (종료)
-  async stopUpdateStatus() {
-    const job = await this.schedulerRegistry.getCronJob('updateUserStatus');
-    job.stop();
   }
 
   // quiz

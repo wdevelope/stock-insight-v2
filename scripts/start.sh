@@ -4,6 +4,7 @@ PROJECT_ROOT="/home/ubuntu/app"
 APP_NAME="project"
 
 TIME_NOW=$(date +%c)
+
 chmod +x $0
 cd $PROJECT_ROOT
 cp ../.env ./

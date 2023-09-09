@@ -152,34 +152,6 @@ export class UsersController {
     return await this.usersService.paginate(page);
   }
 
-  //update-point 스케줄러 시작 http://localhost:3000/api/users/pointStart
-  @Post('/pointStart')
-  startUpdatePoint(): string {
-    this.usersService.startUpdatePoint();
-    return '스케쥴 시작!';
-  }
-
-  //update-point 스케줄러 종료 http://localhost:3000/api/users/pointStop
-  @Post('/pointStop')
-  stopUpdatePoint(): string {
-    this.usersService.stopUpdatePoint();
-    return '스케쥴 종료!';
-  }
-
-  //스테이터스 스케줄러 시작 http://localhost:3000/api/users/statStart
-  @Post('/statStart')
-  startUpdateStatus(): string {
-    this.usersService.startUpdateStatus();
-    return '스케쥴 시작!';
-  }
-
-  //스테이터스 스케줄러 종료 http://localhost:3000/api/users/statStop
-  @Post('/statStop')
-  stopUpdateStatus(): string {
-    this.usersService.stopUpdateStatus();
-    return '스케쥴 종료!';
-  }
-
   // 임시비밀번호로 변경 http://localhost:3000/api/users/resetPassword
   @Patch('/resetPassword')
   async resetPassword(@Body() body: EmailDto) {
