@@ -32,7 +32,7 @@ async function fetchPostDetails() {
                                             <div class="d-flex justify-content-between align-items-center position-relative"> 
                                                 <h3>${freeBoard.title}</h3>
                                                 <div class="putdelbutton position-absolute end-0" style="top: 100%;"> 
-                                                  <a href="/view/freeEditBoard.html?freeEditBoardId=${freeBoard.id}" class="btn btn-secondary edit-post">수정</a>
+                                                  <a href="/freeEditBoard?freeEditBoardId=${freeBoard.id}" class="btn btn-secondary edit-post">수정</a>
                                                   <button class="btn btn-secondary delete-post" onclick="deleteFreePost()">삭제</button>
                                                 </div>
                                                 <button
@@ -119,7 +119,7 @@ async function deleteFreePost() {
     }
 
     alert('게시글이 삭제되었습니다.');
-    window.location.href = '/view/freeBoard.html';
+    window.location.href = '/freeBoard';
   } catch (error) {
     alert('게시글 삭제에 실패했습니다.');
     console.error('Error deleting post:', error);

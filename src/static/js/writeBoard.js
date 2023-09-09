@@ -32,7 +32,7 @@ async function saveFreeBoard() {
       throw new Error('Failed to save the post');
     }
     alert('글 작성이 완료되었습니다.');
-    window.location = '/view/freeBoard.html';
+    window.location = '/freeBoard';
   } catch (error) {
     console.error('Error saving post:', error);
   }
@@ -59,10 +59,10 @@ async function saveNoticeBoard() {
 
     if (response.status === 400) {
       alert('글 작성 권한이 없습니다.');
-      window.location = '/view/noticeBoard.html';
+      window.location = '/noticeBoard';
     } else {
       alert('글 작성이 완료되었습니다.');
-      window.location = '/view/noticeBoard.html';
+      window.location = '/noticeBoard';
     }
   } catch (error) {
     console.error('Error saving post:', error);
@@ -91,7 +91,7 @@ async function saveAskBoard() {
       throw new Error('Failed to save the post');
     }
     alert('글 작성이 완료되었습니다.');
-    window.location = '/view/askBoard.html';
+    window.location = '/askBoard';
   } catch (error) {
     console.error('Error saving post:', error);
   }
@@ -118,7 +118,7 @@ async function saveAskBoardReply() {
       throw new Error('Failed to save the post');
     }
     alert('답글 작성이 완료되었습니다');
-    window.location.href = '/view/askBoard.html';
+    window.location.href = '/askBoard';
   } catch (error) {
     console.log('답글 생성중 에러', error);
   }

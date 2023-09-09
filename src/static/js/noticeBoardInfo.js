@@ -63,7 +63,7 @@ async function deleteNoticePost() {
     }
 
     alert('게시글이 삭제되었습니다.');
-    window.location.href = '/view/noticeBoard.html';
+    window.location.href = '/noticeBoard';
   } catch (error) {
     alert('게시글 삭제에 실패했습니다.');
     console.error('Error deleting post:', error);

@@ -102,7 +102,7 @@ async function loginUser() {
       // 토큰을 쿠키에 저장
       setCookie('Authorization', `Bearer ${result.token}`, 3); // 3은 시간설정
 
-      window.location.href = '/view/index.html';
+      window.location.href = '/index';
     } else {
       alert(result.message || '로그인 실패');
     }
