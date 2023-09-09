@@ -28,8 +28,30 @@ export class AskboardsService {
   }
 
   // 문의 게시글 전체 게시글 정보 조회
-  async findAll(): Promise<Askboard[]> {
-    return await this.askboardRepository.findAllWithUserNickname();
+  async findAll(page: number): Promise<{ data: Askboard[]; meta: any }> {
+    return this.askboardRepository.findAllWithUserNickname(page);
+  }
+
+  // 닉네임으로 검색
+  async findByNickname(
+    nickname: string,
+    page: number = 1,
+  ): Promise<{ data: Askboard[]; meta: any }> {
+    const { data, meta } = await this.askboardRepository.findByNickname(
+      nickname,
+      page,
+    );
+
+    if (!data.length) {
+      throw new NotFoundException(
+        `No askboards found for user nickname: ${nickname}`,
+      );
+    }
+
+    return {
+      data,
+      meta,
+    };
   }
 
   // 문의 게시글 상세 조회
@@ -58,6 +80,7 @@ export class AskboardsService {
   async createReply(
     askBoardId: number,
     replyDto: CreateReplyDto,
+    user: Users,
   ): Promise<Reply> {
     const askboard = await this.askboardRepository.findOneWith(askBoardId);
     if (!askboard) {
@@ -65,15 +88,29 @@ export class AskboardsService {
     }
 
     const reply = this.replyRepository.create(replyDto);
+
     reply.askboard = askboard;
+
+    reply.user = user;
+
     return await this.replyRepository.save(reply);
   }
 
   // 문의글 답글 조회
   async getReplies(askBoardId: number): Promise<Reply[]> {
-    return await this.replyRepository.find({
-      where: { askboard: { id: askBoardId } },
-      relations: ['user'], // 사용자의 정보를 포함하여 답글을 가져옴
-    });
+    return await this.replyRepository
+      .createQueryBuilder('reply')
+      .select([
+        'reply.id',
+        'reply.title',
+        'reply.description',
+        'reply.created_at',
+        'reply.updated_at',
+        'reply.askboard',
+        'user.nickname',
+      ])
+      .innerJoin('reply.user', 'user')
+      .where('reply.askboardId = :askBoardId', { askBoardId })
+      .getMany();
   }
 }

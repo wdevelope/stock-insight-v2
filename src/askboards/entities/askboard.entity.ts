@@ -26,6 +26,9 @@ export class Askboard {
   @Column()
   description: string;
 
+  @ApiProperty({ description: '답글 유무' })
+  has_reply?: number;
+
   @ApiProperty({ description: '문의 게시판 생성 시간' })
   @CreateDateColumn()
   created_at: Date;

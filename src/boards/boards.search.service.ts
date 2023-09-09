@@ -17,6 +17,7 @@ export class BoardSearchService {
         index: 'index_board',
         id: board.id.toString(),
         body: {
+          id: board.id,
           title: board.title,
           description: board.description,
           image: board.image,
