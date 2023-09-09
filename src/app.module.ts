@@ -24,6 +24,7 @@ import { ExceptionModule } from './exception/exception.module';
 import { SearchModule } from './search/search.module';
 import { ChatGateway } from './chat/chat.gateway';
 import { NewsModule } from './news/news.module';
+import { AlertGateway } from './alert/alert.gateway';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { NewsModule } from './news/news.module';
     EmailService,
     { provide: APP_FILTER, useClass: HttpExceptionFilter },
     ChatGateway,
+    AlertGateway,
   ],
 })
 export class AppModule {}

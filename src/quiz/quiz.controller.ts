@@ -50,20 +50,6 @@ export class QuizController {
     return await this.quizService.downQuiz();
   }
 
-  // 퀴즈 확인 스케줄러 시작 http://localhost:3000/quiz/updatequizstart
-  @Post('/updatequizstart')
-  startUpdateQuiz(): string {
-    this.quizService.startUpdateQuiz();
-    return '스케쥴 시작!';
-  }
-
-  // 퀴즈 확인 스케줄러 종료 http://localhost:3000/quiz/updatequizstop
-  @Post('/updatequizstop')
-  stopUpdateQuiz(): string {
-    this.quizService.stopUpdateQuiz();
-    return '스케쥴 종료!';
-  }
-
   // stockId에 맞는 up 비율 http://localhost:3000/quiz/up/:id
   @Get('/up/:id')
   async upStockQuiz(@Param('id') stockId: string) {

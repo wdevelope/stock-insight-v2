@@ -3,17 +3,15 @@ import { CreateQuizDto } from './dto/create-quiz.dto';
 import { QuizRepository } from './quiz.repository';
 import { Users } from '../users/users.entity';
 import { StockService } from 'src/stock/stock.service';
-import { CronJob } from 'cron';
-import { SchedulerRegistry } from '@nestjs/schedule';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class QuizService {
   constructor(
     private readonly quizRepository: QuizRepository,
     private readonly stockService: StockService,
-    private schedulerRegistry: SchedulerRegistry,
   ) {}
-  // 퀴즈 제출 : 한 사람당 10회 제한
+  // 퀴즈 제출
   async createQuiz(user: Users, data: CreateQuizDto) {
     const id = user.id;
     const stockId = data.stockId;
@@ -22,6 +20,10 @@ export class QuizService {
     currentTime.setHours(currentTime.getHours() + 9);
     const today = currentTime.toISOString().substring(0, 10).replace(/-/g, '');
     const updated_date = today;
+    const todayTime = currentTime.toISOString().replace(/-/g, '');
+
+    const time = Number(todayTime.substring(9, 11));
+    const day = currentTime.getDay();
 
     const existQuiz = await this.quizRepository
       .createQueryBuilder('q')
@@ -40,8 +42,6 @@ export class QuizService {
       })
       .getRawMany();
 
-    // console.log(existQuiz);
-
     const existQuizNumber = await this.quizRepository
       .createQueryBuilder('q')
       .select('COUNT(*)', 'count')
@@ -55,66 +55,79 @@ export class QuizService {
       .getRawOne();
 
     const quizNumber = Number(existQuizNumber.count);
-    console.log(quizNumber);
-    console.log(existQuiz[0]);
 
-    if (quizNumber > 9) {
-      return {
-        message: '오늘 제출 횟수를 초과하셨습니다.',
-      };
-    } else {
-      if (existQuiz[0] === undefined) {
-        await this.quizRepository.createQuiz(user, data);
-        return {
-          message: '퀴즈제출 성공',
-        };
-      } else {
-        return { message: '이미 제출 하셨습니다' };
-      }
+    // 제출 가능한 시간대 설정 완료 (평일 9시부터 16시까지 제출 불가능)
+    switch (day) {
+      case 1:
+      case 7:
+        if (quizNumber > 9) {
+          return {
+            message: '오늘 제출 횟수를 초과하셨습니다.',
+          };
+        } else {
+          if (existQuiz[0] === undefined) {
+            await this.quizRepository.createQuiz(user, data);
+            return {
+              message: '퀴즈제출 성공',
+            };
+          } else {
+            return { message: '이미 제출 하셨습니다' };
+          }
+        }
+
+      case 2:
+      case 3:
+      case 4:
+      case 5:
+      case 6:
+        if (8 < time && time < 16) {
+          return {
+            message: '제출 가능한 시간이 아닙니다.',
+          };
+        } else {
+          if (quizNumber > 9) {
+            return {
+              message: '오늘 제출 횟수를 초과하셨습니다.',
+            };
+          } else {
+            if (existQuiz[0] === undefined) {
+              await this.quizRepository.createQuiz(user, data);
+              return {
+                message: '퀴즈제출 성공',
+              };
+            } else {
+              return { message: '이미 제출 하셨습니다' };
+            }
+          }
+        }
     }
   }
-  // 퀴즈 확인
-  async updateQuiz(): Promise<any> {
-    const currentTime = new Date();
-    currentTime.setHours(currentTime.getHours() + 9);
-    const today = currentTime.toISOString().substring(0, 10).replace(/-/g, '');
-    const updated_date = today;
 
-    const quizId = await this.quizRepository.find({ where: { updated_date } });
-    // console.log('1', quizId[0].id);
-    // console.log('3', quizId[1].id);
+  // 퀴즈 확인 : correct가 null 인 값만 반환해서 다 확인 시간 필요 x 실행 시간이 필요 평일 9시 10분 되는지 확인
+  @Cron('10 9 * * 1-5')
+  async updateQuiz(): Promise<any> {
+    const quizId = await this.quizRepository.find({ where: { correct: null } });
 
     for (const ele of quizId) {
       const id = ele.id;
       const quizUser = await this.quizRepository.findOne({
         where: { id },
       });
-
-      // console.log(quizUser);
       const searchStock = await this.stockService.searchStock(quizUser.stockId);
-      // console.log('stockId로 찾기', searchStock);
       const searchStockNumber = await this.stockService.getStockPrice(
         searchStock.data[0].id,
-      );
-      console.log(
-        '코드명으로 찾기',
-        searchStockNumber.stock.stockPrices[0].prdy_vrss_sign,
       );
       const stockAnswer = searchStockNumber.stock.stockPrices[0].prdy_vrss_sign;
       let upANDdownAnswer: string;
       if (stockAnswer === '1') {
         upANDdownAnswer = 'up';
-      }
-      if (stockAnswer === '2') {
+      } else if (stockAnswer === '2') {
         upANDdownAnswer = 'up';
-      }
-      if (stockAnswer === '3') {
+      } else if (stockAnswer === '3') {
         upANDdownAnswer = 'keep';
-      }
-      if (stockAnswer === '4') {
+      } else if (stockAnswer === '4') {
         upANDdownAnswer = 'down';
-      }
-      if (stockAnswer === '5') {
+      } else if (stockAnswer === '5') {
         upANDdownAnswer = 'down';
       }
       // keep 뜰 경우
@@ -158,27 +171,6 @@ export class QuizService {
     const downPercent = (Number(downQ.count) / sumQ) * 100;
 
     return Math.round(downPercent);
-  }
-
-  // 퀴즈 확인 스케줄러 (시작)
-  async startUpdateQuiz() {
-    const job = new CronJob(
-      '0 */60 18-19 * * 1-5',
-      () => {
-        console.log('start');
-        this.updateQuiz();
-      },
-      null,
-      false,
-      'Asia/Seoul',
-    );
-    await this.schedulerRegistry.addCronJob('updateQuiz', job);
-    job.start();
-  }
-  // 퀴즈 확인 스케줄러 (종료)
-  async stopUpdateQuiz() {
-    const job = await this.schedulerRegistry.getCronJob('updateQuiz');
-    job.stop();
   }
 
   // stockId에 맞는 up 비율
