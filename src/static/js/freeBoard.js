@@ -66,7 +66,11 @@ async function fetchAndRenderPosts(
     }
 
     const { data, meta } = await response.json();
-    const today = new Date().toISOString().split('T')[0];
+
+    const today = toKoreanTime(new Date().toISOString()).split('T')[0];
+
+    console.log(data, meta);
+
     data.sort((a, b) => {
       return new Date(b.created_at) - new Date(a.created_at);
     });
@@ -77,9 +81,9 @@ async function fetchAndRenderPosts(
     const DEFAULT_IMAGE_URL = 'https://ifh.cc/g/a2Sg64.png';
 
     for (const post of data) {
-      const postDate = post.created_at.split('T')[0];
+      const postDate = toKoreanTime(post.created_at).split('T')[0];
       const isNewPost =
-        postDate === today ? '<i class="fa-solid fa-n"></i>' : '';
+        postDate === today ? '<span class="newFreePost">N</span>' : '';
       const likesCount = post.likeCount;
       const viewsCount = post.viewCount;
       const userImageUrl = post.imgUrl || DEFAULT_IMAGE_URL;

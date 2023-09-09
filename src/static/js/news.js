@@ -11,7 +11,7 @@ async function fetchNews(pageNumber = 1) {
   currentPage = pageNumber;
   try {
     const response = await fetch(
-      `http://localhost:3000/search/news?query=${encodeURIComponent(
+      `/search/news?query=${encodeURIComponent(
         '주식',
       )}&page=${pageNumber}&pageSize=${PAGE_SIZE}`,
     );
