@@ -17,4 +17,4 @@ hooks:
     - location: scripts/start.sh
       timeout: 60
       runas: ubuntu
-      mode: '777'
+      mode: +x
