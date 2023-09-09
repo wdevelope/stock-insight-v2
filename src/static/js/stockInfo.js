@@ -39,7 +39,6 @@ async function fetchStockDetail() {
     const response = await fetch(`/api/stocks/price/${id}`);
     const data = await response.json();
     renderStockDetail(data);
-    console.log(data);
     const chartData = data.prices.map((item) => ({
       date: new Date(item.time),
       price: parseFloat(item.price),

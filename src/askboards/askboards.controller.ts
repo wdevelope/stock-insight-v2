@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   ValidationPipe,
+  Query,
 } from '@nestjs/common';
 import { AskboardsService } from './askboards.service';
 import { CreateAskboardDto } from './dto/create-askboard.dto';
@@ -43,11 +44,24 @@ export class AskboardsController {
   // 문의 게시글 전체 조회
   @ApiOperation({
     summary: '문의 게시물 조회 API.',
-    description: '문의 게시물을 조회한다.',
+    description: '문의 게시물을 페이지네이션하여 조회한다.',
   })
   @Get()
-  async findAll() {
-    return await this.askboardsService.findAll();
+  async findAll(@Query('page') page: number = 1) {
+    return await this.askboardsService.findAll(page);
+  }
+
+  // 문의 게시글 닉네임 검색
+  @ApiOperation({
+    summary: '닉네임 기반 문의 게시물 조회 API.',
+    description: '특정 닉네임의 사용자가 작성한 문의 게시물을 조회한다.',
+  })
+  @Get('/search/nickname')
+  async findByNickname(
+    @Query('nickname') nickname: string,
+    @Query('page') page: number = 1,
+  ) {
+    return await this.askboardsService.findByNickname(nickname, page);
   }
 
   // 문의 게시글 상세 조회

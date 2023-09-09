@@ -171,7 +171,6 @@ export class BoardsService {
     const existedBoard = await this.boardsRepository.findOne({
       where: { id: boardId, user: { id: user.id } },
     });
-    console.log(existedBoard);
     if (!existedBoard) {
       throw new NotFoundException('보드가 존재하지 않습니다.');
     }

@@ -28,8 +28,30 @@ export class AskboardsService {
   }
 
   // 문의 게시글 전체 게시글 정보 조회
-  async findAll(): Promise<Askboard[]> {
-    return await this.askboardRepository.findAllWithUserNickname();
+  async findAll(page: number): Promise<{ data: Askboard[]; meta: any }> {
+    return this.askboardRepository.findAllWithUserNickname(page);
+  }
+
+  // 닉네임으로 검색
+  async findByNickname(
+    nickname: string,
+    page: number = 1,
+  ): Promise<{ data: Askboard[]; meta: any }> {
+    const { data, meta } = await this.askboardRepository.findByNickname(
+      nickname,
+      page,
+    );
+
+    if (!data.length) {
+      throw new NotFoundException(
+        `No askboards found for user nickname: ${nickname}`,
+      );
+    }
+
+    return {
+      data,
+      meta,
+    };
   }
 
   // 문의 게시글 상세 조회

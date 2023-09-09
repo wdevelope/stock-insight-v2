@@ -18,7 +18,6 @@ async function fetchAskePostDetails() {
 
     const askBoard = await response.json();
 
-    console.log(askBoard);
     const defaultImageUrl = 'https://ifh.cc/g/a2Sg64.png';
     const userImage = askBoard.user.imgUrl || defaultImageUrl;
     const postDate = toKoreanTime(askBoard.created_at).split('T')[0];

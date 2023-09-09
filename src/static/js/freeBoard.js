@@ -66,10 +66,7 @@ async function fetchAndRenderPosts(
     }
 
     const { data, meta } = await response.json();
-
     const today = toKoreanTime(new Date().toISOString()).split('T')[0];
-
-    console.log(data, meta);
 
     data.sort((a, b) => {
       return new Date(b.created_at) - new Date(a.created_at);
@@ -160,6 +157,17 @@ function updatePaginationUI(meta) {
         buttons[i].classList.add('active');
       }
     }
+  }
+
+  const nextButton = document
+    .getElementById('pagination')
+    .querySelector('button:last-child');
+  let isLastGroup = currentGroup * 5 >= totalPageCount;
+
+  if (isLastGroup) {
+    nextButton.setAttribute('disabled', 'disabled');
+  } else {
+    nextButton.removeAttribute('disabled');
   }
 }
 
