@@ -14,7 +14,7 @@ permissions:
 
 hooks:
   AfterInstall:
-    - location: scripts/change_permissions.sh
+    - location: scripts/start.chmod.sh
       timeout: 60
       runas: ubuntu
 
