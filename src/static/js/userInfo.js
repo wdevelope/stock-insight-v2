@@ -40,8 +40,6 @@ document.getElementById('prevPage').addEventListener('click', function () {
 });
 
 document.getElementById('nextPage').addEventListener('click', function () {
-  // 페이지 증가 후 데이터가 없으면 다시 감소시키는 로직을 추가해야 함.
-  // 이 예제에서는 단순 증가만 합니다.
   currentPage++;
   renderUserQuizzes(userId, currentPage);
 });
@@ -64,6 +62,7 @@ async function fetchUserQuizzes(userId, page = 1) {
   }
 }
 
+// 퀴즈 현황 렌더링
 async function renderUserQuizzes(userId, page = 1) {
   const quizContainer = document.getElementById('userQuizzes');
 
@@ -75,21 +74,23 @@ async function renderUserQuizzes(userId, page = 1) {
     quizContainer.innerHTML = '';
 
     quizzes.forEach((quiz) => {
+      let resultText = '';
+      if (quiz.correct === null) {
+        resultText = '대기중';
+      } else if (quiz.correct === 'true') {
+        resultText = '맞춤';
+      } else {
+        resultText = '틀림';
+      }
       const quizItem = document.createElement('li');
       quizItem.classList.add('list-group-item');
-
       quizItem.innerHTML = `
-              
-              <strong>${quiz.stock.prdt_abrv_name} (${quiz.stockId}) </strong>
-              <br>
-              <strong>예측:</strong> ${quiz.upANDdown} 
-              <strong>결과:</strong> ${
-                quiz.correct === null ? '대기중' : quiz.correct
-              }
-              <span style="float: right;"><strong>${
-                quiz.updated_date
-              }</strong></span>           
-          `;
+                              <strong>${quiz.stock.prdt_abrv_name} (${quiz.stockId}) </strong>
+                              <br>
+                              <strong>예측:</strong> ${quiz.upANDdown} 
+                              <strong>결과:</strong> ${resultText}
+                              <span style="float: right;"><strong>${quiz.updated_date}</strong></span>           
+                          `;
 
       quizContainer.appendChild(quizItem);
     });

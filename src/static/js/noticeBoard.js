@@ -34,7 +34,7 @@ async function RenderNoticePosts() {
         postDate === today ? '<span class="newFreePost">N</span>' : '';
 
       postHTML += `
-                    <a href="/view/noticeBoardInfo.html?noticeBoardId=${post.id}" class="list-group-item list-group-item-action"
+                    <a href="/noticeBoardInfo?noticeBoardId=${post.id}" class="list-group-item list-group-item-action"
                     onclick="handleBoardItemClick(${post.id})">
 
                       <div class="d-flex justify-content-between align-items-center">
@@ -62,7 +62,7 @@ async function RenderNoticePosts() {
 // 🟢 조회수 불러오기
 async function viewsRender(boardId) {
   try {
-    const response = await fetch(`/api/views/${boardId}`, {
+    const response = await fetch(`/apis/${boardId}`, {
       method: 'GET',
       headers: {
         Authorization: token,
@@ -107,7 +107,7 @@ async function likesRender(boardId) {
 
 // 🟢 게시판 항목 클릭 이벤트 핸들러
 function handleBoardItemClick(boardId) {
-  fetch(`/api/views/${boardId}`, {
+  fetch(`/apis/${boardId}`, {
     method: 'POST',
     headers: {
       Authorization: token, // 필요한 경우 인증 토큰 포함

@@ -46,7 +46,7 @@ async function RenderAskPosts(page = 1) {
         postDate === today ? '<span class="newFreePost">N</span>' : '';
 
       postHTML += `
-                      <a href="/view/askBoardInfo.html?askBoardId=${post.id}" class="list-group-item list-group-item-action"                  
+                      <a href="/askBoardInfo?askBoardId=${post.id}" class="list-group-item list-group-item-action"                  
                       onclick="handleBoardItemClick(${post.id})">
                         <div class="d-flex justify-content-between align-items-center">
                           <div>
@@ -126,7 +126,7 @@ function renderSearchResults(data) {
       postDate === today ? '<span class="newFreePost">N</span>' : '';
 
     postHTML += `
-                    <a href="/view/askBoardInfo.html?askBoardId=${post.id}" class="list-group-item list-group-item-action" onclick="handleBoardItemClick(${post.id})">
+                    <a href="/askBoardInfo?askBoardId=${post.id}" class="list-group-item list-group-item-action" onclick="handleBoardItemClick(${post.id})">
                       <div class="d-flex justify-content-between align-items-center">
                         <div>
                           ${isNewPost}

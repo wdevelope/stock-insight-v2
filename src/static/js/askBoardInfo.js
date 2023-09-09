@@ -13,7 +13,7 @@ async function fetchAskePostDetails() {
 
     if (!response.ok) {
       alert('권한이 없습니다.');
-      window.location.href = '/view/askBoard.html';
+      window.location.href = '/askBoard';
     }
 
     const askBoard = await response.json();
@@ -43,7 +43,7 @@ async function fetchAskePostDetails() {
                                   </p>
                                   <p>${askBoard.description}</p>
                                   <br/><br/>
-                                  <a type="button" class="btn btn-secondary" href="/view/askBoardReply.html?askBoardId=${askBoardId}">답글 달기</a>                                `;
+                                  <a type="button" class="btn btn-secondary" href="/askBoardReply?askBoardId=${askBoardId}">답글 달기</a>                                `;
     boardContainer.style.display = 'block';
 
     // 답글 가져오기
@@ -110,7 +110,7 @@ async function deleteAskPost() {
     }
 
     alert('게시글이 삭제되었습니다.');
-    window.location.href = '/view/askBoard.html';
+    window.location.href = '/askBoard';
   } catch (error) {
     alert('게시글 삭제에 실패했습니다.');
     console.error('Error deleting post:', error);

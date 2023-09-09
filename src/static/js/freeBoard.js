@@ -87,7 +87,7 @@ async function fetchAndRenderPosts(
       const rankerStar = post.status === 'ranker' ? '⭐️' : '';
 
       postHTML += `
-                  <a href="/view/freeBoardInfo.html?freeBoardId=${post.id}" class="list-group-item list-group-item-action"                  
+                  <a href="/freeBoardInfo?freeBoardId=${post.id}" class="list-group-item list-group-item-action"                  
                   onclick="handleBoardItemClick(${post.id})">
                     <div class="d-flex justify-content-between align-items-center">
                       <div>
@@ -188,7 +188,7 @@ const prevGroup = (meta) => {
 // 🟠 게시글 조회수
 async function handleBoardItemClick(boardId) {
   try {
-    const response = await fetch(`/api/views/${boardId}`, {
+    const response = await fetch(`/apis/${boardId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
