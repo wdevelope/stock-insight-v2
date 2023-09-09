@@ -103,7 +103,7 @@
         </a>
       </nav>
     </header>
-    <!-- 🔴 커뮤니티 메인  -->
+    <!-- 🔴 문의게시판 메인  -->
     <main>
       <!-- 기본 Nav 메뉴 -->
       <ul class="nav nav-pills mt-5">
@@ -144,11 +144,11 @@
       <div id="pagination">
         <button onclick="prevGroup()"><<</button>
         <!-- 페이지네이션 버튼들 -->
-        <button onclick="fetchAndRenderPosts(1)">1</button>
-        <button onclick="fetchAndRenderPosts(2)">2</button>
-        <button onclick="fetchAndRenderPosts(3)">3</button>
-        <button onclick="fetchAndRenderPosts(4)">4</button>
-        <button onclick="fetchAndRenderPosts(5)">5</button>
+        <button onclick="RenderAskPosts(1)">1</button>
+        <button onclick="RenderAskPosts(2)">2</button>
+        <button onclick="RenderAskPosts(3)">3</button>
+        <button onclick="RenderAskPosts(4)">4</button>
+        <button onclick="RenderAskPosts(5)">5</button>
         <button onclick="nextGroup()">>></button>
       </div>
       <!-- 검색 부분 -->
@@ -156,7 +156,6 @@
         <div class="d-flex justify-content-center align-items-center">
           <!-- 검색 옵션 선택 -->
           <select class="form-select" id="searchOption" style="width: auto">
-            <option value="titleContent">제목+내용</option>
             <option value="nickname">닉네임</option>
           </select>
 
@@ -170,7 +169,11 @@
           />
 
           <!-- 검색 버튼 -->
-          <button class="btn btn-primary" style="margin-left: 10px">
+          <button
+            class="btn btn-primary"
+            style="margin-left: 10px"
+            onclick="handleSearch()"
+          >
             검색
           </button>
         </div>
