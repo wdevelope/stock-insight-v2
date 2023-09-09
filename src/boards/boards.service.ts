@@ -130,7 +130,7 @@ export class BoardsService {
     }
   }
 
-  @Cron('0 */5 * * * *')
+  // @Cron('0 */5 * * * *')
   async indexing(): Promise<void> {
     const updateBoardDto: UpdateBoardDto = new UpdateBoardDto();
     updateBoardDto.is_checked = true;
