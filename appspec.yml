@@ -17,9 +17,9 @@ hooks:
     - location: scripts/start.chmod.sh
       timeout: 60
       runas: ubuntu
+      mode: +x
 
   AfterInstall:
     - location: scripts/start.sh
       timeout: 60
       runas: ubuntu
-      mode: +x
