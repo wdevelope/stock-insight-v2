@@ -65,36 +65,29 @@ export class Users {
   @DeleteDateColumn()
   deletedAt: Date | null;
 
-  @OneToMany(() => Board, (board) => board.user, { eager: true })
+  @OneToMany(() => Board, (board) => board.user)
   board: Board[];
 
-  @OneToMany(() => Comment, (comment) => comment.user, { eager: true })
+  @OneToMany(() => Comment, (comment) => comment.user)
   comment: Comment[];
 
-  @OneToMany(() => Likes, (likes) => likes.user, { cascade: true, eager: true })
+  @OneToMany(() => Likes, (likes) => likes.user, { cascade: true })
   likes: Likes[];
 
-  @OneToMany(() => Views, (views) => views.user, { cascade: true, eager: true })
+  @OneToMany(() => Views, (views) => views.user, { cascade: true })
   views: Views[];
 
   @OneToMany(() => NoticeBoard, (noticeboard) => noticeboard.user, {
     cascade: true,
-    eager: true,
   })
   noticeboard: NoticeBoard;
 
-  @OneToMany(() => Quiz, (quiz) => quiz.user, { eager: true })
+  @OneToMany(() => Quiz, (quiz) => quiz.user)
   quiz: Quiz[];
 
-  @OneToMany(() => Askboard, (askboard) => askboard.user, {
-    cascade: true,
-    eager: true,
-  })
+  @OneToMany(() => Askboard, (askboard) => askboard.user, { cascade: true })
   askboard: Askboard;
 
-  @OneToMany(() => MyStock, (myStock) => myStock.user, {
-    cascade: true,
-    eager: true,
-  })
+  @OneToMany(() => MyStock, (myStock) => myStock.user, { cascade: true })
   myStocks: MyStock[];
 }
