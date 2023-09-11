@@ -11,7 +11,7 @@ import { Users } from 'src/users/users.entity';
 import { BoardsRepository } from './boards.repository';
 import { FindBoardDto } from './dto/find-board.dto';
 import { BoardSearchService } from './boards.search.service';
-import { Cron } from '@nestjs/schedule';
+// import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class BoardsService {
@@ -19,6 +19,17 @@ export class BoardsService {
     private boardsRepository: BoardsRepository,
     private readonly boardSearchService: BoardSearchService,
   ) {}
+
+  // 보드 검색
+  async searchByTitleAndDescriptionAndNickname(
+    page: number,
+    findBoardDto: FindBoardDto,
+  ): Promise<{ data: BoardResponseDto[]; meta: any }> {
+    return this.boardsRepository.searchByTitleAndDescriptionAndNickname(
+      page,
+      findBoardDto,
+    );
+  }
 
   // 페이지네이션 조회
   async findAndCountWithPagination(

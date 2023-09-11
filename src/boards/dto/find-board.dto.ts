@@ -2,7 +2,7 @@ import { PartialType } from '@nestjs/mapped-types';
 import { CreateBoardDto } from './create-board.dto';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class FindBoardDto extends PartialType(CreateBoardDto) {
+export class FindBoardDto {
   @ApiProperty({ description: '타이틀' })
   title?: string;
   @ApiProperty({ description: '내용' })

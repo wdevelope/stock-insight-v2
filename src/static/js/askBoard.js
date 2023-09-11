@@ -44,6 +44,7 @@ async function RenderAskPosts(page = 1) {
       const userImageUrl = post.user.imgUrl || defaultImage;
       const isNewPost =
         postDate === today ? '<span class="newFreePost">N</span>' : '';
+      const rankerStar = post.status === 'ranker' ? '⭐️' : '';
 
       postHTML += `
                       <a href="/askBoardInfo?askBoardId=${post.id}" class="list-group-item list-group-item-action"                  
@@ -55,6 +56,7 @@ async function RenderAskPosts(page = 1) {
                             <strong class="mb-1 ms-2">${post.title} <i class="fa-solid fa-lock"></i></strong>
                           </div>
                           <div>
+                          ${rankerStar} 
                           <img src="${userImageUrl}"  class="me-2 board-user-image"> 
                             <small class="me-2">${post.user.nickname}</small>
                             <span>${postDate}</span>

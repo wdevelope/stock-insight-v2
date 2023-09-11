@@ -71,6 +71,7 @@ async function renderUserQuizzes(userId, page = 1) {
     const quizzes = response.data;
     const lastPage = response.last_page;
     const totalQuizSubmissions = response.total;
+    quizzes.sort((a, b) => b.updated_date.localeCompare(a.updated_date));
 
     quizContainer.innerHTML = '';
 

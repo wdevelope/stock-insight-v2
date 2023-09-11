@@ -31,6 +31,6 @@ export class AuthController {
       // secure: true, // HTTPS 사용 시 활성화
       // maxAge: 1000 * 60 * 60 * 24 * 7, // 쿠키 유효 기간 설정 (예: 1주일)
     });
-    return res.redirect(`http://13.125.86.128:3000/index`);
+    return res.redirect(`https://stockinsight.site/index`);
   }
 }
