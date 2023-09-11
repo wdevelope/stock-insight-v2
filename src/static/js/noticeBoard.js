@@ -96,7 +96,7 @@ function updatePaginationUI(meta) {
       buttons[i].style.display = '';
       buttons[i].innerText = pageNum;
       buttons[i].onclick = function () {
-        RenderAskPosts(pageNum);
+        RenderNoticePosts(pageNum);
       };
 
       if (pageNum === currentPage) {
