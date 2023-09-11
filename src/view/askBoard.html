@@ -24,19 +24,7 @@
       <!--  위쪽 Nav -->
       <nav class="navbar navbar-expand-lg fixed-top-custom">
         <div class="container-fluid">
-          <!-- 햄버거 메뉴 버튼 추가 -->
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#sidebarMenu"
-            aria-controls="sidebarMenu"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <a class="navbar-brand text-light" href="/view/index.html">
+          <a class="navbar-brand text-light" href="/index">
             <i class="fa-brands fa-stack-overflow"> stock insight</i>
           </a>
           <!-- 알림,회원 -->
@@ -58,7 +46,7 @@
               <div><strong>이메일:</strong> <span id="email"></span></div>
             </div>
             <!-- 회원상세정보 버튼 -->
-            <a href="/view/userInfo.html" class="custom-button">회원상세정보</a>
+            <a href="/userInfo" class="custom-button">회원상세정보</a>
             <!-- 로그아웃 버튼 -->
             <button onclick="logout()" class="custom-button">로그아웃</button>
           </div>
@@ -67,10 +55,10 @@
 
       <!--  왼쪽 Nav  -->
       <nav
-        class="d-flex flex-column align-items-start bg-light p-4 d-none d-lg-block left-nav-border"
+        class="d-flex flex-column align-items-start bg-light p-4 d-lg-block left-nav-border"
       >
         <a
-          href="/view/news.html"
+          href="/news"
           class="d-flex align-items-center my-3 sidebar"
           role="button"
           aria-label="Economy"
@@ -78,7 +66,7 @@
           <i class="fa-regular fa-newspaper me-2"></i> news
         </a>
         <a
-          href="/view/stocksLike.html"
+          href="/stocksLike"
           class="d-flex align-items-center my-3 sidebar"
           role="button"
           aria-label="Analysis"
@@ -86,7 +74,7 @@
           <i class="fas fa-chart-bar me-2" aria-hidden="true"></i> stocks
         </a>
         <a
-          href="/view/quiz.html"
+          href="/quiz"
           class="d-flex align-items-center my-3 sidebar"
           role="button"
           aria-label="quiz"
@@ -94,7 +82,7 @@
           <i class="fa-brands fa-square-pinterest me-2"></i> quiz
         </a>
         <a
-          href="/view/noticeBoard.html"
+          href="/noticeBoard"
           class="d-flex align-items-center my-3 sidebar"
           role="button"
           aria-label="Community"
@@ -103,18 +91,18 @@
         </a>
       </nav>
     </header>
-    <!-- 🔴 커뮤니티 메인  -->
+    <!-- 🔴 문의게시판 메인  -->
     <main>
       <!-- 기본 Nav 메뉴 -->
       <ul class="nav nav-pills mt-5">
         <li class="nav-item">
-          <a class="nav-link" href="/view/noticeBoard.html">공지사항</a>
+          <a class="nav-link" href="/noticeBoard">공지사항</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/view/freeBoard.html">자유게시판</a>
+          <a class="nav-link" href="/freeBoard">자유게시판</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/view/askBoard.html">문의</a>
+          <a class="nav-link" href="/askBoard">문의</a>
         </li>
       </ul>
 
@@ -130,7 +118,7 @@
             <h2>문의사항</h2>
             <a
               class="btn btn-primary"
-              href="/view/askWriteBoard.html"
+              href="/askWriteBoard"
               data-board="notice"
             >
               글쓰기
@@ -144,11 +132,11 @@
       <div id="pagination">
         <button onclick="prevGroup()"><<</button>
         <!-- 페이지네이션 버튼들 -->
-        <button onclick="fetchAndRenderPosts(1)">1</button>
-        <button onclick="fetchAndRenderPosts(2)">2</button>
-        <button onclick="fetchAndRenderPosts(3)">3</button>
-        <button onclick="fetchAndRenderPosts(4)">4</button>
-        <button onclick="fetchAndRenderPosts(5)">5</button>
+        <button onclick="RenderAskPosts(1)">1</button>
+        <button onclick="RenderAskPosts(2)">2</button>
+        <button onclick="RenderAskPosts(3)">3</button>
+        <button onclick="RenderAskPosts(4)">4</button>
+        <button onclick="RenderAskPosts(5)">5</button>
         <button onclick="nextGroup()">>></button>
       </div>
       <!-- 검색 부분 -->
@@ -156,7 +144,6 @@
         <div class="d-flex justify-content-center align-items-center">
           <!-- 검색 옵션 선택 -->
           <select class="form-select" id="searchOption" style="width: auto">
-            <option value="titleContent">제목+내용</option>
             <option value="nickname">닉네임</option>
           </select>
 
@@ -166,11 +153,16 @@
             class="form-control"
             id="searchInput"
             placeholder="검색어를 입력하세요..."
+            onkeypress="javascript:if(event.keyCode==13){handleSearch();}"
             style="margin-left: 10px; width: auto"
           />
 
           <!-- 검색 버튼 -->
-          <button class="btn btn-primary" style="margin-left: 10px">
+          <button
+            class="btn btn-primary"
+            style="margin-left: 10px"
+            onclick="handleSearch()"
+          >
             검색
           </button>
         </div>

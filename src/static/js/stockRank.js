@@ -72,5 +72,5 @@ function getChangeColor(change) {
 }
 
 function navigateToStockDetail(id) {
-  window.location.href = `stocksInfo.html?id=${id}`;
+  window.location.href = `stocksInfo?id=${id}`;
 }

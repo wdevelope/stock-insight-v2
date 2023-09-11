@@ -24,13 +24,55 @@ export class AskboardsRepository {
   }
 
   // 문의 게시글 전체 조회
-  async findAllWithUserNickname(): Promise<Askboard[]> {
+  async findAllWithUserNickname(
+    page: number = 1,
+  ): Promise<{ data: Askboard[]; meta: any }> {
+    const take = 15;
+
     const query: SelectQueryBuilder<Askboard> =
       this.askboardsRepository.createQueryBuilder('askboard');
+
     query
       .leftJoinAndSelect('askboard.user', 'user')
-      .select(['askboard', 'user.nickname', 'user.imgUrl']);
-    return await query.getMany();
+      .select(['askboard', 'user.nickname', 'user.imgUrl'])
+      .orderBy('askboard.created_at', 'DESC')
+      .skip((page - 1) * take)
+      .take(take);
+
+    const boards = await query.getMany();
+    const totalCount = await query.getCount();
+    const lastPage = Math.ceil(totalCount / take);
+
+    return {
+      data: boards,
+      meta: { totalCount, lastPage },
+    };
+  }
+  // 닉네임 검색
+  async findByNickname(
+    nickname: string,
+    page: number = 1,
+  ): Promise<{ data: Askboard[]; meta: any }> {
+    const take = 15; // 한 페이지에 표시할 게시글 수
+
+    const query: SelectQueryBuilder<Askboard> =
+      this.askboardsRepository.createQueryBuilder('askboard');
+
+    query
+      .leftJoinAndSelect('askboard.user', 'user')
+      .select(['askboard', 'user.nickname', 'user.imgUrl'])
+      .where('user.nickname = :nickname', { nickname })
+      .skip((page - 1) * take)
+      .take(take);
+
+    const boards = await query.getMany();
+    const totalCount = await query.getCount();
+    const lastPage = Math.ceil(totalCount / take);
+
+    return {
+      data: boards,
+      meta: { totalCount, lastPage },
+    };
   }
 
   // 문의 게시글 상세 조회
@@ -73,6 +115,7 @@ export class AskboardsRepository {
     }
     return updatedAskboard;
   }
+
   // 문의 게시글 저장
   async save(createAskboardDto: CreateAskboardDto, user: Users): Promise<void> {
     try {

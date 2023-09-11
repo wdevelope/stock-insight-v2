@@ -66,7 +66,8 @@ async function fetchAndRenderPosts(
     }
 
     const { data, meta } = await response.json();
-    const today = new Date().toISOString().split('T')[0];
+    const today = toKoreanTime(new Date().toISOString()).split('T')[0];
+
     data.sort((a, b) => {
       return new Date(b.created_at) - new Date(a.created_at);
     });
@@ -77,16 +78,16 @@ async function fetchAndRenderPosts(
     const DEFAULT_IMAGE_URL = 'https://ifh.cc/g/a2Sg64.png';
 
     for (const post of data) {
-      const postDate = post.created_at.split('T')[0];
+      const postDate = toKoreanTime(post.created_at).split('T')[0];
       const isNewPost =
-        postDate === today ? '<i class="fa-solid fa-n"></i>' : '';
+        postDate === today ? '<span class="newFreePost">N</span>' : '';
       const likesCount = post.likeCount;
       const viewsCount = post.viewCount;
       const userImageUrl = post.imgUrl || DEFAULT_IMAGE_URL;
       const rankerStar = post.status === 'ranker' ? '⭐️' : '';
 
       postHTML += `
-                  <a href="/view/freeBoardInfo.html?freeBoardId=${post.id}" class="list-group-item list-group-item-action"                  
+                  <a href="/freeBoardInfo?freeBoardId=${post.id}" class="list-group-item list-group-item-action"                  
                   onclick="handleBoardItemClick(${post.id})">
                     <div class="d-flex justify-content-between align-items-center">
                       <div>
@@ -157,6 +158,17 @@ function updatePaginationUI(meta) {
       }
     }
   }
+
+  const nextButton = document
+    .getElementById('pagination')
+    .querySelector('button:last-child');
+  let isLastGroup = currentGroup * 5 >= totalPageCount;
+
+  if (isLastGroup) {
+    nextButton.setAttribute('disabled', 'disabled');
+  } else {
+    nextButton.removeAttribute('disabled');
+  }
 }
 
 // 🟠 페이지 네이션 다음페이지
@@ -176,7 +188,7 @@ const prevGroup = (meta) => {
 // 🟠 게시글 조회수
 async function handleBoardItemClick(boardId) {
   try {
-    const response = await fetch(`/api/views/${boardId}`, {
+    const response = await fetch(`/apis/${boardId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -191,12 +203,3 @@ async function handleBoardItemClick(boardId) {
     console.error('Error updating views count:', error);
   }
 }
-
-document
-  .getElementById('searchInput')
-  .addEventListener('keydown', function (event) {
-    if (event.key === 'Enter') {
-      event.preventDefault(); // 실제 Enter 동작(예: 폼 제출) 방지
-      freeBoardSearch();
-    }
-  });

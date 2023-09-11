@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Quiz } from './quiz.entity';
 import { DataSource, Repository } from 'typeorm';
 import { CreateQuizDto } from './dto/create-quiz.dto';
@@ -16,12 +16,30 @@ export class QuizRepository extends Repository<Quiz> {
     currentTime.setHours(currentTime.getHours() + 9);
     const today = currentTime.toISOString().substring(0, 10).replace(/-/g, '');
 
-    return await this.insert({
-      upANDdown: data.upANDdown,
-      stockId: data.stockId,
-      updated_date: today,
-      user,
-    });
+    // return await this.insert({
+    //   upANDdown: data.upANDdown,
+    //   stockId: data.stockId,
+    //   updated_date: today,
+    //   user,
+    // });
+
+    try {
+      await this.dataSource.manager.transaction(async (transaction) => {
+        await transaction
+          .createQueryBuilder()
+          .insert()
+          .into(Quiz)
+          .values({
+            upANDdown: data.upANDdown,
+            stockId: data.stockId,
+            updated_date: today,
+            user,
+          })
+          .execute();
+      });
+    } catch (error) {
+      throw new BadRequestException('REPOSITORY_ERROR');
+    }
   }
 
   //정답 확인

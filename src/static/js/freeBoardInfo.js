@@ -26,11 +26,14 @@ async function fetchPostDetails() {
     // 자유 게시글 상세페이지
     const freeBoardContainerContent =
       boardContainer.querySelector('.post-content');
+    const postDate = toKoreanTime(freeBoard.created_at).split('T')[0];
+    const formattedDescription = freeBoard.description.replace(/\n/g, '<br>');
+
     freeBoardContainerContent.innerHTML = `
                                             <div class="d-flex justify-content-between align-items-center position-relative"> 
                                                 <h3>${freeBoard.title}</h3>
                                                 <div class="putdelbutton position-absolute end-0" style="top: 100%;"> 
-                                                  <a href="/view/freeEditBoard.html?freeEditBoardId=${freeBoard.id}" class="btn btn-secondary edit-post">수정</a>
+                                                  <a href="/freeEditBoard?freeEditBoardId=${freeBoard.id}" class="btn btn-secondary edit-post">수정</a>
                                                   <button class="btn btn-secondary delete-post" onclick="deleteFreePost()">삭제</button>
                                                 </div>
                                                 <button
@@ -43,9 +46,9 @@ async function fetchPostDetails() {
                                             </div>         
                                             <p class="text-muted post-info">
                                             <img src="${authorImage}" alt="Author's Image" style="width: 30px; height: 30px; border-radius: 50%;">
-                                               <span class="author">${freeBoard.nickname}</span> | 날짜: <span class="date">${freeBoard.created_at}</span>
+                                               <span class="author">${freeBoard.nickname}</span> | 날짜: <span class="date">${postDate}</span>
                                             </p>
-                                            <p>${freeBoard.description}</p>
+                                            <p>${formattedDescription}</p>                                        
                                             <button class="btn btn-primary" onclick="handleLikeClick()">👍(${likeText})</button>
                                         `;
 
@@ -53,42 +56,31 @@ async function fetchPostDetails() {
     const comments = await fetchComments(freeBoardId);
     const commentsSection = boardContainer.querySelector('.comments-section');
     const commentsList = commentsSection.querySelector('.list-group');
-    const commentsImage = comments.imgUrl || defaultImageUrl;
-    // 댓글 날짜만
-    function formatDate(dateString) {
-      const date = new Date(dateString);
-      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
-        2,
-        '0',
-      )}-${String(date.getDate()).padStart(2, '0')}`;
-    }
 
+    // 댓글 날짜만
     const commentsHTML = comments
-      .map(
-        (comment) => `
-                      <div class="list-group-item">
-                          <div class="d-flex justify-content-between align-items-center">
-                              <div class="d-flex align-items-center">
-                                  <img src="${
-                                    comment.user.imgUrl
-                                  }" alt="Author's Image" style="width: 30px; height: 30px; border-radius: 50%;">
-                                  <strong class="ms-2">${
-                                    comment.user.nickname
-                                  }</strong>
-                              </div>
-                              <div>
-                                  <button class="btn-close" aria-label="Close" onclick="deleteComment(${
-                                    comment.id
-                                  })"></button>
-                              </div>
+      .map((comment) => {
+        const commentImage = comment.user.imgUrl || defaultImageUrl;
+        const commentDate = toKoreanTime(comment.created_at).split('T')[0];
+
+        return `
+                  <div class="list-group-item">
+                      <div class="d-flex justify-content-between align-items-center">
+                          <div class="d-flex align-items-center">
+                              <img src="${commentImage}" alt="Author's Image" style="width: 30px; height: 30px; border-radius: 50%;">
+                              <strong class="ms-2">${comment.user.nickname}</strong>
                           </div>
-                          <p class="mt-2">${comment.comment}</p>
-                          <div style="text-align: right;">
-                              <small>${formatDate(comment.updated_at)}</small>
+                          <div>
+                              <button class="btn-close" aria-label="Close" onclick="deleteComment(${comment.id})"></button>
                           </div>
                       </div>
-                  `,
-      )
+                      <p class="mt-2">${comment.comment}</p>
+                      <div style="text-align: right;">
+                          <small>${commentDate}</small>
+                      </div>
+                  </div>
+              `;
+      })
       .join('');
 
     commentsList.innerHTML = `
@@ -128,7 +120,7 @@ async function deleteFreePost() {
     }
 
     alert('게시글이 삭제되었습니다.');
-    window.location.href = '/view/freeBoard.html';
+    window.location.href = '/freeBoard';
   } catch (error) {
     alert('게시글 삭제에 실패했습니다.');
     console.error('Error deleting post:', error);

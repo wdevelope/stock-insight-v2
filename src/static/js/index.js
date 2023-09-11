@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (!token) {
     alert('로그인이 필요합니다.');
-    window.location.href = '';
+    window.location.href = '/';
   }
 });
 
@@ -97,7 +97,7 @@ function logout() {
   }
   deleteCookie('Authorization');
   alert('로그아웃 완료');
-  window.location.href = '';
+  window.location.href = '/';
 }
 
 // 🟠 query url에서 Id값들 가져오는 코드들
@@ -128,6 +128,13 @@ function toggleControlButtons() {
   } else {
     controlButtons.style.display = 'none';
   }
+}
+
+// 한국 시간 설정
+function toKoreanTime(dateString) {
+  const date = new Date(dateString);
+  date.setHours(date.getHours() + 9);
+  return date.toISOString();
 }
 
 // 🟠 뒤로가기

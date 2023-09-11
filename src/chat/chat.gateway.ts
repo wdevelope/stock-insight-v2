@@ -18,6 +18,15 @@ export class ChatGateway
   @WebSocketServer() server: Server;
   private logger: Logger = new Logger('ChatGateway');
   private redisClient: any;
+  private clearRedisMessages() {
+    this.redisClient.del('messages', (err, reply) => {
+      if (err) {
+        this.logger.error('Failed to clear Redis messages');
+      } else {
+        this.logger.log('Redis messages cleared');
+      }
+    });
+  }
 
   constructor() {
     this.redisClient = redis.createClient({
@@ -35,6 +44,20 @@ export class ChatGateway
 
   afterInit(server: Server) {
     this.logger.log('Init');
+
+    const now = new Date();
+    const delayUntilNextHour =
+      (60 - now.getMinutes()) * 60 * 1000 - now.getSeconds() * 1000;
+
+    setTimeout(() => {
+      this.clearRedisMessages();
+      setInterval(
+        () => {
+          this.clearRedisMessages();
+        },
+        1000 * 60 * 60,
+      ); // 매 1시간마다 초기화
+    }, delayUntilNextHour); // 정각까지 대기
   }
 
   handleConnection(client: Socket, ...args: any[]) {

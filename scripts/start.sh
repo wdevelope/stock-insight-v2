@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
-
 PROJECT_ROOT="/home/ubuntu/app"
 APP_NAME="project"
 
 TIME_NOW=$(date +%c)
-chmod +x $0
+
 cd $PROJECT_ROOT
 cp ../.env ./
 pm2 delete $APP_NAME
