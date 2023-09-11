@@ -13,20 +13,16 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const res = ctx.getResponse<Response>();
     const req = ctx.getRequest<Request>();
-    console.log('exception 전');
-    console.log('if문 들어가기 전 exception', exception);
+    const stack = exception.stack;
 
     if (!(exception instanceof HttpException)) {
-      console.log('if문 안 exception', exception);
       exception = new InternalServerErrorException();
     }
-    console.log('exception 후');
 
     const response = (exception as HttpException).getResponse();
 
     const timestamp = new Date();
     const url = req.url;
-    const stack = exception.stack;
 
     res
       .status((exception as HttpException).getStatus())
