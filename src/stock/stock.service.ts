@@ -73,7 +73,12 @@ export class StockService {
     try {
       const response = await axios.request(config);
       const { OutBlock_1 } = response.data;
-      const today = new Date().toISOString().substring(0, 10).replace(/-/g, '');
+      const currentTime = new Date();
+      currentTime.setHours(currentTime.getHours() + 9);
+      const today = currentTime
+        .toISOString()
+        .substring(0, 10)
+        .replace(/-/g, '');
 
       for (const OutBlock of OutBlock_1) {
         const entity = new Stock();
@@ -292,16 +297,44 @@ export class StockService {
   }
 
   async getStockindex(): Promise<any> {
-    const KOSPI = await this.stockIndexRepository.findOne({
-      where: { bstp_cls_code: '0001' },
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    let KOSPI = await this.stockIndexRepository.find({
+      where: { bstp_cls_code: '0001', created_at: MoreThanOrEqual(today) },
       order: { created_at: 'DESC' },
     });
-    const KOSDAQ = await this.stockIndexRepository.findOne({
-      where: { bstp_cls_code: '1001' },
+    let KOSDAQ = await this.stockIndexRepository.find({
+      where: { bstp_cls_code: '1001', created_at: MoreThanOrEqual(today) },
       order: { created_at: 'DESC' },
     });
-
-    return { KOSPI: KOSPI, KOSDAQ: KOSDAQ };
+    if (KOSPI.length === 0) {
+      KOSPI = await this.stockIndexRepository.find({
+        where: { bstp_cls_code: '0001' },
+        order: { created_at: 'DESC' },
+        take: 40,
+      });
+    }
+    if (KOSDAQ.length === 0) {
+      KOSDAQ = await this.stockIndexRepository.find({
+        where: { bstp_cls_code: '1001' },
+        order: { created_at: 'DESC' },
+        take: 40,
+      });
+    }
+    const KOSPIV = KOSPI.map((v) => ({
+      price: v.bstp_nmix_prpr,
+      time: v.created_at,
+    }));
+    const KOSDAQV = KOSDAQ.map((v) => ({
+      price: v.bstp_nmix_prpr,
+      time: v.created_at,
+    }));
+    return {
+      KOSPI: KOSPI[0],
+      KOSDAQ: KOSDAQ[0],
+      KOSPIV: KOSPIV,
+      KOSDAQV: KOSDAQV,
+    };
   }
 
   async getStockPage(page: number = 1): Promise<any> {
