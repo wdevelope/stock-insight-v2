@@ -45,11 +45,11 @@ async function fetchAndRenderPosts(
   }
 
   if (searchOption === 'titleContent') {
-    url = `/api/boards/find?page=${page}&title=${encodeURIComponent(
+    url = `/api/boards/search?page=${page}&title=${encodeURIComponent(
       searchValue,
     )}&description=${encodeURIComponent(searchValue)}`;
   } else if (searchOption === 'nickname') {
-    url = `/api/boards/find?page=${page}&nickname=${encodeURIComponent(
+    url = `/api/boards/search?page=${page}&nickname=${encodeURIComponent(
       searchValue,
     )}`;
   }
@@ -188,14 +188,13 @@ const prevGroup = (meta) => {
 // 🟠 게시글 조회수
 async function handleBoardItemClick(boardId) {
   try {
-    const response = await fetch(`/apis/${boardId}`, {
+    const response = await fetch(`api/views/${boardId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: token,
       },
     });
-
     if (!response.ok) {
       throw new Error('Failed to update views count');
     }

@@ -9,11 +9,13 @@ import {
   ValidationPipe,
   BadRequestException,
   Query,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { BoardResponseDto } from './dto/board-response.dto';
+import { FindBoardDto } from './dto/find-board.dto';
 import { Board } from './entities/board.entity';
 import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
@@ -51,7 +53,19 @@ export class BoardsController {
     }
   }
 
-  // 보드 검색
+  // 보드 일반검색
+  @Get('/search')
+  async search(
+    @Query('page') page: number = 1,
+    @Query() findBoardDto: FindBoardDto,
+  ) {
+    return await this.boardsService.searchByTitleAndDescriptionAndNickname(
+      page,
+      findBoardDto,
+    );
+  }
+
+  // 보드 오픈서치 검색
   @Get('find')
   @ApiOperation({
     summary: '게시물 조회 API(title & description).',
@@ -83,7 +97,14 @@ export class BoardsController {
   async all(
     @Query('page') page: number = 1,
   ): Promise<{ data: BoardResponseDto[]; meta: any }> {
-    return await this.boardsService.findAndCountWithPagination(page, 15);
+    try {
+      return await this.boardsService.findAndCountWithPagination(page, 15);
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error fetching boards',
+        error.message,
+      );
+    }
   }
 
   // 조회수 정렬
