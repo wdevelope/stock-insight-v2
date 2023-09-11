@@ -42,6 +42,8 @@ async function saveFreeBoard() {
 async function saveNoticeBoard() {
   const title = document.getElementById('postTitle').value;
   const description = document.getElementById('postContent').value;
+  // 소켓io 포트번호
+  const socket = io('');
 
   try {
     const response = await fetch('/api/noticeboards', {
@@ -67,6 +69,22 @@ async function saveNoticeBoard() {
   } catch (error) {
     console.error('Error saving post:', error);
   }
+  // 소켓 이용해 보는중
+  socket.on('ntcToClient', (notice) => {
+    const noticebox = document.getElementById('notice-box');
+    noticebox.innerHTML += `<div>${notice}</div>`;
+  });
+
+  socket.on('connect', () => {
+    console.log('connected');
+  });
+
+  socket.on('disconnect', () => {
+    console.log('disconnected');
+  });
+
+  const text = '새 공지사항이 있습니다!';
+  socket.emit('ntcToServer', text);
 }
 
 // 🟠 문의사항 게시글 생성 함수
