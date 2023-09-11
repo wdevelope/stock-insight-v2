@@ -6,6 +6,7 @@ import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import { HttpExceptionFilter } from './exception/http-exception.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as favicon from 'serve-favicon';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -17,6 +18,8 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   app.useGlobalFilters(new HttpExceptionFilter());
+
+  app.use(favicon(join(__dirname, '..', 'static', 'photo', 'favicon.ico')));
 
   const config = new DocumentBuilder()
     .setTitle('stock community')

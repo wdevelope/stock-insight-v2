@@ -40,8 +40,6 @@ export class NoticeBoardsRepository {
         'board.title',
         'board.description',
         'board.image',
-        'board.likeCount',
-        'board.viewCount',
         'board.created_at',
         'board.updated_at',
         'user.nickname',
@@ -68,6 +66,8 @@ export class NoticeBoardsRepository {
       created_at: result.created_at,
       updated_at: result.updated_at,
       nickname: result.user.nickname,
+      imgUrl: result.user.imgUrl,
+      status: result.user.status,
     }));
 
     return [formattedBoards, total];
