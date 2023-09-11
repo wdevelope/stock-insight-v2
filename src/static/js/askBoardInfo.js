@@ -23,6 +23,8 @@ async function fetchAskePostDetails() {
     const postDate = toKoreanTime(askBoard.created_at).split('T')[0];
     const boardContainer = document.querySelector('main');
     const askBoardContainer = boardContainer.querySelector('.post-content');
+    const formattedDescription = askBoard.description.replace(/\n/g, '<br>');
+
     askBoardContainer.innerHTML = `
                                     <div class="d-flex justify-content-between align-items-center position-relative">
                                     <h3>${askBoard.title}</h3>
@@ -41,7 +43,7 @@ async function fetchAskePostDetails() {
                                   <img src="${userImage}" alt="Author's Image" style="width: 30px; height: 30px; border-radius: 50%;"> 
                                    <span class="author">${askBoard.user.nickname}</span> | 날짜: <span class="date">${postDate}</span>
                                   </p>
-                                  <p>${askBoard.description}</p>
+                                  <p>${formattedDescription}</p>
                                   <br/><br/>
                                   <a type="button" class="btn btn-secondary" href="/askBoardReply?askBoardId=${askBoardId}">답글 달기</a>                                `;
     boardContainer.style.display = 'block';

@@ -17,6 +17,7 @@ lerna-debug.log*
 # Tests
 /coverage
 /.nyc_output
+stress_test.js
 
 # IDEs and editors
 /.idea

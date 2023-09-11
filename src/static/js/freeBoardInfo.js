@@ -27,6 +27,7 @@ async function fetchPostDetails() {
     const freeBoardContainerContent =
       boardContainer.querySelector('.post-content');
     const postDate = toKoreanTime(freeBoard.created_at).split('T')[0];
+    const formattedDescription = freeBoard.description.replace(/\n/g, '<br>');
 
     freeBoardContainerContent.innerHTML = `
                                             <div class="d-flex justify-content-between align-items-center position-relative"> 
@@ -47,7 +48,7 @@ async function fetchPostDetails() {
                                             <img src="${authorImage}" alt="Author's Image" style="width: 30px; height: 30px; border-radius: 50%;">
                                                <span class="author">${freeBoard.nickname}</span> | 날짜: <span class="date">${postDate}</span>
                                             </p>
-                                            <p>${freeBoard.description}</p>
+                                            <p>${formattedDescription}</p>                                        
                                             <button class="btn btn-primary" onclick="handleLikeClick()">👍(${likeText})</button>
                                         `;
 
