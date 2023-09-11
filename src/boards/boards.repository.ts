@@ -104,6 +104,7 @@ export class BoardsRepository {
       };
       return this.boardsRepository.find(optionsWithRelations);
     } catch (error) {
+      console.log(error);
       throw new BadRequestException('REPOSITORY_ERROR');
     }
   }
