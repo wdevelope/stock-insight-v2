@@ -95,7 +95,7 @@ export class UsersService {
     };
   }
   // answer가 true 면 point 를 얻고, keep은 그대로, false 면 point를 잃는다. 대신 0점 밑으로는 내려가지 않는다.
-  @Cron('15 9 * * 1-5')
+  @Cron('50 15 * * 1-5')
   async updatePoint() {
     const userQuiz = await this.usersRepository.getQuizDay();
     userQuiz.forEach(async (userQuiz) => {
@@ -125,7 +125,7 @@ export class UsersService {
   }
 
   // 포인트에 따라서 유저의 스테이터스가 변화한다.
-  @Cron('20 9 * * 1-5')
+  @Cron('0 16 * * 1-5')
   async updateUserStatus() {
     const userId = await this.usersRepository.getQuizDay();
     userId.forEach(async (userId) => {
