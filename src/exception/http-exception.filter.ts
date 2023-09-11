@@ -26,9 +26,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     const timestamp = new Date();
     const url = req.url;
+    const stack = exception.stack;
 
     res
       .status((exception as HttpException).getStatus())
-      .json({ response, timestamp, url });
+      .json({ response, timestamp, url, stack });
   }
 }
