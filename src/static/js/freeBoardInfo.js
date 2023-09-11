@@ -17,10 +17,8 @@ async function fetchPostDetails() {
 
     const freeBoard = await response.json();
     const likeText = freeBoard.likeCount || 0;
-
     const defaultImageUrl = 'https://ifh.cc/g/a2Sg64.png';
     const authorImage = freeBoard.imgUrl || defaultImageUrl;
-
     const boardContainer = document.querySelector('.board-container');
 
     // 자유 게시글 상세페이지

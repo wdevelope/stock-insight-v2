@@ -70,7 +70,6 @@ async function fetchAndRenderPosts(
     }
 
     const { data, meta } = await response.json();
-
     const today = toKoreanTime(new Date().toISOString()).split('T')[0];
 
     const boardElement = document.querySelector('#notice .list-group');
