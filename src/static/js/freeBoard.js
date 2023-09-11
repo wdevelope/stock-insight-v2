@@ -33,7 +33,11 @@ async function fetchAndRenderPosts(
   searchOption = '',
   searchValue = '',
 ) {
-  window.history.pushState(null, null, `?page=${page}&sort=${sortOption}`);
+  let newUrl = `?page=${page}`;
+  if (sortOption) {
+    newUrl += `&sort=${sortOption}`;
+  }
+  window.history.pushState(null, null, newUrl);
 
   let url = `/api/boards/page?page=${page}`;
   if (sortOption === 'view') {
