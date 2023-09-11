@@ -153,6 +153,7 @@ export class BoardsController {
     try {
       return this.boardsService.findOneWithDetails(boardId);
     } catch (error) {
+      console.log(error);
       throw new BadRequestException('CONTROLLER_ERROR');
     }
   }
