@@ -73,7 +73,12 @@ export class StockService {
     try {
       const response = await axios.request(config);
       const { OutBlock_1 } = response.data;
-      const today = new Date().toISOString().substring(0, 10).replace(/-/g, '');
+      const currentTime = new Date();
+      currentTime.setHours(currentTime.getHours() + 9);
+      const today = currentTime
+        .toISOString()
+        .substring(0, 10)
+        .replace(/-/g, '');
 
       for (const OutBlock of OutBlock_1) {
         const entity = new Stock();
