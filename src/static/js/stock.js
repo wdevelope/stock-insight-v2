@@ -173,7 +173,7 @@ function updateStockCount(total) {
 
 // 주식 상세 페이지로 이동
 function navigateToStockDetail(id) {
-  window.location.href = `stocksInfo.html?id=${id}`;
+  window.location.href = `stocksInfo?id=${id}`;
 }
 
 // 디바운스 함수: 이벤트 연속 발생 시 일정 시간 후 한 번만 호출

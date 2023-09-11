@@ -47,7 +47,7 @@ async function submitEdit() {
       return;
     }
     alert('게시글이 수정되었습니다.');
-    window.location.href = `/view/freeBoardInfo.html?freeBoardId=${freeEditBoardId}`;
+    window.location.href = `/freeBoardInfo?freeBoardId=${freeEditBoardId}`;
   } catch (error) {
     console.log(err);
   }

@@ -22,6 +22,8 @@ async function fetchNoticePostDetails() {
     const boardContainer = document.querySelector('.board-container');
     // 공지 게시글 상세페이지
     const noticeBoardContainer = boardContainer.querySelector('.post-content');
+    const formattedDescription = noticeBoard.description.replace(/\n/g, '<br>');
+
     noticeBoardContainer.innerHTML = `
                                           <div class="d-flex justify-content-between align-items-center position-relative"> 
                                               <h3>${noticeBoard.title}</h3>
@@ -41,7 +43,7 @@ async function fetchNoticePostDetails() {
                                           <img src="${authorImage}" alt="Author's Image" style="width: 30px; height: 30px; border-radius: 50%;"> <!-- 작성자의 이미지 추가 -->
                                              <span class="author">${noticeBoard.user.nickname}</span> | 날짜: <span class="date">${postDate}</span>
                                           </p>
-                                          <p>${noticeBoard.description}</p>
+                                          <p>${formattedDescription}</p>
                                       `;
     boardContainer.style.display = 'block';
   } catch (error) {
@@ -63,7 +65,7 @@ async function deleteNoticePost() {
     }
 
     alert('게시글이 삭제되었습니다.');
-    window.location.href = '/view/noticeBoard.html';
+    window.location.href = '/noticeBoard';
   } catch (error) {
     alert('게시글 삭제에 실패했습니다.');
     console.error('Error deleting post:', error);

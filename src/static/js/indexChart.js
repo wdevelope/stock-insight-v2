@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   createDemoChart('kospiChart', 'KOSPI Demo Stock Price'); // KOSPI 차트 생성
   createDemoChart('kosdaqChart', 'KOSDAQ Demo Stock Price'); // KOSDAQ 차트 생성
   fetchStockData();
+  getStockRank();
 });
 
 // 🟢 코스피 코스닥 불러오기
@@ -114,9 +115,12 @@ function createDemoChart(canvasId, labelName) {
             color: 'rgba(255, 255, 255, 0.1)',
             zeroLineColor: 'rgba(255, 255, 255, 0.5)',
           },
+          ticks: {
+            display: false,
+          },
         },
         x: {
-          display: true,
+          display: false,
           gridLines: {
             drawBorder: false,
             color: 'rgba(255, 255, 255, 0.1)',
@@ -126,7 +130,7 @@ function createDemoChart(canvasId, labelName) {
       title: {
         display: true,
         text: labelName,
-        fontSize: 20,
+        fontSize: 25,
         padding: 20,
       },
       legend: {
@@ -144,4 +148,77 @@ function createDemoChart(canvasId, labelName) {
       },
     },
   });
+}
+
+function formatNumberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+async function getStockRank() {
+  try {
+    const response = await fetch('/api/stocks/rank', {
+      headers: {
+        'content-type': 'application/json',
+        Authorization: token,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch stocks.');
+    }
+    const data = (await response.json()).slice(0, 20);
+
+    // 데이터 포맷팅
+    data.forEach((stock) => {
+      stock.prdy_vrss = formatNumberWithCommas(stock.prdy_vrss);
+      if (!stock.prdy_vrss.startsWith('-')) {
+        stock.prdy_vrss = `+${stock.prdy_vrss}`;
+      }
+    });
+
+    populateStockList(data);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function populateStockList(data) {
+  const stockListElement = document.getElementById('stockRankList');
+
+  data.forEach((stock, index) => {
+    const stockItem = document.createElement('li');
+    const formattedPrice = formatPrice(stock.stck_prpr);
+    const formattedChange = stock.prdy_vrss;
+    const changeColor = getChangeColor(formattedChange);
+    const rank = index + 1;
+
+    stockItem.innerHTML = `
+          <div class="stock-item" onclick="navigateToStockDetail('${stock.id}')">
+              <span class="stock-rank">${rank}. </span>  
+              <span class="stock-name" > ${stock.prdt_abrv_name}</span>
+              <span class="stock-id">${stock.id}</span>
+              <span class="stock-price">${formattedPrice}</span>
+              <span class="stock-change" style="color: ${changeColor};">${formattedChange}</span>
+              <span class="stock-market">${stock.rprs_mrkt_kor_name}</span>
+          </div>
+      `;
+    stockListElement.appendChild(stockItem);
+  });
+}
+
+function formatPrice(price) {
+  return parseInt(price, 10).toLocaleString('ko-KR');
+}
+
+function getChangeColor(change) {
+  if (change.startsWith('-')) {
+    return 'blue';
+  } else if (change.startsWith('+') || !isNaN(change)) {
+    return 'red';
+  }
+  return 'black'; // default color
+}
+
+function navigateToStockDetail(id) {
+  window.location.href = `stocksInfo?id=${id}`;
 }

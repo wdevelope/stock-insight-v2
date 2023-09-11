@@ -109,7 +109,7 @@ export class AskboardsController {
     );
   }
 
-  // 문의게시판 답글 조회
+  // 문의게시판 답글 조회.
   @Get('/:askBoardId/replies')
   async getReplies(@Param('askBoardId') askBoardId: number) {
     return await this.askboardsService.getReplies(askBoardId);

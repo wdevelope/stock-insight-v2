@@ -14,7 +14,9 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
     />
+
     <link rel="stylesheet" href="/static/css/index.css" />
+    <link rel="stylesheet" href="/static/css/stock.css" />
   </head>
 
   <body>
@@ -23,19 +25,7 @@
       <!--  위쪽 Nav -->
       <nav class="navbar navbar-expand-lg fixed-top-custom">
         <div class="container-fluid">
-          <!-- 햄버거 메뉴 버튼 추가 -->
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#sidebarMenu"
-            aria-controls="sidebarMenu"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <a class="navbar-brand text-light" href="/view/index.html">
+          <a class="navbar-brand text-light" href="/index">
             <i class="fa-brands fa-stack-overflow"> stock insight</i>
           </a>
           <!-- 알림,회원 -->
@@ -57,7 +47,7 @@
               <div><strong>이메일:</strong> <span id="email"></span></div>
             </div>
             <!-- 회원상세정보 버튼 -->
-            <a href="/view/userInfo.html" class="custom-button">회원상세정보</a>
+            <a href="/userInfo" class="custom-button">회원상세정보</a>
             <!-- 로그아웃 버튼 -->
             <button onclick="logout()" class="custom-button">로그아웃</button>
           </div>
@@ -66,10 +56,11 @@
 
       <!--  왼쪽 Nav  -->
       <nav
-        class="d-flex flex-column align-items-start bg-light p-4 d-none d-lg-block left-nav-border"
+        id="sidebarMenu"
+        class="d-flex flex-column align-items-start bg-light p-4 d-lg-block left-nav-border"
       >
         <a
-          href="/view/news.html"
+          href="/news"
           class="d-flex align-items-center my-3 sidebar"
           role="button"
           aria-label="Economy"
@@ -77,7 +68,7 @@
           <i class="fa-regular fa-newspaper me-2"></i> news
         </a>
         <a
-          href="/view/stocksLike.html"
+          href="/stocksLike"
           class="d-flex align-items-center my-3 sidebar"
           role="button"
           aria-label="Analysis"
@@ -85,7 +76,7 @@
           <i class="fas fa-chart-bar me-2" aria-hidden="true"></i> stocks
         </a>
         <a
-          href="/view/quiz.html"
+          href="/quiz"
           class="d-flex align-items-center my-3 sidebar"
           role="button"
           aria-label="quiz"
@@ -93,7 +84,7 @@
           <i class="fa-brands fa-square-pinterest me-2"></i> quiz
         </a>
         <a
-          href="/view/noticeBoard.html"
+          href="/noticeBoard"
           class="d-flex align-items-center my-3 sidebar"
           role="button"
           aria-label="Community"
@@ -106,80 +97,62 @@
     <!-- 🔴 메인  -->
     <main>
       <div class="container mt-5">
-        <h1 class="text-center mb-4">시장 현황</h1>
+        <h1 class="text-center mb-4 index-title">시장 현황</h1>
         <div class="row">
-          <!-- KOSPI 정보 카드 -->
-          <div class="col-md-6 mb-4">
-            <div class="card">
-              <div class="card-header">KOSPI</div>
-              <div class="card-body">
-                <div class="stock-chart">
-                  <canvas id="kospiChart"></canvas>
-                </div>
-                <h5 class="card-title" id="kospi-price"></h5>
-                <p class="card-text" id="kospi-change"></p>
-              </div>
+          <!-- 당일 급등종목 -->
+          <div class="col-md-6">
+            <div class="stock-rank-container">
+              <h2>당일 급등종목</h2>
+              <br />
+              <ul id="stockRankList">
+                <li class="stock-header">
+                  <span class="stock-name">종목명</span>
+                  <span class="stock-id">ID</span>
+                  <span class="stock-price">가격</span>
+                  <span class="stock-change">등락률</span>
+                  <span class="stock-market">시장</span>
+                </li>
+              </ul>
             </div>
           </div>
-
-          <!-- KOSDAQ 정보 카드 -->
+          <!-- KOSPI, KOSDAQ 정보 카드 -->
           <div class="col-md-6">
-            <div class="card">
-              <div class="card-header">KOSDAQ</div>
-              <div class="card-body">
-                <div class="stock-chart">
-                  <canvas id="kosdaqChart"></canvas>
+            <!-- KOSPI 정보 카드 -->
+            <div class="mb-4">
+              <div class="card">
+                <div class="card-header">KOSPI</div>
+                <div class="card-body">
+                  <div class="stock-chart">
+                    <canvas id="kospiChart"></canvas>
+                  </div>
+                  <br />
+                  <h5 class="card-title" id="kospi-price"></h5>
+                  <p class="card-text" id="kospi-change"></p>
                 </div>
-                <h5 class="card-title" id="kosdaq-price"></h5>
-                <p class="card-text" id="kosdaq-change"></p>
+              </div>
+            </div>
+
+            <!-- KOSDAQ 정보 카드 -->
+            <div class="mb-4">
+              <div class="card">
+                <div class="card-header">KOSDAQ</div>
+                <div class="card-body">
+                  <div class="stock-chart">
+                    <canvas id="kosdaqChart"></canvas>
+                  </div>
+                  <br />
+                  <h5 class="card-title" id="kosdaq-price"></h5>
+                  <p class="card-text" id="kosdaq-change"></p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
       <br />
-      <!-- 주요 기능 -->
-      <div class="mainDescription">
-        <h2 class="features-title">💡 플랫폼 주요 기능</h2>
-        <br />
-        <details>
-          <summary>
-            news : <뉴스> 투자 관련 기사, 리포트, 등의 자료를 조회할 수
-            있습니다.
-          </summary>
-          <br />
-        </details>
-        <br />
-        <details>
-          <summary>
-            stocks : <실시간 주식 정보 조회> 주요 지수, 개별 종목의 실시간 가격
-            및 차트를 제공합니다.
-          </summary>
-          <br />
-        </details>
-        <br />
-
-        <details>
-          <summary>
-            quiz : <주가 예측> 유저는 당일의 주가 예측 퀴즈를 통해, 랭커로
-            진급이 가능합니다.
-          </summary>
-          <br />
-        </details>
-        <br />
-        <details>
-          <summary>
-            community : <사용자 커뮤니티> 주식 투자에 대한 의견, 전략, 분석을
-            공유하고 토론할 수 있는 공간이 있습니다.
-          </summary>
-          <br />
-        </details>
-        <br />
-      </div>
     </main>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.1/umd/popper.min.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
