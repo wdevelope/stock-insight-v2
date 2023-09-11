@@ -16,7 +16,6 @@ async function fetchFavoriteStocks() {
     }
 
     const stocks = await response.json();
-    console.log('즐겨찾기 종목 데이터 테스트', stocks);
     displayFavoriteStocks(stocks);
   } catch (error) {
     console.error('Error fetching favorite stocks:', error);
@@ -158,5 +157,5 @@ async function deleteMyStock(stockId) {
 }
 
 function navigateToStockDetail(id) {
-  window.location.href = `stocksInfo.html?id=${id}`;
+  window.location.href = `stocksInfo?id=${id}`;
 }

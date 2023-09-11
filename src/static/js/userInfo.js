@@ -31,7 +31,7 @@ async function renderUserDetails() {
 
 let currentPage = 1;
 let userId;
-
+// 페이지네이션
 document.getElementById('prevPage').addEventListener('click', function () {
   if (currentPage > 1) {
     currentPage--;
@@ -40,12 +40,11 @@ document.getElementById('prevPage').addEventListener('click', function () {
 });
 
 document.getElementById('nextPage').addEventListener('click', function () {
-  // 페이지 증가 후 데이터가 없으면 다시 감소시키는 로직을 추가해야 함.
-  // 이 예제에서는 단순 증가만 합니다.
   currentPage++;
   renderUserQuizzes(userId, currentPage);
 });
 
+// 🟢 퀴즈 현황 렌더링
 async function fetchUserQuizzes(userId, page = 1) {
   const baseUrl = '/quiz/userQuiz';
   const queryParams = `?page=${page}&userId=${userId}`;
@@ -53,7 +52,6 @@ async function fetchUserQuizzes(userId, page = 1) {
   try {
     const response = await fetch(baseUrl + queryParams);
     const data = await response.json();
-
     if (!response.ok) {
       throw new Error(data.message || 'API 호출 중 오류가 발생했습니다.');
     }
@@ -64,6 +62,7 @@ async function fetchUserQuizzes(userId, page = 1) {
   }
 }
 
+// 🟢 퀴즈 현황 렌더링
 async function renderUserQuizzes(userId, page = 1) {
   const quizContainer = document.getElementById('userQuizzes');
 
@@ -71,31 +70,37 @@ async function renderUserQuizzes(userId, page = 1) {
     const response = await fetchUserQuizzes(userId, page);
     const quizzes = response.data;
     const lastPage = response.last_page;
+    const totalQuizSubmissions = response.total;
 
     quizContainer.innerHTML = '';
 
     quizzes.forEach((quiz) => {
+      let resultText = '';
+      if (quiz.correct === null) {
+        resultText = '대기중';
+      } else if (quiz.correct === 'true') {
+        resultText = '맞춤';
+      } else {
+        resultText = '틀림';
+      }
       const quizItem = document.createElement('li');
       quizItem.classList.add('list-group-item');
-
       quizItem.innerHTML = `
-              
-              <strong>${quiz.stock.prdt_abrv_name} (${quiz.stockId}) </strong>
-              <br>
-              <strong>예측:</strong> ${quiz.upANDdown} 
-              <strong>결과:</strong> ${
-                quiz.correct === null ? '대기중' : quiz.correct
-              }
-              <span style="float: right;"><strong>${
-                quiz.updated_date
-              }</strong></span>           
-          `;
+                              <strong>${quiz.stock.prdt_abrv_name} (${quiz.stockId}) </strong>
+                              <br>
+                              <strong>예측:</strong> ${quiz.upANDdown} 
+                              <strong>결과:</strong> ${resultText}
+                              <span style="float: right;"><strong>${quiz.updated_date}</strong></span>           
+                          `;
 
       quizContainer.appendChild(quizItem);
     });
 
     // 페이지 번호 업데이트
     document.getElementById('currentPage').textContent = currentPage;
+    document.getElementById(
+      'totalQuizzes',
+    ).textContent = `총 퀴즈 제출 개수: ${totalQuizSubmissions}`; // 총 퀴즈 제출 개수를 화면에 표시
 
     // 페이지 버튼 활성화/비활성화
     document.getElementById('prevPage').disabled = currentPage === 1;

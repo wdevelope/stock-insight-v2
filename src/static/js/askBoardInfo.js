@@ -13,17 +13,18 @@ async function fetchAskePostDetails() {
 
     if (!response.ok) {
       alert('권한이 없습니다.');
-      window.location.href = '/view/askBoard.html';
+      window.location.href = '/askBoard';
     }
 
     const askBoard = await response.json();
 
-    console.log(askBoard);
     const defaultImageUrl = 'https://ifh.cc/g/a2Sg64.png';
     const userImage = askBoard.user.imgUrl || defaultImageUrl;
     const postDate = toKoreanTime(askBoard.created_at).split('T')[0];
     const boardContainer = document.querySelector('main');
     const askBoardContainer = boardContainer.querySelector('.post-content');
+    const formattedDescription = askBoard.description.replace(/\n/g, '<br>');
+
     askBoardContainer.innerHTML = `
                                     <div class="d-flex justify-content-between align-items-center position-relative">
                                     <h3>${askBoard.title}</h3>
@@ -42,9 +43,9 @@ async function fetchAskePostDetails() {
                                   <img src="${userImage}" alt="Author's Image" style="width: 30px; height: 30px; border-radius: 50%;"> 
                                    <span class="author">${askBoard.user.nickname}</span> | 날짜: <span class="date">${postDate}</span>
                                   </p>
-                                  <p>${askBoard.description}</p>
+                                  <p>${formattedDescription}</p>
                                   <br/><br/>
-                                  <a type="button" class="btn btn-secondary" href="/view/askBoardReply.html?askBoardId=${askBoardId}">답글 달기</a>                                `;
+                                  <a type="button" class="btn btn-secondary" href="/askBoardReply?askBoardId=${askBoardId}">답글 달기</a>                                `;
     boardContainer.style.display = 'block';
 
     // 답글 가져오기
@@ -111,7 +112,7 @@ async function deleteAskPost() {
     }
 
     alert('게시글이 삭제되었습니다.');
-    window.location.href = '/view/askBoard.html';
+    window.location.href = '/askBoard';
   } catch (error) {
     alert('게시글 삭제에 실패했습니다.');
     console.error('Error deleting post:', error);
