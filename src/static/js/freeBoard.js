@@ -203,12 +203,3 @@ async function handleBoardItemClick(boardId) {
     console.error('Error updating views count:', error);
   }
 }
-
-document
-  .getElementById('searchInput')
-  .addEventListener('keydown', function (event) {
-    if (event.key === 'Enter') {
-      event.preventDefault(); // 실제 Enter 동작(예: 폼 제출) 방지
-      freeBoardSearch();
-    }
-  });

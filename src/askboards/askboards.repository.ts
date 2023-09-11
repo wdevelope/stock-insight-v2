@@ -35,6 +35,7 @@ export class AskboardsRepository {
     query
       .leftJoinAndSelect('askboard.user', 'user')
       .select(['askboard', 'user.nickname', 'user.imgUrl'])
+      .orderBy('askboard.created_at', 'DESC')
       .skip((page - 1) * take)
       .take(take);
 
