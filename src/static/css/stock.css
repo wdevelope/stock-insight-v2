@@ -116,9 +116,13 @@ tbody tr td:nth-child(5) {
 
 .stock-id,
 .stock-price,
-.stock-change,
 .stock-market {
   flex: 1;
+  text-align: right;
+}
+
+.stock-change {
+  flex: 2;
   text-align: right;
 }
 
