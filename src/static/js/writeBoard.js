@@ -38,12 +38,17 @@ async function saveFreeBoard() {
   }
 }
 
+// 공지사항 알림 생성 소켓
+const socket = io('');
+
+socket.on('connect', () => {
+  console.log('connected');
+});
+
 // 🟡 공지사항 생성 함수
 async function saveNoticeBoard() {
   const title = document.getElementById('postTitle').value;
   const description = document.getElementById('postContent').value;
-  // 소켓io 포트번호
-  const socket = io('');
 
   try {
     const response = await fetch('/api/noticeboards', {
@@ -59,6 +64,9 @@ async function saveNoticeBoard() {
       }),
     });
 
+    const text = '새 공지사항이 있습니다!';
+    socket.emit('ntcToServer', text);
+
     if (response.status === 400) {
       alert('글 작성 권한이 없습니다.');
       window.location = '/noticeBoard';
@@ -69,23 +77,11 @@ async function saveNoticeBoard() {
   } catch (error) {
     console.error('Error saving post:', error);
   }
-  // 소켓 이용해 보는중
-  socket.on('ntcToClient', (notice) => {
-    const noticebox = document.getElementById('notice-box');
-    noticebox.innerHTML += `<div>${notice}</div>`;
-  });
-
-  socket.on('connect', () => {
-    console.log('connected');
-  });
-
-  socket.on('disconnect', () => {
-    console.log('disconnected');
-  });
-
-  const text = '새 공지사항이 있습니다!';
-  socket.emit('ntcToServer', text);
 }
+
+socket.on('disconnect', () => {
+  console.log('disconnected');
+});
 
 // 🟠 문의사항 게시글 생성 함수
 async function saveAskBoard() {
@@ -141,3 +137,11 @@ async function saveAskBoardReply() {
     console.log('답글 생성중 에러', error);
   }
 }
+
+// // 소켓 버튼 따로
+// socketbutton.addEventListener('click', (event) => {
+//   event.preventDefault();
+
+//   const text = '새 공지사항이 있습니다!';
+//   socket.emit('ntcToServer', text);
+// });

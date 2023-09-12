@@ -39,7 +39,7 @@ export class EmailService {
       .sendMail({
         to: email, // List of receivers email address
         from: 'gwagbyeol@naver.com', // Senders email address
-        subject: 'Testing Nest Mailermodule with template ✔',
+        subject: '✔ stock insight 회원가입 인증번호입니다. ✔',
         template: 'index', // The `.pug` or `.hbs` extension is appended automatically.
         context: {
           // Data to be sent to template engine.
@@ -96,7 +96,7 @@ export class EmailService {
         .sendMail({
           to: email, // List of receivers email address
           from: 'gwagbyeol@naver.com', // Senders email address
-          subject: 'Testing Nest Mailermodule with template ✔',
+          subject: `✔ stock insight에서 ${email}로 보냈습니다. ✔`,
           template: 'index', // The `.pug` or `.hbs` extension is appended automatically.
           context: {
             // Data to be sent to template engine.

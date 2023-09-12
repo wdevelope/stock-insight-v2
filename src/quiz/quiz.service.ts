@@ -104,7 +104,7 @@ export class QuizService {
   }
 
   // 퀴즈 확인 : correct가 null 인 값만 반환해서 다 확인 시간 필요 x 실행 시간이 필요 평일 9시 10분 되는지 확인
-  @Cron('40 15 * * 1-5')
+  // @Cron('47 15 * * 1-5')
   async updateQuiz(): Promise<any> {
     const quizId = await this.quizRepository.find({ where: { correct: null } });
 
