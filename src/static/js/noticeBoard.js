@@ -57,4 +57,16 @@ async function RenderNoticePosts() {
   } catch (error) {
     console.error('Error fetching notice posts:', error);
   }
+
+  // 공지사항 알림 창 띄우는 소켓
+  const socket = io('');
+  const noticebox = document.getElementById('notice-box');
+
+  socket.on('ntcToClient', (notice) => {
+    noticebox.innerHTML = `<div>${notice}</div>`;
+    console.log(notice);
+    if (notice === null) {
+      noticebox.innerHTML = `<div></div>`;
+    }
+  });
 }
