@@ -43,33 +43,32 @@ function displayFavoriteStocks(stocks) {
     }
 
     const card = `
-                  <div class="col-md-3 mb-4">
-                      <div class="card" style="height: 400px; background-color:${priceChangeColor}; border: none;" onclick="navigateToStockDetail('${
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <div class="card" style="height: auto; max-height: 500px; background-color:${priceChangeColor}; border: none; display: flex; flex-direction: column;" onclick="navigateToStockDetail('${
+                      stock.stockId
+                    }')">
+                    <div class="card-header">
+                      ${stock.prdt_abrv_name} <br>(${stock.stockId})
+                      <span class="delete-button" style="position: absolute; top: 5px; right: 5px; cursor: pointer;" onclick="event.stopPropagation(); deleteMyStock('${
                         stock.stockId
-                      }')">
-                      <div class="card-header">
-                        ${stock.prdt_abrv_name} <br>(${stock.stockId})
-                        <span class="delete-button" style="position: absolute; top: 5px; right: 5px; cursor: pointer;" onclick="event.stopPropagation(); deleteMyStock('${
-                          stock.stockId
-                        }');">❌</span>
-
-                      </div>
-                      <div class="card-body" style="position: relative;">                
-                        <canvas id="stock-chart-${index}" style="position: relative; height: 60%; width: 100%;"></canvas>
-                        <h4 class="card-subtitle mb-2 text-muted" id="stock-price-${index}">
+                      }');">X</span>
+                    </div>
+                    <div class="card-body flex-grow-1" style="position: relative; display: flex; flex-direction: column;">                
+                      <canvas id="stock-chart-${index}" style="position: relative; flex-grow: 1;"></canvas>
+                      <h4 class="card-subtitle mb-2 text-muted">
                         <br>
-                          <span class="current-price-text">현재가</span> 
-                          <br/>
-                          <span class="current-price-value">${parseInt(
-                            stock.stck_prpr,
-                            10,
-                          ).toLocaleString()} 원</span>
-                          <span class="current-price-value">(${priceChange.toLocaleString()}%)</span> 
-                        </h4>
-                      </div>
+                        <span class="current-price-text">현재가</span> 
+                        <br/>
+                        <span class="current-price-value">${parseInt(
+                          stock.stck_prpr,
+                          10,
+                        ).toLocaleString()} 원</span>
+                        <span class="current-price-value">(${priceChange.toLocaleString()}%)</span> 
+                      </h4>
                     </div>
                   </div>
-                `;
+                </div>
+              `;
 
     cardRow.innerHTML += card;
     setTimeout(() => {

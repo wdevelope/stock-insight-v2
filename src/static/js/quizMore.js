@@ -1,36 +1,66 @@
-// DOM 요소 가져오기
-const stockNameTitle = document.getElementById('stock-name-title');
-const stockPrice = document.getElementById('stock-price');
-const riseButton = document.getElementById('rise-button');
-const fallButton = document.getElementById('fall-button');
+// 현재 페이지와 그룹
+let currentPage = 1;
+let currentGroup = 1;
 
-document.addEventListener('DOMContentLoaded', () => {
-  getRandomStock();
+// DOM 요소 가져오기
+const stockSearchInput = document.getElementById('stockSearchInput');
+
+// 검색 입력창 이벤트 설정
+stockSearchInput.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    handleInput(event);
+  }
 });
 
-// 🟢 주식 종목 가져오기
-async function getRandomStock() {
+let currentStocks = [];
+
+// input 검색
+async function handleInput(event) {
+  const query = event.target.value;
+  if (query.length < 1) {
+    createCards(currentStocks);
+    return;
+  }
+  const stocks = await fetchStocksByQuery(query);
+  createCards(stocks);
+  stockSearchInput.value = '';
+}
+
+// 주식 이름으로 API 호출하여 검색
+async function fetchStocksByQuery(query) {
   try {
-    const response = await fetch(`/api/stocks/quiz`, {
+    const response = await fetch(`/api/stocks/search?query=${query}`, {
+      method: 'GET',
       headers: {
-        'content-type': 'application/json',
+        'Content-Type': 'application/json',
         Authorization: token,
       },
     });
+    if (!response.ok) {
+      throw new Error('Failed to fetch stock search results.');
+    }
+
+    const data = await response.json();
+    return data.data; // 'data' 키에 해당하는 배열 반환
+  } catch (error) {
+    console.error('Error during stock search:', error);
+  }
+}
+
+// 페이지 번호를 이용하여 주식 정보 API 호출
+async function fetchStocks(page) {
+  try {
+    const response = await fetch(`/api/stocks/?page=${page}`);
 
     if (!response.ok) {
       throw new Error('Failed to fetch stocks.');
     }
 
     const data = await response.json();
-    const stocks = data.data;
-
-    if (stocks) {
-      currentStocks = stocks;
-      createCards(stocks);
-    } else {
-      console.error('주식 정보를 가져오는데 실패했습니다.');
-    }
+    currentStocks = data.data;
+    createCards(currentStocks);
+    updateURL(page);
+    updatePaginationUI();
   } catch (error) {
     console.error('Error fetching stocks:', error);
   }
@@ -39,6 +69,12 @@ async function getRandomStock() {
 // 🟢 카드 생성 함수
 function createCards(stocks) {
   const cardsContainer = document.querySelector('.cards-container');
+
+  if (!cardsContainer) {
+    console.error("Error: Can't find the cards container.");
+    return;
+  }
+
   cardsContainer.innerHTML = '';
 
   const cardRow = document.createElement('div');
@@ -47,8 +83,8 @@ function createCards(stocks) {
 
   stocks.forEach((stock, index) => {
     const card = `
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 mb-4">
-                        <div class="card" style="height: 300px;">
+                <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12 mb-4">
+                    <div class="card" style="height: 300px;">
                       <div class="card-header"><i class="fa-brands fa-square-pinterest me-2"></i>${
                         stock.rprs_mrkt_kor_name
                       }</div>
@@ -88,6 +124,24 @@ function createCards(stocks) {
   });
 }
 
+// 주식 검색 함수
+async function searchStock() {
+  const query = stockSearchInput.value;
+  const stocks = await fetchStocksByQuery(query);
+  createCards(stocks);
+  stockSearchInput.value = '';
+}
+
+// 검색 결과 출력
+function renderSearchResults(stocks) {
+  createCards(stocks);
+}
+
+// 주식 상세 페이지로 이동
+function navigateToStockDetail(id) {
+  window.location.href = `stocksInfo?id=${id}`;
+}
+
 // 🟢 퀴즈 제출 함수
 async function submitQuiz(prediction, index) {
   const stock = currentStocks[index];
@@ -119,6 +173,54 @@ async function submitQuiz(prediction, index) {
   }
 }
 
-function navigateToStockDetail(id) {
-  window.location.href = `/stocksInfo?id=${id}`;
+// 페이지 번호 동적 부여
+function updatePaginationUI() {
+  const buttons = document
+    .getElementById('pagination')
+    .querySelectorAll('button:not(:first-child):not(:last-child)');
+  const currentPage = getPageFromURL();
+
+  for (let i = 0; i < buttons.length; i++) {
+    let pageNum = i + 1 + 5 * (currentGroup - 1);
+    buttons[i].innerText = pageNum;
+    buttons[i].onclick = function () {
+      fetchStocks(pageNum);
+    };
+
+    if (pageNum === currentPage) {
+      buttons[i].classList.add('active');
+    } else {
+      buttons[i].classList.remove('active');
+    }
+  }
 }
+
+// 🟠 페이지 네이션 다음페이지
+const nextGroup = () => {
+  currentGroup++;
+  updatePaginationUI();
+};
+
+// 🟠 페이지 네이션 이전페이지
+const prevGroup = () => {
+  if (currentGroup > 1) {
+    currentGroup--;
+    updatePaginationUI();
+  }
+};
+
+function updateURL(page) {
+  const currentURL = window.location.href.split('?')[0];
+  const newURL = `${currentURL}?page=${page}`;
+  window.history.pushState({ path: newURL }, '', newURL);
+}
+
+function getPageFromURL() {
+  const searchParams = new URLSearchParams(window.location.search);
+  return parseInt(searchParams.get('page')) || 1;
+}
+
+window.onload = function () {
+  const currentPage = getPageFromURL();
+  fetchStocks(currentPage);
+};

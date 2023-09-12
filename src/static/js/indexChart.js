@@ -166,7 +166,7 @@ async function getStockRank() {
     if (!response.ok) {
       throw new Error('Failed to fetch stocks.');
     }
-    const data = (await response.json()).slice(0, 20);
+    const data = (await response.json()).slice(0, 10);
 
     // 데이터 포맷팅
     data.forEach((stock) => {
@@ -194,15 +194,14 @@ function populateStockList(data) {
     const formattedPer = stock.prdy_ctrt;
 
     stockItem.innerHTML = `
-          <div class="stock-item" onclick="navigateToStockDetail('${stock.id}')">
-              <span class="stock-rank">${rank}. </span>  
-              <span class="stock-name" > ${stock.prdt_abrv_name}</span>
-              <span class="stock-id">${stock.id}</span>
-              <span class="stock-price">${formattedPrice}</span>
-              <span class="stock-change" style="color: ${changeColor};">${formattedChange}(${formattedPer})%</span>
-              <span class="stock-market">${stock.rprs_mrkt_kor_name}</span>
-          </div>
-      `;
+                              <div class="stock-item" onclick="navigateToStockDetail('${stock.id}')">
+                              <span class="stock-rank">${rank}. </span>  
+                              <span class="stock-name" > ${stock.prdt_abrv_name}</span>
+                              <span class="stock-price">${formattedPrice}</span>
+                              <span class="stock-change" style="color: ${changeColor};">${formattedChange} (${formattedPer})%</span>
+                              <span class="stock-market">${stock.rprs_mrkt_kor_name}</span>
+                              </div>
+                         `;
     stockListElement.appendChild(stockItem);
   });
 }
