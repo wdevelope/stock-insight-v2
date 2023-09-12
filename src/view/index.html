@@ -96,18 +96,51 @@
 
     <!-- 🔴 메인  -->
     <main>
-      <div class="container mt-5">
-        <h1 class="text-center mb-4 index-title">시장 현황</h1>
-        <div class="row">
-          <!-- 당일 급등종목 -->
-          <div class="col-md-6">
+      <div>
+        <div class="row main-index">
+          <div class="col-md-5">
+            <h3 class="main-h2">
+              <i class="fa-solid fa-layer-group"></i> 주요 지수
+            </h3>
+            <!-- KOSPI, KOSDAQ 정보 카드 -->
+            <div class="main-indexchart">
+              <div class="col-sm-6">
+                <div class="card">
+                  <div class="card-body">
+                    <h2>KOSPI</h2>
+                    <div class="stock-chart">
+                      <canvas id="kospiChart"></canvas>
+                    </div>
+                    <br />
+                    <h5 class="card-title" id="kospi-price"></h5>
+                    <p class="card-text" id="kospi-change"></p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm-6">
+                <div class="card">
+                  <div class="card-body">
+                    <h2>KOSDAQ</h2>
+                    <div class="stock-chart">
+                      <canvas id="kosdaqChart"></canvas>
+                    </div>
+                    <br />
+                    <h5 class="card-title" id="kosdaq-price"></h5>
+                    <p class="card-text" id="kosdaq-change"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- 당일 급등종목 -->
+            <h3 class="main-h2">
+              <i class="fa-solid fa-arrow-trend-up"></i> 당일 급등종목
+            </h3>
             <div class="stock-rank-container">
-              <h2>당일 급등종목</h2>
               <br />
               <ul id="stockRankList">
                 <li class="stock-header">
                   <span class="stock-name">종목명</span>
-                  <span class="stock-id">ID</span>
                   <span class="stock-price">가격</span>
                   <span class="stock-change">등락률</span>
                   <span class="stock-market">시장</span>
@@ -115,40 +148,52 @@
               </ul>
             </div>
           </div>
-          <!-- KOSPI, KOSDAQ 정보 카드 -->
-          <div class="col-md-6">
-            <!-- KOSPI 정보 카드 -->
-            <div class="mb-4">
-              <div class="card">
-                <div class="card-header">KOSPI</div>
-                <div class="card-body">
-                  <div class="stock-chart">
-                    <canvas id="kospiChart"></canvas>
-                  </div>
-                  <br />
-                  <h5 class="card-title" id="kospi-price"></h5>
-                  <p class="card-text" id="kospi-change"></p>
-                </div>
-              </div>
-            </div>
+          <div class="col-md-7">
+            <!-- 찜한 종목 카드 목록 -->
 
-            <!-- KOSDAQ 정보 카드 -->
-            <div class="mb-4">
-              <div class="card">
-                <div class="card-header">KOSDAQ</div>
-                <div class="card-body">
-                  <div class="stock-chart">
-                    <canvas id="kosdaqChart"></canvas>
-                  </div>
-                  <br />
-                  <h5 class="card-title" id="kosdaq-price"></h5>
-                  <p class="card-text" id="kosdaq-change"></p>
-                </div>
-              </div>
+            <h3 class="main-h2"><i class="fa-solid fa-star"></i> 찜한 종목</h3>
+            <!-- 색상별 가이드라인 -->
+            <div class="color-guide">
+              <div
+                style="
+                  display: inline-block;
+                  width: 24px;
+                  height: 24px;
+                  background-color: #f3722ca5;
+                  margin-right: 8px;
+                "
+              ></div>
+              상승
+              <div
+                style="
+                  display: inline-block;
+                  width: 24px;
+                  height: 24px;
+                  background-color: #a3cef1;
+                  margin-right: 8px;
+                  margin-left: 24px;
+                "
+              ></div>
+              하락
+              <div
+                style="
+                  display: inline-block;
+                  width: 24px;
+                  height: 24px;
+                  background-color: #b0b5c2b7;
+                  margin-right: 8px;
+                  margin-left: 24px;
+                "
+              ></div>
+              보합
             </div>
+            <br />
+            <div class="cards-container main-index-likecards"></div>
+            <!-- 여기에 찜한 종목 카드가 추가 -->
           </div>
         </div>
       </div>
+
       <br />
     </main>
 
@@ -166,5 +211,6 @@
 
     <script src="/static/js/index.js"></script>
     <script src="/static/js/indexChart.js"></script>
+    <script src="/static/js/stockLike.js"></script>
   </body>
 </html>

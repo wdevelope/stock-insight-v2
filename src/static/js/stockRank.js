@@ -47,10 +47,9 @@ function populateStockList(data) {
     stockItem.innerHTML = `
           <div class="stock-item" onclick="navigateToStockDetail('${stock.id}')">
               <span class="stock-rank">${rank}. </span>  
-              <span class="stock-name" > ${stock.prdt_abrv_name}</span>
-              <span class="stock-id">${stock.id}</span>
+              <span class="stock-name" > ${stock.prdt_abrv_name}(${stock.id})</span>
               <span class="stock-price">${formattedPrice}</span>
-              <span class="stock-change" style="color: ${changeColor};">${formattedChange}(${formattedPer})%</span>
+              <span class="stock-change" style="color: ${changeColor};">${formattedChange} (${formattedPer})%</span>
               <span class="stock-market">${stock.rprs_mrkt_kor_name}</span>
           </div>
       `;

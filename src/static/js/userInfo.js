@@ -77,15 +77,22 @@ async function renderUserQuizzes(userId, page = 1) {
 
     quizzes.forEach((quiz) => {
       let resultText = '';
+      let bgColor = '';
+
       if (quiz.correct === null) {
         resultText = '대기중';
+        bgColor = '#b0b5c2b7';
       } else if (quiz.correct === 'true') {
         resultText = '맞춤';
+        bgColor = '#f3722ca5';
       } else {
         resultText = '틀림';
+        bgColor = '#a3cef1';
       }
+
       const quizItem = document.createElement('li');
       quizItem.classList.add('list-group-item');
+      quizItem.style.backgroundColor = bgColor;
       quizItem.innerHTML = `
                               <strong>${quiz.stock.prdt_abrv_name} (${quiz.stockId}) </strong>
                               <br>

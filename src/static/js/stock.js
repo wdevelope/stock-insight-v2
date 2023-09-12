@@ -16,13 +16,23 @@ stockSearchInput.addEventListener('keydown', (event) => {
     searchStock();
   }
 });
-// 디바운스 1초
-stockSearchInput.addEventListener('input', debounce(handleInput, 1000));
+
+// 디바운스 함수: 이벤트 연속 발생 시 일정 시간 후 한 번만 호출
+function debounce(func, delay) {
+  let inDebounce;
+  return function (...args) {
+    clearTimeout(inDebounce);
+    inDebounce = setTimeout(() => func.apply(this, args), delay);
+  };
+}
+
+// 디바운스 0.3초
+stockSearchInput.addEventListener('input', debounce(handleInput, 300));
 
 // 입력 이벤트 핸들러: 자동완성 기능
 async function handleInput(event) {
   const query = event.target.value;
-  if (query.length < 2) {
+  if (query.length < 1) {
     autocompleteContainer.innerHTML = '';
     return;
   }
@@ -34,7 +44,9 @@ async function handleInput(event) {
 function createAutocompleteContainer() {
   const container = document.createElement('div');
   container.id = 'autocompleteContainer';
+
   document.body.appendChild(container);
+
   return container;
 }
 
@@ -176,15 +188,6 @@ function navigateToStockDetail(id) {
   window.location.href = `stocksInfo?id=${id}`;
 }
 
-// 디바운스 함수: 이벤트 연속 발생 시 일정 시간 후 한 번만 호출
-function debounce(func, delay) {
-  let inDebounce;
-  return function (...args) {
-    clearTimeout(inDebounce);
-    inDebounce = setTimeout(() => func.apply(this, args), delay);
-  };
-}
-
 // 페이지 번호 동적 부여
 function updatePaginationUI() {
   const buttons = document
@@ -227,15 +230,12 @@ function updateURL(page) {
   window.history.pushState({ path: newURL }, '', newURL);
 }
 
-window.onload = function () {
-  const currentPage = getPageFromURL();
-  fetchStocks(currentPage);
-};
-
 function getPageFromURL() {
   const searchParams = new URLSearchParams(window.location.search);
   return parseInt(searchParams.get('page')) || 1;
 }
 
-// 페이지 로딩시 초기 주식 목록 불러오기
-fetchStocks(currentPage);
+window.onload = function () {
+  const currentPage = getPageFromURL();
+  fetchStocks(currentPage);
+};

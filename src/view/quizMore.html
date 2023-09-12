@@ -15,6 +15,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
     />
     <link rel="stylesheet" href="/static/css/index.css" />
+    <link rel="stylesheet" href="/static/css/stock.css" />
   </head>
 
   <body>
@@ -104,58 +105,55 @@
           </a>
         </li>
       </ul>
+
       <h2 class="quiz-title">
-        <i class="fa-solid fa-fire"></i> 내일의 주식을 예측해 보아요!
+        <i class="fa-solid fa-fire"></i> 모든 국내 주식을 예측해 보아요!
         <span class="subtitle">(퀴즈 제출 시간 16:00 ~ 09:00)</span>
       </h2>
+      <!-- 검색창 -->
+      <div class="search-section mt-5">
+        <div class="d-flex align-items-center">
+          <!-- 검색어 입력창 -->
+          <input
+            type="text"
+            class="form-control"
+            id="stockSearchInput"
+            placeholder="주식명을 입력하세요.."
+            style="margin-left: 10px; width: auto"
+          />
+
+          <!-- 검색 버튼 -->
+          <button
+            class="btn btn-primary"
+            style="margin-left: 10px"
+            onclick="searchStock()"
+          >
+            검색
+          </button>
+        </div>
+        <!-- 자동완성 컨테이너 -->
+        <div id="autocompleteContainer"></div>
+      </div>
       <br />
+      <br />
+
+      <!-- 퀴즈 메인 페이지 -->
       <div class="row">
         <!-- Cards Section -->
-        <div class="col-md-8 cards-container">
+        <div class="col-md-12 cards-container">
           <!-- 카드 생성되는곳 -->
         </div>
-        <!-- 채팅 세션 -->
-        <div class="col-md-2 chattingSession">
-          <h4><i class="fa-brands fa-rocketchat"></i> 실시간 chat</h4>
+      </div>
 
-          <div class="chat-notification">채팅은 매 정각 초기화 됩니다.</div>
-
-          <div id="chat-box" class="border border-dark p-2">
-            <!-- 채팅 생성되는곳 -->
-          </div>
-
-          <form id="chat-form" class="input-group mb-3">
-            <div class="input-group mb-1">
-              <input
-                type="text"
-                id="chattingNickname"
-                class="form-control w-100 rounded"
-                placeholder="닉네임을 입력하세요."
-                aria-label="Recipient's username"
-                aria-describedby="button-addon2"
-              />
-            </div>
-            <div class="input-group">
-              <input
-                type="text"
-                id="message"
-                class="form-control"
-                placeholder="채팅을 입력하세요."
-                aria-label="Recipient's username"
-                aria-describedby="button-addon2"
-              />
-              <div class="input-group-append">
-                <button
-                  class="btn btn-primary rounded"
-                  type="submit"
-                  id="sendBtn"
-                >
-                  보내기
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
+      <div id="pagination">
+        <button onclick="prevGroup()"><<</button>
+        <!-- 페이지네이션 버튼들 -->
+        <button onclick="fetchStocks(1)">1</button>
+        <button onclick="fetchStocks(2)">2</button>
+        <button onclick="fetchStocks(3)">3</button>
+        <button onclick="fetchStocks(4)">4</button>
+        <button onclick="fetchStocks(5)">5</button>
+        <button onclick="nextGroup()">>></button>
       </div>
     </main>
 
@@ -170,9 +168,7 @@
       src="https://kit.fontawesome.com/1a93e99cf8.js"
       crossorigin="anonymous"
     ></script>
-    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
     <script src="/static/js/index.js"></script>
-    <script src="/static/js/quiz.js"></script>
-    <script src="/static/js/chatting.js"></script>
+    <script src="/static/js/quizMore.js"></script>
   </body>
 </html>
