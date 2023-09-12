@@ -28,7 +28,7 @@ export class AlertGateway
 
   @SubscribeMessage('ntcToServer')
   handleMessage(client: Socket, text: string): void {
-    this.redisClient.set('notice', text, 'EX', 300);
+    this.redisClient.set('notice', text, 'EX', 90);
     this.server.emit('ntcToClient', text);
   }
 

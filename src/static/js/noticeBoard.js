@@ -68,6 +68,18 @@ async function RenderNoticePosts(page = 1) {
   } catch (error) {
     console.error('Error fetching notice posts:', error);
   }
+
+  // 공지사항 알림 창 띄우는 소켓
+  const socket = io('');
+  const noticebox = document.getElementById('notice-box');
+
+  socket.on('ntcToClient', (notice) => {
+    noticebox.innerHTML = `<div>${notice}</div>`;
+    console.log(notice);
+    if (notice === null) {
+      noticebox.innerHTML = `<div></div>`;
+    }
+  });
 }
 
 // 🟢 페이지 번호 동적 부여
