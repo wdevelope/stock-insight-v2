@@ -27,8 +27,8 @@ export class AuthController {
     const user = req.user;
     const token = await this.authService.generateJWT(user);
     res.cookie('Authorization', `Bearer ${token}`, {
-      // httpOnly: true,
-      // secure: true, // HTTPS 사용 시 활성화
+      httpOnly: true,
+      secure: true, // HTTPS 사용 시 활성화
       // maxAge: 1000 * 60 * 60 * 24 * 7, // 쿠키 유효 기간 설정 (예: 1주일)
     });
     return res.redirect(`https://stockinsight.site/index`);

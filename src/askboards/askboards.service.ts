@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateAskboardDto } from './dto/update-askboard.dto';
 import { Askboard } from './entities/askboard.entity';
@@ -112,5 +116,26 @@ export class AskboardsService {
       .innerJoin('reply.user', 'user')
       .where('reply.askboardId = :askBoardId', { askBoardId })
       .getMany();
+  }
+
+  // 문의글 답글 삭제
+  async deleteReply(
+    askBoardId: number,
+    replyId: number,
+    user: Users,
+  ): Promise<void> {
+    const reply = await this.replyRepository.findOne({
+      where: { id: replyId, askboard: { id: askBoardId } },
+    });
+
+    if (!reply) {
+      throw new NotFoundException('Reply not found');
+    }
+
+    if (reply.user.id !== user.id) {
+      throw new UnauthorizedException('Not authorized to delete this reply');
+    }
+
+    await this.replyRepository.remove(reply);
   }
 }

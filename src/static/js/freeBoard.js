@@ -84,7 +84,7 @@ async function fetchAndRenderPosts(
       const likesCount = post.likeCount;
       const viewsCount = post.viewCount;
       const userImageUrl = post.imgUrl || DEFAULT_IMAGE_URL;
-      const rankerStar = post.status === 'ranker' ? '⭐️' : '';
+      const rankerStar = post.status === 'ranker' ? '🏅' : '';
 
       postHTML += `
                   <a href="/freeBoardInfo?freeBoardId=${post.id}" class="list-group-item list-group-item-action"                  

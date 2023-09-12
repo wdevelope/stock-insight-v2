@@ -7,8 +7,10 @@
   display: none;
   position: absolute;
   border: 1px solid #ccc;
-  margin-left: 5px;
+  margin-left: 6px;
   background-color: white;
+  border-radius: 5px;
+  padding: 5px;
 }
 
 #autocompleteContainer > div:hover {
@@ -74,6 +76,7 @@ tbody tr td:nth-child(5) {
 
 .card:hover {
   cursor: pointer;
+  transform: scale(1.02);
 }
 
 .card-header {
