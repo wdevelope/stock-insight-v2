@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
   renderUserDetails();
 });
 
+let currentPage = 1;
+let userId;
+
 //🟡 유저 상세페이지 렌더링
 async function renderUserDetails() {
   const userProfileImage = document.getElementById('mainProfileImage');
@@ -11,7 +14,6 @@ async function renderUserDetails() {
   const userStatus = document.getElementById('mainStatus');
 
   const data = await fetchUserDetails();
-
   // 이미지 렌더링
   if (data.imgUrl) {
     userProfileImage.src = data.imgUrl;
@@ -24,13 +26,92 @@ async function renderUserDetails() {
   userEmail.textContent = data.email;
   userPoint.textContent = data.point;
   userStatus.textContent = data.status;
-
   userId = data.id;
   renderUserQuizzes(userId);
 }
 
-let currentPage = 1;
-let userId;
+//🟡 비밀번호 변경 함수
+async function changePassword() {
+  const password = document.getElementById('password').value;
+  const newPassword = document.getElementById('newPassword').value;
+  const newConfirm = document.getElementById('newConfirm').value;
+
+  if (password && newPassword && newConfirm) {
+    if (newPassword !== newConfirm) {
+      alert('새 비밀번호와 확인이 일치하지 않습니다.');
+      return;
+    }
+
+    const body = {
+      password,
+      newPassword,
+      newConfirm,
+    };
+    try {
+      const response = await fetch(`/api/users/${userId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token,
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (response.status === 200) {
+        alert('비밀번호가 성공적으로 변경되었습니다.');
+        // 모달창 닫기
+        const modalInstance = bootstrap.Modal.getInstance(
+          document.getElementById('passwordChangeModal'),
+        );
+        modalInstance.hide();
+      } else {
+        const data = await response.json();
+        alert(data.error || '비밀번호 변경에 실패했습니다.');
+      }
+    } catch (error) {
+      alert('서버에 문제가 발생했습니다. 다시 시도해주세요.');
+    }
+  } else {
+    alert('모든 필드를 채워주세요.');
+  }
+}
+// 닉네임 변경
+async function changeNickname() {
+  try {
+    const password = document.getElementById('nickpassword').value;
+    const nickname = document.getElementById('changenickname').value;
+    const body = {
+      password,
+      nickname,
+    };
+    console.log(password, nickname);
+    const response = await fetch(`/api/users/${userId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+      body: JSON.stringify(body),
+    });
+
+    const data = await response.json();
+    console.log(data);
+    if (data.statusCode === 201) {
+      alert('닉네임이 변경되었습니다.');
+      const modal = bootstrap.Modal.getInstance(
+        document.getElementById('nicknameChangeModal'),
+      );
+      modal.hide();
+      location.reload();
+    } else {
+      throw new Error('API responded with non-200 status code');
+    }
+  } catch (error) {
+    console.error('닉네임 변경 중 오류 발생:', error);
+    alert('닉네임 변경에 실패하였습니다. 다시 시도해 주세요.');
+  }
+}
+
 // 페이지네이션
 document.getElementById('prevPage').addEventListener('click', function () {
   if (currentPage > 1) {
@@ -94,11 +175,13 @@ async function renderUserQuizzes(userId, page = 1) {
       quizItem.classList.add('list-group-item');
       quizItem.style.backgroundColor = bgColor;
       quizItem.innerHTML = `
+                            <div id="userInfoQuiz" onclick="navigateToStockDetail('${quiz.stockId}')">
                               <strong>${quiz.stock.prdt_abrv_name} (${quiz.stockId}) </strong>
                               <br>
                               <strong>예측:</strong> ${quiz.upANDdown} 
                               <strong>결과:</strong> ${resultText}
-                              <span style="float: right;"><strong>${quiz.updated_date}</strong></span>           
+                              <span style="float: right;"><strong>${quiz.updated_date}</strong></span> 
+                            </div>          
                           `;
 
       quizContainer.appendChild(quizItem);
@@ -152,4 +235,9 @@ async function uploadImageToServer() {
   } catch (error) {
     alert('업로드 중 오류 발생: ' + error);
   }
+}
+
+// 주식 상세 페이지로 이동
+function navigateToStockDetail(id) {
+  window.location.href = `stocksInfo?id=${id}`;
 }

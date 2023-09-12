@@ -126,9 +126,11 @@ ul.nav .nav-item .nav-link.active {
   padding: 10px;
   display: inline-block;
   border-radius: 5px;
+  font-size: 2rem;
+  font-weight: bold;
 }
 
-h6 {
+.h6 {
   color: grey;
 }
 
@@ -137,6 +139,17 @@ h6 {
   font-weight: bold;
   text-transform: uppercase;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.indexkos {
+  color: white;
+  background-color: rgb(68, 68, 73);
+  text-align: center;
+  border-radius: 5px;
+}
+
+.list-group-item > #userInfoQuiz:hover {
+  cursor: pointer;
 }
 
 /* 🔥 메인 css */
@@ -174,7 +187,7 @@ h6 {
   color: white;
   border-radius: 5px;
   padding: 2px 5px;
-  font-size: 0.8em;
+  font-size: 0.6em;
   vertical-align: middle;
   margin-left: 5px;
 }
@@ -247,4 +260,10 @@ h6 {
   background-color: #f7f5f5;
   margin-bottom: 5px;
   border: 1px solid #e2e2e2;
+}
+
+.align-right {
+  text-align: right;
+  display: block;
+  margin-top: auto;
 }

@@ -114,4 +114,14 @@ export class AskboardsController {
   async getReplies(@Param('askBoardId') askBoardId: number) {
     return await this.askboardsService.getReplies(askBoardId);
   }
+
+  // 문의게시판 답글 삭제
+  @Delete('/:askBoardId/replies/:replyId')
+  async deleteReply(
+    @Param('askBoardId') askBoardId: number,
+    @Param('replyId') replyId: number,
+    @CurrentUser() user: Users,
+  ) {
+    return await this.askboardsService.deleteReply(askBoardId, replyId, user);
+  }
 }

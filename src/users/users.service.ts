@@ -40,7 +40,7 @@ export class UsersService {
   }
 
   async updateUser(id: number, body: Partial<UpdateRequestDto>) {
-    const { password, confirm, newPassword, newConfirm, nickname } = body;
+    const { password, newPassword, newConfirm, nickname } = body;
     const user = await this.usersRepository.findUserById(id);
 
     if (!user) {
@@ -54,10 +54,6 @@ export class UsersService {
 
     if (!isPasswordValidated) {
       throw new UnauthorizedException('password를 확인해주세요.');
-    }
-
-    if (password !== confirm) {
-      throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
     }
 
     if (newPassword !== newConfirm) {
