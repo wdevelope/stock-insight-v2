@@ -1,14 +1,15 @@
 window.onload = async function () {
   const urlParams = new URLSearchParams(window.location.search);
   const page = urlParams.get('page') || 1;
-  fetchAndRenderPosts(page);
+  const sort = urlParams.get('sort') || '';
+  fetchAndRenderPosts(page, sort);
   document
     .querySelectorAll('input[name="sortOption"]')
     .forEach(function (radio) {
       radio.addEventListener('change', onSortOptionChanged);
     });
 
-  const meta = await fetchAndRenderPosts(page);
+  const meta = await fetchAndRenderPosts(page, sort);
 
   document
     .getElementById('pagination')
@@ -28,28 +29,31 @@ function handleSortChange() {
 // 🟠 자유게시판 글 랜더링 함수 (검색 결과 포함)
 async function fetchAndRenderPosts(
   page = 1,
-  orderBy = '',
+  sortOption = '',
   searchOption = '',
   searchValue = '',
 ) {
-  window.history.pushState(null, null, `?page=${page}`);
+  let newUrl = `?page=${page}`;
+  if (sortOption) {
+    newUrl += `&sort=${sortOption}`;
+  }
+  window.history.pushState(null, null, newUrl);
 
   let url = `/api/boards/page?page=${page}`;
-
-  if (orderBy === 'view') {
+  if (sortOption === 'view') {
     url = `/api/boards/orderbyviewcount?page=${page}`;
-  } else if (orderBy === 'like') {
+  } else if (sortOption === 'like') {
     url = `/api/boards/orderbylikecount?page=${page}`;
-  } else if (orderBy === 'ranker') {
+  } else if (sortOption === 'ranker') {
     url = `/api/boards/orderbyRanker?page=${page}`;
   }
 
   if (searchOption === 'titleContent') {
-    url = `/api/boards/find?page=${page}&title=${encodeURIComponent(
+    url = `/api/boards/search?page=${page}&title=${encodeURIComponent(
       searchValue,
     )}&description=${encodeURIComponent(searchValue)}`;
   } else if (searchOption === 'nickname') {
-    url = `/api/boards/find?page=${page}&nickname=${encodeURIComponent(
+    url = `/api/boards/search?page=${page}&nickname=${encodeURIComponent(
       searchValue,
     )}`;
   }
@@ -67,10 +71,6 @@ async function fetchAndRenderPosts(
 
     const { data, meta } = await response.json();
     const today = toKoreanTime(new Date().toISOString()).split('T')[0];
-
-    data.sort((a, b) => {
-      return new Date(b.created_at) - new Date(a.created_at);
-    });
 
     const boardElement = document.querySelector('#notice .list-group');
     let postHTML = '';
@@ -150,7 +150,9 @@ function updatePaginationUI(meta) {
       buttons[i].style.display = '';
       buttons[i].innerText = pageNum;
       buttons[i].onclick = function () {
-        fetchAndRenderPosts(pageNum);
+        const urlParams = new URLSearchParams(window.location.search);
+        const sort = urlParams.get('sort') || '';
+        fetchAndRenderPosts(pageNum, sort);
       };
 
       if (pageNum === currentPage) {
@@ -173,14 +175,20 @@ function updatePaginationUI(meta) {
 
 // 🟠 페이지 네이션 다음페이지
 const nextGroup = (meta) => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const sort = urlParams.get('sort') || '';
   currentGroup++;
+  fetchAndRenderPosts(1 + 5 * (currentGroup - 1), sort);
   updatePaginationUI(meta);
 };
 
 // 🟠 페이지 네이션 이전페이지
 const prevGroup = (meta) => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const sort = urlParams.get('sort') || '';
   if (currentGroup > 1) {
     currentGroup--;
+    fetchAndRenderPosts(1 + 5 * (currentGroup - 1), sort);
     updatePaginationUI(meta);
   }
 };
@@ -188,14 +196,13 @@ const prevGroup = (meta) => {
 // 🟠 게시글 조회수
 async function handleBoardItemClick(boardId) {
   try {
-    const response = await fetch(`/apis/${boardId}`, {
+    const response = await fetch(`api/views/${boardId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: token,
       },
     });
-
     if (!response.ok) {
       throw new Error('Failed to update views count');
     }
