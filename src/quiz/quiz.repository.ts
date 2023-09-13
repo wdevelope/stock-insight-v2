@@ -121,4 +121,28 @@ export class QuizRepository extends Repository<Quiz> {
 
     return downQuiz;
   }
+
+  // userId에 맞는 true 의 개수
+  async correctQuizTrue(userId: number): Promise<any> {
+    const correctTrue = await this.createQueryBuilder('q')
+      .select('COUNT(*)', 'count')
+      .where('q.correct = :correct', { correct: 'true' })
+      .innerJoin('q.user', 'user')
+      .andWhere('user.id = :id', { id: userId })
+      .getRawMany();
+
+    return correctTrue;
+  }
+
+  // userId에 맞는 false 의 개수
+  async correctQuizFalse(userId: number): Promise<any> {
+    const correctFalse = await this.createQueryBuilder('q')
+      .select('COUNT(*)', 'count')
+      .where('q.correct = :correct', { correct: 'false' })
+      .innerJoin('q.user', 'user')
+      .andWhere('user.id = :id', { id: userId })
+      .getRawMany();
+
+    return correctFalse;
+  }
 }

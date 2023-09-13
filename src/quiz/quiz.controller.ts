@@ -70,4 +70,10 @@ export class QuizController {
   ): Promise<any> {
     return await this.quizService.getUserQuiz(userId, page);
   }
+
+  // userId에 맞는 correct 비율 http://localhost:3000/quiz/correct/:id
+  @Get('/correct/:id')
+  async correctQuiz(@Param('id') userId: number) {
+    return await this.quizService.correctQuiz(userId);
+  }
 }

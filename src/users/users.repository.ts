@@ -95,4 +95,11 @@ export class UsersRepository extends Repository<Users> {
 
     return user;
   }
+
+  async getId() {
+    const userId = await this.createQueryBuilder('u')
+      .select('u.id')
+      .getRawOne();
+    return userId;
+  }
 }
