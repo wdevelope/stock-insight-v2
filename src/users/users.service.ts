@@ -167,12 +167,8 @@ export class UsersService {
   }
 
   // quiz
-  async getQuizDay() {
-    const user = await this.usersRepository.getQuizDay();
-    for (const ele of user) {
-      const id = ele.u_id;
-      // console.log('유저id', id);
-    }
+  async getId() {
+    const user = await this.usersRepository.getId();
     return user;
   }
 }

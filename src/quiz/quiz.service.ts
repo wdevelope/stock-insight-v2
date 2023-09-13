@@ -3,7 +3,6 @@ import { CreateQuizDto } from './dto/create-quiz.dto';
 import { QuizRepository } from './quiz.repository';
 import { Users } from '../users/users.entity';
 import { StockService } from 'src/stock/stock.service';
-import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class QuizService {
@@ -56,7 +55,7 @@ export class QuizService {
 
     const quizNumber = Number(existQuizNumber.count);
 
-    // 제출 가능한 시간대 설정 완료 (평일 9시부터 16시까지 제출 불가능)
+    // 제출 가능한 시간대 설정 (평일 9시부터 16시까지 제출 불가능)
     switch (day) {
       case 0:
       case 6:
@@ -103,8 +102,7 @@ export class QuizService {
     }
   }
 
-  // 퀴즈 확인 : correct가 null 인 값만 반환해서 다 확인 시간 필요 x 실행 시간이 필요 평일 9시 10분 되는지 확인
-  // @Cron('47 15 * * 1-5')
+  // 퀴즈 확인 : correct가 null 인 값만 반환해서 다 확인
   async updateQuiz(): Promise<any> {
     const quizId = await this.quizRepository.find({ where: { correct: null } });
 
@@ -197,6 +195,7 @@ export class QuizService {
   async getUserQuiz(userId: number, page: number = 1) {
     const queryBuilder = await this.quizRepository
       .createQueryBuilder('q')
+      .orderBy('q.updated_date', 'DESC')
       .innerJoin('q.stock', 'stock')
       .addSelect('stock.prdt_abrv_name');
     if (userId) {
@@ -217,5 +216,16 @@ export class QuizService {
       pageIndex,
       last_page: Math.ceil(total / take),
     };
+  }
+
+  // user.id에 맞는 맞춘 비율
+  async correctQuiz(userId: number) {
+    const correctTrue = await this.quizRepository.correctQuizTrue(userId);
+    const correctFalse = await this.quizRepository.correctQuizFalse(userId);
+    const sumCorrect =
+      Number(correctTrue[0].count) + Number(correctFalse[0].count);
+    const quizPercent = (Number(correctTrue[0].count) / sumCorrect) * 100;
+
+    return Math.round(quizPercent);
   }
 }

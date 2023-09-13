@@ -158,8 +158,10 @@ export class UsersController {
     return await this.emailService.resetPassword(body);
   }
 
-  @Get('getQuizDay')
-  async getQuizDay() {
-    return await this.usersService.getQuizDay();
+  // http://localhost:3000/api/users/userId
+  @UseGuards(JwtAuthGuard)
+  @Get('/userId')
+  async getId() {
+    return await this.usersService.getId();
   }
 }
