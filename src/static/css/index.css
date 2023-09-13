@@ -26,22 +26,6 @@ main {
   padding-left: 260px;
 }
 
-/* 메인 설명 */
-.mainDescription {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.features-title {
-  text-align: center;
-}
-
-.mainDescription details summary {
-  text-align: left;
-  font-size: 1.2rem;
-}
-
 /* 🔥 메뉴 nav바 */
 .navbar {
   background-color: #01161e;
@@ -75,13 +59,13 @@ main {
 }
 
 .sidebar:hover {
-  background-color: #01161e; /* 배경색 변경 */
+  background-color: #01161e;
   color: white;
-  transition: all 0.1s; /* 부드러운 전환 효과 */
+  transition: all 0.1s;
 }
 
 .sidebar:active {
-  background-color: #01161e; /* 클릭 시 원하는 배경색으로 변경 */
+  background-color: #01161e;
 }
 
 ul.nav .nav-item .nav-link.active {
@@ -121,7 +105,7 @@ ul.nav .nav-item .nav-link.active {
   background-color: #007bff;
   color: #fff;
   cursor: pointer;
-  text-decoration: none; /* a태그의 밑줄 제거 */
+  text-decoration: none;
   display: inline-block;
   margin-top: 10px;
   border-radius: 10px;
@@ -132,18 +116,50 @@ ul.nav .nav-item .nav-link.active {
 }
 
 .userInfo {
-  /* border: 1px solid rgb(188, 188, 188); */
   height: 450px;
   padding: 50px;
   border-radius: 15px;
   margin-bottom: 20px;
 }
 
+.main-h2 {
+  padding: 10px;
+  display: inline-block;
+  border-radius: 5px;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
 .h6 {
   color: grey;
 }
 
+.nav-item > a {
+  color: navy;
+  font-weight: bold;
+  text-transform: uppercase;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.indexkos {
+  color: white;
+  background-color: rgb(68, 68, 73);
+  text-align: center;
+  border-radius: 5px;
+}
+
+.list-group-item > #userInfoQuiz:hover {
+  cursor: pointer;
+}
+
 /* 🔥 메인 css */
+.main-indexchart {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
 .board-container {
   display: none;
 }
@@ -152,17 +168,6 @@ ul.nav .nav-item .nav-link.active {
   display: none;
   z-index: 1;
   border-radius: 4px;
-}
-
-.stock-chart {
-  height: 300px;
-}
-
-.index-title {
-  background-color: #f2f2f2; /* 회색 배경 */
-  padding: 10px 20px;
-  border-radius: 5px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* 🔥 페이지 네이션 */
@@ -177,6 +182,16 @@ ul.nav .nav-item .nav-link.active {
 }
 
 /* 🔥 퀴즈 */
+.premium-tag {
+  background-color: rgb(255, 166, 0);
+  color: white;
+  border-radius: 5px;
+  padding: 2px 5px;
+  font-size: 0.6em;
+  vertical-align: middle;
+  margin-left: 5px;
+}
+
 .quiz-bodyclik:hover {
   cursor: pointer;
   color: #007bff;
@@ -202,6 +217,12 @@ ul.nav .nav-item .nav-link.active {
 .change-price-value {
   font-size: 0.9rem;
 }
+
+.subtitle {
+  font-size: 0.7em;
+  color: red;
+}
+
 /* 🔥 채팅박스 */
 #chat-box {
   width: 380px;
@@ -239,4 +260,10 @@ ul.nav .nav-item .nav-link.active {
   background-color: #f7f5f5;
   margin-bottom: 5px;
   border: 1px solid #e2e2e2;
+}
+
+.align-right {
+  text-align: right;
+  display: block;
+  margin-top: auto;
 }

@@ -44,7 +44,7 @@ async function RenderAskPosts(page = 1) {
       const userImageUrl = post.user.imgUrl || defaultImage;
       const isNewPost =
         postDate === today ? '<span class="newFreePost">N</span>' : '';
-      const rankerStar = post.status === 'ranker' ? '⭐️' : '';
+      const rankerStar = post.status === 'ranker' ? '🏅' : '';
 
       postHTML += `
                       <a href="/askBoardInfo?askBoardId=${post.id}" class="list-group-item list-group-item-action"                  
