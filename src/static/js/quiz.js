@@ -111,6 +111,10 @@ async function submitQuiz(prediction, index) {
       throw new Error('Failed to submit quiz.');
     }
 
+    const upButton = document.getElementById(`up-button-${index}`);
+    const downButton = document.getElementById(`down-button-${index}`);
+    upButton.disabled = true;
+    downButton.disabled = true;
     const data = await response.json();
     alert(data.message);
   } catch (error) {

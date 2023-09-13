@@ -166,6 +166,12 @@ async function submitQuiz(prediction, index) {
     }
 
     const data = await response.json();
+
+    const upButton = document.getElementById(`up-button-${index}`);
+    const downButton = document.getElementById(`down-button-${index}`);
+    upButton.disabled = true;
+    downButton.disabled = true;
+
     alert(data.message);
   } catch (error) {
     console.error('Error submitting quiz:', error);

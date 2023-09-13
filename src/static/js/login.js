@@ -33,7 +33,8 @@ async function verifyEmail() {
     });
 
     if (response.status === 201) {
-      alert('인증 코드를 이메일로 발송하였습니다.');
+      alert(`인증 코드를 이메일로 발송하였습니다.
+주의사항: 이메일을 받지 못했다면 스팸 메일함을 확인해주세요.`);
     } else {
       alert('인증 코드 발송에 실패하였습니다.');
     }

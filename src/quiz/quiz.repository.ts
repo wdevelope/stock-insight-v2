@@ -42,7 +42,7 @@ export class QuizRepository extends Repository<Quiz> {
     }
   }
 
-  //정답 확인
+  // 정답 확인
   async updateQuiz(quiz: Quiz, data: UpdateQuizDto): Promise<object> {
     const result = await this.update({ id: quiz.id }, data);
     return result;
