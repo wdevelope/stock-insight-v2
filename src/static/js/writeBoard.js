@@ -137,11 +137,3 @@ async function saveAskBoardReply() {
     console.log('답글 생성중 에러', error);
   }
 }
-
-// // 소켓 버튼 따로
-// socketbutton.addEventListener('click', (event) => {
-//   event.preventDefault();
-
-//   const text = '새 공지사항이 있습니다!';
-//   socket.emit('ntcToServer', text);
-// });
