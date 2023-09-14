@@ -84,7 +84,6 @@ async function changeNickname() {
       password,
       nickname,
     };
-    console.log(password, nickname);
     const response = await fetch(`/api/users/${userId}`, {
       method: 'PATCH',
       headers: {
@@ -95,7 +94,6 @@ async function changeNickname() {
     });
 
     const data = await response.json();
-    console.log(data);
     if (data.statusCode === 201) {
       alert('닉네임이 변경되었습니다.');
       const modal = bootstrap.Modal.getInstance(
@@ -125,7 +123,7 @@ document.getElementById('nextPage').addEventListener('click', function () {
   renderUserQuizzes(userId, currentPage);
 });
 
-// 🟢 퀴즈 현황 렌더링
+// 🟢 퀴즈 현황 불러오기
 async function fetchUserQuizzes(userId, page = 1) {
   const baseUrl = '/quiz/userQuiz';
   const queryParams = `?page=${page}&userId=${userId}`;
@@ -143,19 +141,25 @@ async function fetchUserQuizzes(userId, page = 1) {
   }
 }
 
-// 🟢 퀴즈 현황 렌더링
 async function renderUserQuizzes(userId, page = 1) {
   const quizContainer = document.getElementById('userQuizzes');
+  const totalQuizzesEl = document.getElementById('totalQuizzes');
+  const correctPercentageEl = document.getElementById('correctPercentage'); // 새로운 정답률을 표시할 요소 ID
 
   try {
-    const response = await fetchUserQuizzes(userId, page);
-    const quizzes = response.data;
-    const lastPage = response.last_page;
-    const totalQuizSubmissions = response.total;
+    const quizResponse = await fetchUserQuizzes(userId, page);
+    const quizzes = quizResponse.data;
+    const lastPage = quizResponse.last_page;
+    const totalQuizSubmissions = quizResponse.total;
+
+    // 새로운 API 호출
+    const correctResponse = await fetch(
+      `http://localhost:3000/quiz/correct/${userId}`,
+    );
+    const correctPercentage = await correctResponse.json();
+
     quizzes.sort((a, b) => b.updated_date.localeCompare(a.updated_date));
-
     quizContainer.innerHTML = '';
-
     quizzes.forEach((quiz) => {
       let resultText = '';
       let bgColor = '';
@@ -175,25 +179,22 @@ async function renderUserQuizzes(userId, page = 1) {
       quizItem.classList.add('list-group-item');
       quizItem.style.backgroundColor = bgColor;
       quizItem.innerHTML = `
-                            <div id="userInfoQuiz" onclick="navigateToStockDetail('${quiz.stockId}')">
-                              <strong>${quiz.stock.prdt_abrv_name} (${quiz.stockId}) </strong>
-                              <br>
-                              <strong>예측:</strong> ${quiz.upANDdown} 
-                              <strong>결과:</strong> ${resultText}
-                              <span style="float: right;"><strong>${quiz.updated_date}</strong></span> 
-                            </div>          
-                          `;
+              <div id="userInfoQuiz" onclick="navigateToStockDetail('${quiz.stockId}')">
+                <strong>${quiz.stock.prdt_abrv_name} (${quiz.stockId}) </strong>
+                <br>
+                <strong>예측:</strong> ${quiz.upANDdown} 
+                <strong>결과:</strong> ${resultText}
+                <span style="float: right;"><strong>${quiz.updated_date}</strong></span> 
+              </div>`;
 
       quizContainer.appendChild(quizItem);
     });
 
-    // 페이지 번호 업데이트
+    // 페이지 정보 업데이트
     document.getElementById('currentPage').textContent = currentPage;
-    document.getElementById(
-      'totalQuizzes',
-    ).textContent = `총 퀴즈 제출 개수: ${totalQuizSubmissions}`; // 총 퀴즈 제출 개수를 화면에 표시
+    totalQuizzesEl.textContent = `총 퀴즈 제출 개수: ${totalQuizSubmissions}`;
+    correctPercentageEl.textContent = `정답률: ${correctPercentage}%`;
 
-    // 페이지 버튼 활성화/비활성화
     document.getElementById('prevPage').disabled = currentPage === 1;
     document.getElementById('nextPage').disabled = currentPage === lastPage;
   } catch (error) {

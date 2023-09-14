@@ -16,7 +16,7 @@
 
 <br>
 
-[<img src="./src/static/photo/new.png" width=100%>](https://)
+[<img src="./src/static/photo/main.png" width=100%>](https://)
 <br>
 <br>
 
@@ -49,20 +49,19 @@
 <br>
 
 <details>
-  <summary>주가 예측 : 유저는 당일의 주가 예측 퀴즈를 통해, 랭커로 진급이 가능합니다.</summary>
+  <summary>퀴즈 (주가 예측) : 유저는 당일의 주가 예측 퀴즈를 통해, 랭커로 진급이 가능합니다.</summary>
     <br>
   <img src="./src/static/photo/quiz.png" width=100%>
 </details>
 <br>
 
 <br>
-<br>
 
 ## 👀 사이트 둘러보기
 
-> 아래 이미지를 클릭하면 사이트로 이동됩니다.(아직 배포는 못했습니다.)
+> 아래 이미지를 클릭하면 사이트로 이동됩니다.
 
-[![사이트로 이동하기](./src/static/photo/login.png)](https://localhost:3000)
+[![사이트로 이동하기](./src/static/photo/login.png)](https://stockinsight.site/)
 
 <br>
 <br>
@@ -79,7 +78,7 @@
 ## 👨‍⚖️ 기술적 의사결정
 
 <details>
-  <summary><b>1. Redis DB 사용 (유저: 인증번호)</b></summary>
+  <summary><b>1. Redis DB 사용 (이메일 인증번호)</b></summary>
   <div markdown="1">
     </br>
     <ul>
@@ -183,21 +182,41 @@
 
 ## ⚙️ 서비스 아키텍처
 
+<details>
+  <summary>AWS 인프라 아키텍쳐</summary>  
+  <br>
+  <img src="./src/static/photo/AWS_infra.png" width=100%>
+</details>
+
 <br>
-<img src="./src/static/photo/서비스아키텍쳐.png" width=100%>
-<p>기술스팩과, 아키텍쳐를 같이 표현해놓았으나, 추후 수정 예정입니다.</p>
+<details>
+  <summary>기술스팩</summary>  
+  <br>
+  <img src="./src/static/photo/서비스아키텍쳐.png" width=100%>
+</details>
+
+<br>
 
 ## ⚒️ 설계
 
 <details>
   <summary>ERD</summary>  
   <br>
-  <img src="./src/static/photo/ERD.png" width=100%>
+
+> 아래 이미지를 클릭하면 사이트로 이동됩니다.
+
+[![사이트로 이동하기](./src/static/photo/ERD.png)](https://drawsql.app/teams/wdeveloper/diagrams/7)
+
 </details>
 <br>
 <details>
-  <summary>API 설계</summary>  
+  <summary>API 설계 (swagger)</summary>  
   <br>
+
+> 아래 이미지를 클릭하면 사이트로 이동됩니다.
+
+[![사이트로 이동하기](./src/static/photo/swagger.png)](https://stockinsight.site/api)
+
 </details>
 
 <br>
@@ -212,29 +231,27 @@
  ┣ 📂askboards             # 문의게시판
  ┣ 📂auth                  # 인증                             
  ┣ 📂boards                # 자유게시판
+ ┣ 📂chat                  # 소켓 채팅
  ┣ 📂comments              # 댓글
  ┣ 📂common                # 공통
  ┣ 📂events                # 이벤트
- ┣ 📂exception             
+ ┣ 📂exception             # 에러처리 미들웨어
  ┣ 📂likes                 # 좋아요
  ┣ 📂noticeboards          # 공지게시판
  ┣ 📂quiz                  # 퀴즈
  ┣ 📂search                # 검색
- ┣ 📂socket-client         # 소켓
- ┣ 📂static                # 프론트 js
+ ┣ 📂static                # 프론트 js, css
  ┣ 📂stock                 # 주식
  ┣ 📂upload                # s3
  ┣ 📂users                 # 유저
  ┣ 📂view                  # 프론트 html
- ┣ 📂views                 # 조회수
- ┣ 📂template              
- ┣ 📂test
- ┃ ┣ 📂                                       
+ ┣ 📂views                 # 조회수                                                
  ┣ 📜app.controller.ts
  ┣ 📜app.module.ts
  ┣ 📜app.service.ts
  ┗ 📜main.ts     
 ``` 
+ ┃ ┣ 📂  
 </details>
 <br>
 
