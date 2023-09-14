@@ -38,7 +38,7 @@ export class EmailService {
     await this.mailerService
       .sendMail({
         to: email, // List of receivers email address
-        from: 'gwagbyeol@naver.com', // Senders email address
+        from: process.env.EMAIL_ID, // Senders email addresse
         subject: '✔ stock insight 회원가입 인증번호입니다. ✔',
         template: 'index', // The `.pug` or `.hbs` extension is appended automatically.
         context: {
@@ -95,12 +95,12 @@ export class EmailService {
       await this.mailerService
         .sendMail({
           to: email, // List of receivers email address
-          from: 'gwagbyeol@naver.com', // Senders email address
-          subject: `✔ stock insight에서 ${email}로 보냈습니다. ✔`,
+          from: process.env.EMAIL_ID, // Senders email address
+          subject: `✔ stock insight에서 ${email}의 임시비밀번호를 보냈습니다. ✔`,
           template: 'index', // The `.pug` or `.hbs` extension is appended automatically.
           context: {
             // Data to be sent to template engine.
-            code: `임시 비밀번호는 ${randomPassword} 입니다.`,
+            code: `임시 비밀번호는 ${randomPassword} 입니다. 로그인 하시면 비밀번호 변경을 해주세요`,
             username: 'stock insight',
           },
         })

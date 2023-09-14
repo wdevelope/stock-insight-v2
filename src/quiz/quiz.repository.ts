@@ -16,13 +16,6 @@ export class QuizRepository extends Repository<Quiz> {
     currentTime.setHours(currentTime.getHours() + 9);
     const today = currentTime.toISOString().substring(0, 10).replace(/-/g, '');
 
-    // return await this.insert({
-    //   upANDdown: data.upANDdown,
-    //   stockId: data.stockId,
-    //   updated_date: today,
-    //   user,
-    // });
-
     try {
       await this.dataSource.manager.transaction(async (transaction) => {
         await transaction
@@ -48,37 +41,26 @@ export class QuizRepository extends Repository<Quiz> {
     return result;
   }
 
-  // up 의 개수
-  async upQuiz(): Promise<any> {
-    const currentTime = new Date();
-    currentTime.setHours(currentTime.getHours() + 9);
-    const today = currentTime.toISOString().substring(0, 10).replace(/-/g, '');
-    const updated_date = today;
-
+  // stockId에 맞는 up 의 개수 (전체)
+  async upQuiz(stockId: string): Promise<any> {
     const upQuiz = await this.createQueryBuilder('q')
       .select('COUNT(*)', 'count')
       .where('q.upANDdown = :upANDdown', { upANDdown: 'up' })
-      .andWhere('quiz.updated_date = :updated_date', {
-        updated_date: updated_date,
-      })
+      .andWhere('quiz.stockId = :stockId', { stockId: stockId })
       .getRawOne();
 
     return upQuiz;
   }
 
-  // down 의 개수
-  async downQuiz(): Promise<any> {
-    const currentTime = new Date();
-    currentTime.setHours(currentTime.getHours() + 9);
-    const today = currentTime.toISOString().substring(0, 10).replace(/-/g, '');
-    const updated_date = today;
-
+  // stockId에 맞는 down 의 개수 (전체)
+  async downQuiz(stockId: string): Promise<any> {
     const downQuiz = await this.createQueryBuilder('q')
       .select('COUNT(*)', 'count')
       .where('q.upANDdown = :upANDdown', { upANDdown: 'down' })
-      .andWhere('quiz.updated_date = :updated_date', {
-        updated_date: updated_date,
+      .andWhere('quiz.correct = :correct', {
+        correct: null,
       })
+      .andWhere('quiz.stockId = :stockId', { stockId: stockId })
       .getRawOne();
 
     return downQuiz;
@@ -86,16 +68,11 @@ export class QuizRepository extends Repository<Quiz> {
 
   // stockId에 맞는 up 의 개수
   async upStockQuiz(stockId: string): Promise<any> {
-    const currentTime = new Date();
-    currentTime.setHours(currentTime.getHours() + 9);
-    const today = currentTime.toISOString().substring(0, 10).replace(/-/g, '');
-    const updated_date = today;
-
     const upQuiz = await this.createQueryBuilder('q')
       .select('COUNT(*)', 'count')
       .where('q.upANDdown = :upANDdown', { upANDdown: 'up' })
-      .andWhere('quiz.updated_date = :updated_date', {
-        updated_date: updated_date,
+      .andWhere('quiz.correct = :correct', {
+        correct: null,
       })
       .andWhere('quiz.stockId = :stockId', { stockId: stockId })
       .getRawOne();
@@ -105,16 +82,11 @@ export class QuizRepository extends Repository<Quiz> {
 
   // stockId에 맞는 down 의 개수
   async downStockQuiz(stockId: string): Promise<any> {
-    const currentTime = new Date();
-    currentTime.setHours(currentTime.getHours() + 9);
-    const today = currentTime.toISOString().substring(0, 10).replace(/-/g, '');
-    const updated_date = today;
-
     const downQuiz = await this.createQueryBuilder('q')
       .select('COUNT(*)', 'count')
       .where('q.upANDdown = :upANDdown', { upANDdown: 'down' })
-      .andWhere('quiz.updated_date = :updated_date', {
-        updated_date: updated_date,
+      .andWhere('quiz.correct = :correct', {
+        correct: null,
       })
       .andWhere('quiz.stockId = :stockId', { stockId: stockId })
       .getRawOne();

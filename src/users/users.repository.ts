@@ -25,7 +25,15 @@ export class UsersRepository extends Repository<Users> {
   async findUserByIdWithoutPassword(id: number): Promise<Users | null> {
     const user = await this.findOne({
       where: { id, deletedAt: null },
-      select: ['id', 'email', 'nickname', 'imgUrl', 'point', 'status'],
+      select: [
+        'id',
+        'email',
+        'nickname',
+        'imgUrl',
+        'point',
+        'status',
+        'is_subscribe',
+      ],
     });
     return user;
   }
@@ -94,12 +102,5 @@ export class UsersRepository extends Repository<Users> {
       .getRawMany();
 
     return user;
-  }
-
-  async getId() {
-    const userId = await this.createQueryBuilder('u')
-      .select('u.id')
-      .getRawOne();
-    return userId;
   }
 }

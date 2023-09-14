@@ -98,11 +98,20 @@
           <a class="nav-link" href="/quiz/">오늘의 퀴즈</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/quizMore">
+          <button type="button" class="nav-link" id="quizMore">
             더 많은 퀴즈
             <span class="premium-tag">Premium</span>
-          </a>
+          </button>
         </li>
+        <!-- 카카오 결제 -->
+        <button
+          type="button"
+          class="btn btn-lg btn-block btn-custom"
+          id="charge_kakao"
+        >
+          충 전 하 기
+        </button>
+        <!-- 카카오 결제 -->
       </ul>
       <h2 class="quiz-title">
         <i class="fa-solid fa-fire"></i> 내일의 주식을 예측해 보아요!
@@ -174,5 +183,9 @@
     <script src="/static/js/index.js"></script>
     <script src="/static/js/quiz.js"></script>
     <script src="/static/js/chatting.js"></script>
+    <!-- iamport SDK Library, 카카오 결제.js -->
+    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+    <script src="/static/js/chargeKakao.js"></script>
+    <!-- iamport SDK Library, 카카오 결제.js -->
   </body>
 </html>

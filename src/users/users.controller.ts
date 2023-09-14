@@ -25,6 +25,7 @@ import { EmailService } from './email/email.service';
 import { EmailDto } from './dto/email.dto';
 import { PointDto } from './dto/point.dto';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { SubscribeDto } from './dto/subscribe.dto';
 
 @ApiTags('users')
 @Controller('api/users')
@@ -158,10 +159,13 @@ export class UsersController {
     return await this.emailService.resetPassword(body);
   }
 
-  // http://localhost:3000/api/users/userId
+  // http://localhost:3000/api/users/charge/:id
   @UseGuards(JwtAuthGuard)
-  @Get('/userId')
-  async getId() {
-    return await this.usersService.getId();
+  @Patch('/charge/:id')
+  async updateSubscribe(
+    @Param('id') userId: number,
+    @Body() body: Partial<SubscribeDto>,
+  ) {
+    return await this.usersService.updateSubscribe(userId, body);
   }
 }
