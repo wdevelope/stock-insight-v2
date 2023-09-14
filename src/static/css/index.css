@@ -65,6 +65,10 @@ ul.nav .nav-item .nav-link.active {
   background-color: rgb(4, 26, 66);
   color: white;
 }
+/* ul.nav .nav-item button.active {
+  background-color: rgb(4, 26, 66);
+  color: white;
+} */
 
 /* 🔥 유저 정보  */
 .user-details {
@@ -214,6 +218,18 @@ ul.nav .nav-item .nav-link.active {
 .subtitle {
   font-size: 0.7em;
   color: red;
+}
+
+.btn-custom {
+  background-color: navy;
+  color: #ffffff;
+  border-radius: 50px;
+  padding: 3px 15px;
+  transition: all 0.3s;
+}
+
+.btn-custom:hover {
+  background-color: #fffb07;
 }
 
 /* 🔥 채팅박스 */

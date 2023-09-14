@@ -89,6 +89,10 @@ async function checkEmailCode() {
 
     if (response.status === 201) {
       alert('이메일 인증이 완료되었습니다.');
+      // 이메일 인증이 완료되면 카운트다운 중지 및 숨기기
+      clearInterval(countdownInterval);
+      document.getElementById('countdown-container').style.display = 'none';
+
       emailVerified = true;
     } else {
       alert('인증 코드가 올바르지 않습니다.');
