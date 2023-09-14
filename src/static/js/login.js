@@ -33,14 +33,36 @@ async function verifyEmail() {
     });
 
     if (response.status === 201) {
-      alert(`인증 코드를 이메일로 발송하였습니다.
-주의사항: 이메일을 받지 못했다면 스팸 메일함을 확인해주세요.`);
+      alert('인증코드가 이메일로 발송되었습니다.');
+      startCountdown();
     } else {
       alert('인증 코드 발송에 실패하였습니다.');
     }
   } catch (error) {
     alert('인증 코드 발송 중 오류가 발생했습니다.');
   }
+}
+
+let countdownInterval;
+
+// 🟢 이메일 인증코드 카운트다운
+function startCountdown() {
+  let timeLeft = 300; // 300 seconds = 5 minutes
+
+  document.getElementById('countdown-container').style.display = 'block';
+  document.getElementById('countdown').textContent = timeLeft;
+
+  countdownInterval = setInterval(() => {
+    timeLeft--;
+
+    document.getElementById('countdown').textContent = timeLeft;
+
+    if (timeLeft <= 0) {
+      clearInterval(countdownInterval);
+      alert('인증 코드 입력 시간이 만료되었습니다.');
+      document.getElementById('countdown-container').style.display = 'none';
+    }
+  }, 1000);
 }
 
 // 🟢 이메일 인증코드 확인 함수

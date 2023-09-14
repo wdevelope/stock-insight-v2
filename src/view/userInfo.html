@@ -92,7 +92,7 @@
     </header>
 
     <!-- 🔴 유저 상세 메인  -->
-    <main class="userInfoMain">
+    <main>
       <h3 class="mb-3"><i class="fa-solid fa-user"></i> 유저 정보</h3>
 
       <div class="userInfo">
@@ -160,6 +160,12 @@
       <h3 class="mb-1"><i class="fa-solid fa-pen"></i> 퀴즈 현황</h3>
 
       <div class="userInfo">
+        <div id="quizSummary">
+          <span id="totalQuizzes"></span> (
+          <span id="correctPercentage"></span> )
+          <br />
+          <br />
+        </div>
         <!-- 색상별 가이드라인 -->
         <div class="color-guide">
           <div
@@ -195,10 +201,7 @@
           ></div>
           대기
         </div>
-        <div id="quizSummary">
-          <br />
-          <span id="totalQuizzes"></span>
-        </div>
+
         <br />
         <div class="row">
           <div class="col-12">
