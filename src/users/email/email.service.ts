@@ -82,14 +82,15 @@ export class EmailService {
       };
 
       const randomPassword = getRandomPassword(11111111, 99999999);
+      const dataString = randomPassword.toString(); // 숫자를 문자열로 변환
 
       let hashedPassword: string | undefined;
-      if (randomPassword) {
-        hashedPassword = await bcrypt.hash(randomPassword, 10);
+      if (dataString) {
+        hashedPassword = await bcrypt.hash(dataString, 10);
       }
 
       await this.usersRepository.updateUser(existEmail, {
-        password: hashedPassword || existEmail.password,
+        password: hashedPassword,
       });
 
       await this.mailerService

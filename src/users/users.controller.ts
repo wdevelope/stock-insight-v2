@@ -147,14 +147,14 @@ export class UsersController {
     return await this.usersService.updateUserStatus();
   }
 
-  //페이지네이션 http://localhost:3000/api/users/page?page=(number)
+  // 페이지네이션 http://localhost:3000/api/users/page?page=(number)
   @Get('/page')
   async all(@Query('page') page: number = 1): Promise<Users[]> {
     return await this.usersService.paginate(page);
   }
 
-  // 임시비밀번호로 변경 http://localhost:3000/api/users/resetPassword
-  @Patch('/resetPassword')
+  // 임시 비밀번호 보내기 http://localhost:3000/api/users/resetPassword
+  @Post('/resetPassword')
   async resetPassword(@Body() body: EmailDto) {
     return await this.emailService.resetPassword(body);
   }
