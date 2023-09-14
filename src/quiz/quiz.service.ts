@@ -151,20 +151,20 @@ export class QuizService {
     };
   }
 
-  // up 비율
-  async upQuiz() {
-    const upQ = await this.quizRepository.upQuiz();
-    const downQ = await this.quizRepository.downQuiz();
+  // stockId에 맞는 up 비율 (전체)
+  async upQuiz(stockId: string) {
+    const upQ = await this.quizRepository.upQuiz(stockId);
+    const downQ = await this.quizRepository.downQuiz(stockId);
     const sumQ = Number(upQ.count) + Number(downQ.count);
     const upPercent = (Number(upQ.count) / sumQ) * 100;
 
     return Math.round(upPercent);
   }
 
-  // down 비율
-  async downQuiz() {
-    const upQ = await this.quizRepository.upQuiz();
-    const downQ = await this.quizRepository.downQuiz();
+  // stockId에 맞는 down 비율 (전체)
+  async downQuiz(stockId: string) {
+    const upQ = await this.quizRepository.upQuiz(stockId);
+    const downQ = await this.quizRepository.downQuiz(stockId);
     const sumQ = Number(upQ.count) + Number(downQ.count);
     const downPercent = (Number(downQ.count) / sumQ) * 100;
 

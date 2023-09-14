@@ -65,6 +65,12 @@ export class Users {
   @DeleteDateColumn()
   deletedAt: Date | null;
 
+  @Column({ default: false })
+  is_subscribe: boolean;
+
+  @Column({ default: 0 })
+  amount: number;
+
   @OneToMany(() => Board, (board) => board.user, { cascade: true })
   board: Board[];
 
