@@ -190,7 +190,7 @@
 
 <br>
 <details>
-  <summary>기술스팩</summary>  
+  <summary>기술 스택</summary>  
   <br>
   <img src="./src/static/photo/서비스아키텍쳐.png" width=100%>
 </details>
