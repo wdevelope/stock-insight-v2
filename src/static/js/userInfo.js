@@ -153,9 +153,7 @@ async function renderUserQuizzes(userId, page = 1) {
     const totalQuizSubmissions = quizResponse.total;
 
     // 새로운 API 호출
-    const correctResponse = await fetch(
-      `http://localhost:3000/quiz/correct/${userId}`,
-    );
+    const correctResponse = await fetch(`/quiz/correct/${userId}`);
     const correctPercentage = await correctResponse.json();
 
     quizzes.sort((a, b) => b.updated_date.localeCompare(a.updated_date));
