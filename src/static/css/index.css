@@ -264,4 +264,5 @@ ul.nav .nav-item .nav-link.active {
 #totalQuizzes,
 #correctPercentage {
   font-size: 1.4rem;
+  font-weight: bold;
 }

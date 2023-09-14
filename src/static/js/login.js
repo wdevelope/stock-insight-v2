@@ -98,6 +98,39 @@ async function checkEmailCode() {
   }
 }
 
+// 🟢 임시 비밀번호 발급
+async function sendResetPassword() {
+  const email = document.getElementById('resetEmail').value;
+  if (!email) {
+    alert('이메일을 입력해주세요.');
+    return;
+  }
+
+  try {
+    const response = await fetch('/api/users/resetPassword', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    if (response.ok) {
+      alert('임시 비밀번호가 이메일로 발송되었습니다.');
+      // 모달 닫기
+      const modal = bootstrap.Modal.getInstance(
+        document.getElementById('passwordResetModal'),
+      );
+      modal.hide();
+    } else {
+      const data = await response.json();
+      alert('오류: ' + (data.message || '알 수 없는 오류 발생'));
+    }
+  } catch (error) {
+    alert('서버 오류: ' + error.message);
+  }
+}
+
 // 🟠 로그인 함수
 async function loginUser() {
   const email = document.getElementById('emailInput').value;
