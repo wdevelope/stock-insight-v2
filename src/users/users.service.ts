@@ -7,7 +7,8 @@ import { UsersRepository } from './users.repository';
 import * as bcrypt from 'bcrypt';
 import { SignUpDto } from './dto/signUp.dto';
 import { UpdateRequestDto } from './dto/updateRequest.dto';
-import { Cron } from '@nestjs/schedule';
+import { SubscribeDto } from './dto/subscribe.dto';
+import { Users } from './users.entity';
 
 @Injectable()
 export class UsersService {
@@ -166,9 +167,16 @@ export class UsersService {
     };
   }
 
-  // quiz
-  async getId() {
-    const user = await this.usersRepository.getId();
-    return user;
+  async updateSubscribe(userId: number, body: Partial<SubscribeDto>) {
+    const data: SubscribeDto = new SubscribeDto();
+    data.is_subscribe = true;
+    const { amount } = body;
+
+    await this.usersRepository
+      .createQueryBuilder()
+      .update(Users)
+      .set({ is_subscribe: data.is_subscribe, amount: amount })
+      .where('id=:id', { id: userId })
+      .execute();
   }
 }

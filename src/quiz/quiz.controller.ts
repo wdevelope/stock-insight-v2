@@ -38,16 +38,16 @@ export class QuizController {
     return await this.quizService.updateQuiz();
   }
 
-  // up 비율 http://localhost:3000/quiz/up
-  @Get('/up')
-  async upQuiz() {
-    return await this.quizService.upQuiz();
+  // stockId에 맞는 up 비율 (전체) http://localhost:3000/quiz/upQuiz/:id
+  @Get('/upQuiz/:id')
+  async upQuiz(@Param('id') stockId: string) {
+    return await this.quizService.upQuiz(stockId);
   }
 
-  // down 비율 http://localhost:3000/quiz/down
-  @Get('/down')
-  async downQuiz() {
-    return await this.quizService.downQuiz();
+  // stockId에 맞는 down 비율 (전체) http://localhost:3000/quiz/downQuiz/:id
+  @Get('/downQuiz/:id')
+  async downQuiz(@Param('id') stockId: string) {
+    return await this.quizService.downQuiz(stockId);
   }
 
   // stockId에 맞는 up 비율 http://localhost:3000/quiz/up/:id
