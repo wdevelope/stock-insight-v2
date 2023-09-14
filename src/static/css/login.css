@@ -28,3 +28,12 @@ canvas {
 .carousel-control-next-icon {
   background-color: rgba(0, 0, 0, 0.5); /* 검정 반투명 배경 */
 }
+
+#countdown-container {
+  border: 1px solid #e0e0e0;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: bold;
+  color: #ff4500;
+}

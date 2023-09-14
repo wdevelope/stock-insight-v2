@@ -19,13 +19,6 @@ main {
   padding-left: 260px;
 }
 
-.userInfoMain {
-  margin-top: 100px;
-  margin-right: 300px;
-  margin-left: 260px;
-  padding-left: 260px;
-}
-
 /* 🔥 메뉴 nav바 */
 .navbar {
   background-color: #01161e;
@@ -266,4 +259,9 @@ ul.nav .nav-item .nav-link.active {
   text-align: right;
   display: block;
   margin-top: auto;
+}
+
+#totalQuizzes,
+#correctPercentage {
+  font-size: 1.4rem;
 }
