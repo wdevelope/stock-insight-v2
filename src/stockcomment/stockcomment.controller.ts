@@ -15,7 +15,6 @@ import { Users } from 'src/users/users.entity';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { StockCommentService } from './stockcomment.service';
 import { StockCommentDto } from './dto/stockcomment.dto';
-import { Stock } from 'src/stock/entities/stock.entity';
 import { StockComment } from './entities/stockcomment.entity';
 
 @UseGuards(JwtAuthGuard)
@@ -33,10 +32,10 @@ export class StockCommentController {
   @ApiBody({ type: [StockCommentDto] })
   create(
     @CurrentUser() user: Users,
-    @Param('id') stock: Stock,
+    @Param('id') id: string,
     @Body(ValidationPipe) stockCommentDto: StockCommentDto,
   ) {
-    return this.stockcommentService.create(user, stockCommentDto, stock);
+    return this.stockcommentService.create(user, stockCommentDto, id);
   }
 
   @Get('/:id/stockcomment')

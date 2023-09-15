@@ -6,7 +6,6 @@ import {
 
 import { Users } from 'src/users/users.entity';
 import { StockCommentDto } from './dto/stockcomment.dto';
-import { Stock } from 'src/stock/entities/stock.entity';
 import { StockCommentRepository } from './stockcomment.repository';
 import { StockComment } from './entities/stockcomment.entity';
 
@@ -17,13 +16,13 @@ export class StockCommentService {
   async create(
     user: Users,
     stockcommentDto: StockCommentDto,
-    stock: Stock,
+    id: string,
   ): Promise<void> {
-    const existedstock = await this.stockcommentRepository.findstock(stock.id);
+    const existedstock = await this.stockcommentRepository.findstock(id);
     if (!existedstock) {
       throw new NotFoundException('주식이 존재하지 않습니다.');
     }
-    await this.stockcommentRepository.save(user, stockcommentDto, stock);
+    await this.stockcommentRepository.save(user, stockcommentDto, existedstock);
   }
 
   async findAllByStock(id: string): Promise<StockComment[]> {
@@ -31,13 +30,8 @@ export class StockCommentService {
     if (!stock) {
       throw new NotFoundException('주식이 존재하지 않습니다.');
     }
-    try {
-      const stockcomment =
-        await this.stockcommentRepository.findWithUserNickname(id);
-      return stockcomment;
-    } catch (error) {
-      throw new BadRequestException('SERVICE_ERROR');
-    }
+
+    return await this.stockcommentRepository.findWithUserNickname(id);
   }
 
   async update(
