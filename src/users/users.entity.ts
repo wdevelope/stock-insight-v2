@@ -14,6 +14,7 @@ import {
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { MyStock } from 'src/stock/entities/myStock.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { StockComment } from 'src/stockcomment/entities/stockcomment.entity';
 
 @Entity()
 export class Users {
@@ -96,4 +97,7 @@ export class Users {
 
   @OneToMany(() => MyStock, (myStock) => myStock.user, { cascade: true })
   myStocks: MyStock[];
+
+  @OneToMany(() => StockComment, (stockComment) => stockComment.user)
+  stockComment: StockComment[];
 }

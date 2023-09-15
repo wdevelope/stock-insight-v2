@@ -92,7 +92,7 @@ export class UsersService {
     };
   }
   // answer가 true 면 point 를 얻고, keep은 그대로, false 면 point를 잃는다. 대신 0점 밑으로는 내려가지 않는다.
-  // @Cron('50 15 * * 1-5')
+  // @Cron('53 15 * * 1-5')
   async updatePoint() {
     const userQuiz = await this.usersRepository.getQuizDay();
     userQuiz.forEach(async (userQuiz) => {
