@@ -112,7 +112,7 @@ async function sendResetPassword() {
 
   try {
     const response = await fetch('/api/users/resetPassword', {
-      method: 'PATCH',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
