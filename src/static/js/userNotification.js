@@ -1,7 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
   userNotification();
 });
+
 let userNoti;
+
 //🟠 유저 알림 불러오기
 async function userNotification() {
   const userData = await fetchUserDetails();
@@ -47,6 +49,7 @@ async function toggleNotification() {
 
         const deleteButton = document.createElement('button');
         deleteButton.innerText = 'X';
+        deleteButton.classList.add('delete-btn');
         deleteButton.addEventListener('click', () => {
           deleteNotification(noti.notification_id);
         });
@@ -79,7 +82,7 @@ async function toggleNotification() {
 async function navigateToFreeBoard(notification_boardId, notification_id) {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/boards/notification/${notification_id}`,
+      `/api/boards/notification/${notification_id}`,
       {
         method: 'PATCH',
         headers: {
