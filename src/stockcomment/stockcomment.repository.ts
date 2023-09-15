@@ -22,13 +22,9 @@ export class StockCommentRepository {
   async findWithUserNickname(id: string): Promise<any> {
     return await this.stockCommentRepository
       .createQueryBuilder('stockComment')
-      .leftJoinAndSelect(
-        'stockComment.user',
-        'user',
-        'user.id = stockComment.userId',
-      )
-      .addSelect(['user.nickname']) // nickname만 선택하여 가져옵니다.
-      .where('stockComment.id = :id', { id })
+      .leftJoinAndSelect('stockComment.user', 'user')
+      .addSelect(['user.nickname'])
+      .where('stockComment.stockId = :id', { id })
       .getMany();
   }
 
