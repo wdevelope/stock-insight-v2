@@ -168,4 +168,11 @@ export class UsersController {
   ) {
     return await this.usersService.updateSubscribe(userId, body);
   }
+
+  // 알림 조회 http://localhost:3000/api/users/notification/:id
+  @UseGuards(JwtAuthGuard)
+  @Get('/notification/:id')
+  async userNotification(@Param('id') userId: number) {
+    return await this.usersService.userNotification(userId);
+  }
 }

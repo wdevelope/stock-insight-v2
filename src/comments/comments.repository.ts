@@ -55,13 +55,15 @@ export class CommentsRepository {
     }
   }
 
-  async save(user: Users, commentDto: CommentDto, board: Board): Promise<void> {
+  async save(user: Users, commentDto: CommentDto, board: Board): Promise<any> {
     try {
-      await this.commentsRepository.save({
+      const result = await this.commentsRepository.save({
         comment: commentDto.comment,
         board: board,
         user: user,
       });
+
+      return result;
     } catch (error) {
       throw new BadRequestException('REPOSITORY_ERROR');
     }

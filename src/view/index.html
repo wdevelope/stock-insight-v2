@@ -30,6 +30,17 @@
           </a>
           <!-- 알림,회원 -->
           <div class="d-flex ms-auto">
+            <!-- 알림 -->
+            <button
+              class="btn btn-outline-light"
+              onclick="toggleNotification()"
+            >
+              <i class="fas fa-bell fa-2x"></i>
+            </button>
+            <!-- 알림 정보 영역 -->
+            <div class="user-notification" id="userNotification">
+              <div class="user-noti" id="userNoti"></div>
+            </div>
             <!-- 회원 -->
             <button class="btn btn-outline-light" onclick="toggleProfile()">
               <i class="fas fa-user fa-2x"></i>
@@ -212,5 +223,6 @@
     <script src="/static/js/index.js"></script>
     <script src="/static/js/indexChart.js"></script>
     <script src="/static/js/stockLike.js"></script>
+    <script src="/static/js/userNotification.js"></script>
   </body>
 </html>

@@ -13,7 +13,6 @@ async function renderUserInfo() {
   userEmail = data.email;
   userId = data.id;
   userSub = data.is_subscribe;
-  console.log(data);
 }
 
 $('#charge_kakao').click(function () {
@@ -56,7 +55,7 @@ $('#charge_kakao').click(function () {
         msg += '에러내용 : ' + rsp.error_msg;
       }
       alert(msg);
-      // document.location.href = '/user/mypage/home'; //alert창 확인 후 이동할 url 설정
+      document.location.href = '/quiz'; //alert창 확인 후 이동할 url 설정
     },
   );
 });

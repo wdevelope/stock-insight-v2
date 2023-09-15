@@ -41,6 +41,6 @@ export class Stock {
   })
   stockPrices: StockPrice[];
 
-  @OneToMany(() => Quiz, (quiz) => quiz.user, { eager: true })
+  @OneToMany(() => Quiz, (quiz) => quiz.stock)
   quiz: Quiz[];
 }
