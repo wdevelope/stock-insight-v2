@@ -14,11 +14,8 @@ import {
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { MyStock } from 'src/stock/entities/myStock.entity';
 import { ApiProperty } from '@nestjs/swagger';
-<<<<<<< HEAD
 import { StockComment } from 'src/stockcomment/entities/stockcomment.entity';
-=======
 import { Notification } from 'src/comments/entities/notification.entity';
->>>>>>> 2e4af4e59e9163469b421297349216b361bef105
 
 @Entity()
 export class Users {
@@ -104,7 +101,7 @@ export class Users {
 
   @OneToMany(() => StockComment, (stockComment) => stockComment.user)
   stockComment: StockComment[];
-  
+
   @OneToMany(() => Notification, (notification) => notification.user)
   notification: Notification[];
 }
