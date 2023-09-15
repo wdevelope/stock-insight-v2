@@ -103,6 +103,7 @@ export class QuizService {
   }
 
   // 퀴즈 확인 : correct가 null 인 값만 반환해서 다 확인
+  // @Cron('46 15 * * 1-5')
   async updateQuiz(): Promise<any> {
     const quizId = await this.quizRepository.find({ where: { correct: null } });
 

@@ -9,6 +9,7 @@ import {
 import { StockPrice } from './stockPrice.entity';
 import { Quiz } from 'src/quiz/quiz.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { StockComment } from 'src/stockcomment/entities/stockcomment.entity';
 
 @Entity()
 export class Stock {
@@ -40,6 +41,11 @@ export class Stock {
     cascade: true,
   })
   stockPrices: StockPrice[];
+
+  @OneToMany(() => StockComment, (stockComment) => stockComment.stock, {
+    cascade: true,
+  })
+  stockComment: StockComment[];
 
   @OneToMany(() => Quiz, (quiz) => quiz.stock)
   quiz: Quiz[];

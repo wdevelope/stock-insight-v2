@@ -25,6 +25,7 @@ import { SearchModule } from './search/search.module';
 import { ChatGateway } from './chat/chat.gateway';
 import { NewsModule } from './news/news.module';
 import { AlertGateway } from './alert/alert.gateway';
+import { StockCommentModule } from './stockcomment/stockcomment.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { AlertGateway } from './alert/alert.gateway';
     ExceptionModule,
     SearchModule,
     NewsModule,
+    StockCommentModule,
   ],
   controllers: [AppController],
   providers: [
