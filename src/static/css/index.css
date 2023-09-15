@@ -265,3 +265,18 @@ ul.nav .nav-item .nav-link.active {
 #correctPercentage {
   font-size: 1.4rem;
 }
+
+/* 🔥 알림 정보  */
+.user-notification {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 200px;
+  background-color: white;
+  border: 1px solid #414141;
+  border-radius: 10px;
+  z-index: 100;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
