@@ -1,8 +1,6 @@
 .stock-detail-container {
   border: 1px solid #29265a;
   padding: 30px;
-  max-width: 1000px;
-  margin: 50px auto;
   background-color: #ffffff;
   box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
@@ -38,30 +36,14 @@
   margin-right: 40px;
 }
 
-.stock-main-content {
-  display: flex;
-  flex-wrap: nowrap;
-}
-
-.stock-chart {
-  flex: 1.6;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 450px;
-  border-radius: 8px;
-  padding: 20px;
-  margin-right: 10px;
-}
-
 .stock-info {
-  flex: 0.6;
   padding: 20px;
 }
 
 #stockInfo > div > i {
   margin-top: -20px;
 }
+
 .star-btn {
   border: none;
   font-size: 24px;
@@ -93,4 +75,13 @@
 
 .stock-highlights > div > i {
   margin-bottom: 15px;
+}
+
+.comments-list {
+  max-height: 1000px;
+  overflow-y: auto;
+}
+
+#myChart {
+  height: 400px;
 }

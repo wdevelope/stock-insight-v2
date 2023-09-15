@@ -75,7 +75,6 @@ async function RenderNoticePosts(page = 1) {
 
   socket.on('ntcToClient', (notice) => {
     noticebox.innerHTML = `<div>${notice}</div>`;
-    console.log(notice);
     if (notice === null) {
       noticebox.innerHTML = `<div></div>`;
     }

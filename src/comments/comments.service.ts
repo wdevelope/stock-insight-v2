@@ -45,9 +45,6 @@ export class CommentsService {
       commentDto,
       board,
     );
-    console.log('현재 코멘트 쓰는 userid', user.id);
-
-    console.log('보드주인의 userid', currentBoard.user_id);
 
     if (user.id !== currentBoard.user_id) {
       // 2. 알림 생성

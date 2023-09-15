@@ -34,7 +34,6 @@ $('#charge_kakao').click(function () {
       buyer_postcode: '123-456',
     },
     function (rsp) {
-      console.log(rsp);
       if (rsp.success) {
         var msg = '결제가 완료되었습니다.';
         msg += '결제 금액 : ' + rsp.paid_amount;

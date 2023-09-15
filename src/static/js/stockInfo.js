@@ -164,6 +164,7 @@ async function addFavoriteStock(stockId) {
 // 🟤 주식 차트를 그리는 함수
 function renderChart(chartData) {
   const canvas = document.getElementById('myChart');
+
   const ctx = canvas.getContext('2d');
   // 차트 데이터를 역순으로 정렬
   chartData = chartData.reverse();
@@ -213,6 +214,7 @@ function renderChart(chartData) {
         mode: 'index',
         intersect: false,
       },
+      maintainAspectRatio: false,
       hover: {
         mode: 'nearest',
         intersect: true,

@@ -26,7 +26,6 @@ export class ViewsService {
     });
     const cnt = 0;
     const viewscount = existedBoard.viewCount;
-    console.log(viewscount);
     try {
       if (existedView === null) {
         updateBoardDto.viewCount = cnt + 1;
@@ -40,6 +39,7 @@ export class ViewsService {
       throw new BadRequestException('SERVICE_ERROR');
     }
   }
+
   async viewTotalCnt(boardId: number): Promise<number> {
     // const boardFind = await this.viewsRepository.findBoard(boardId);
     const existedViews = await this.viewsRepository.findViewsByBoardId(boardId);

@@ -96,7 +96,6 @@ export class NoticeboardsService {
     const existedNoticeBoard = await this.noticeBoardRepository.findOne({
       where: { id: noticeBoardId, user: { id: user.id } },
     });
-    console.log(existedNoticeBoard);
     if (!existedNoticeBoard) {
       throw new NotFoundException('보드가 존재하지 않습니다.');
     }
