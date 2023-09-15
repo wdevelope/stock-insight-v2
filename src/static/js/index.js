@@ -116,6 +116,7 @@ const noticeBoardId = getURLParameter('noticeBoardId');
 const askBoardId = getURLParameter('askBoardId');
 
 const freeEditBoardId = getURLParameter('freeEditBoardId');
+const stockId = getURLParameter('id');
 
 // 🟠  수정,삭제 버튼 토글 기능
 function toggleControlButtons() {
