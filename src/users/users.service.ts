@@ -179,4 +179,20 @@ export class UsersService {
       .where('id=:id', { id: userId })
       .execute();
   }
+
+  // 알림 조회 함수
+  async userNotification(userId: number) {
+    const result = await this.usersRepository
+      .createQueryBuilder('u')
+      .select('u.id')
+      .innerJoin('u.notification', 'notification')
+      .addSelect('notification.id')
+      .addSelect('notification.boardId')
+      .addSelect('notification.message')
+      .addSelect('notification.isRead')
+      .where('u.id = :id', { id: userId })
+      .getRawMany();
+
+    return result;
+  }
 }

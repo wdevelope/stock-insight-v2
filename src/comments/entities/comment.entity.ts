@@ -6,9 +6,11 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Notification } from './notification.entity';
 
 @Entity()
 export class Comment {
@@ -33,4 +35,9 @@ export class Comment {
 
   @ManyToOne(() => Users, (user) => user.comment, { onDelete: 'CASCADE' })
   user: Users;
+
+  @OneToOne(() => Notification, (notification) => notification.comment, {
+    cascade: true,
+  })
+  notification: Notification[];
 }

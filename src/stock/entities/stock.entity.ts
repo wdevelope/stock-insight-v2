@@ -47,6 +47,6 @@ export class Stock {
   })
   stockComment: StockComment[];
 
-  @OneToMany(() => Quiz, (quiz) => quiz.user, { eager: true })
+  @OneToMany(() => Quiz, (quiz) => quiz.stock)
   quiz: Quiz[];
 }

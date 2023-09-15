@@ -170,7 +170,7 @@ export class BoardsRepository {
             description: updateBoardDto.description,
             image: updateBoardDto.image,
             likeCount: updateBoardDto.likeCount,
-            viewCount: updateBoardDto.viewCount,
+            viewCount: () => `viewCount + 1`,
             is_checked: updateBoardDto.is_checked,
           })
           .where('id=:id', { id: boardId })

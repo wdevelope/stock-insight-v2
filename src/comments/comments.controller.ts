@@ -87,4 +87,16 @@ export class CommentsController {
       throw new BadRequestException('CONTROLLER_ERROR');
     }
   }
+
+  // 알림 읽기 http://localhost:3000/api/boards/notification/:id
+  @Patch('/notification/:id')
+  async updateNotification(@Param('id') id: number) {
+    return await this.commentsService.updateNotification(id);
+  }
+
+  // 알림 삭제 http://localhost:3000/api/boards/notification/:id
+  @Delete('/notification/:id')
+  async removeNotification(@Param('id') id: number) {
+    return await this.commentsService.removeNotification(id);
+  }
 }

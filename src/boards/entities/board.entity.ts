@@ -12,6 +12,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Notification } from 'src/comments/entities/notification.entity';
 
 @Entity()
 export class Board {
@@ -28,7 +29,7 @@ export class Board {
   description: string;
 
   @ApiProperty({ description: '게시물 이미지' })
-  @Column()
+  @Column({ default: null })
   image: string;
 
   @ApiProperty({ description: '게시물 좋아요 수' })
@@ -68,4 +69,7 @@ export class Board {
     cascade: true,
   })
   views: Views[];
+
+  @OneToMany(() => Notification, (notification) => notification.board)
+  notification: Notification[];
 }

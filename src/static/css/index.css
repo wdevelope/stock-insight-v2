@@ -66,6 +66,24 @@ ul.nav .nav-item .nav-link.active {
   color: white;
 }
 
+.delete-btn {
+  border: none;
+  outline: none;
+  background: transparent;
+  cursor: pointer;
+  color: red;
+  font-weight: bold;
+}
+
+.delete-btn:hover {
+  transform: scale(1.1);
+}
+
+/* ul.nav .nav-item button.active {
+  background-color: rgb(4, 26, 66);
+  color: white;
+} */
+
 /* 🔥 유저 정보  */
 .user-details {
   display: none;
@@ -216,6 +234,18 @@ ul.nav .nav-item .nav-link.active {
   color: red;
 }
 
+.btn-custom {
+  background-color: navy;
+  color: #ffffff;
+  border-radius: 50px;
+  padding: 3px 15px;
+  transition: all 0.3s;
+}
+
+.btn-custom:hover {
+  background-color: #fffb07;
+}
+
 /* 🔥 채팅박스 */
 #chat-box {
   width: 380px;
@@ -264,4 +294,20 @@ ul.nav .nav-item .nav-link.active {
 #totalQuizzes,
 #correctPercentage {
   font-size: 1.4rem;
+  font-weight: bold;
+}
+
+/* 🔥 알림 정보  */
+.user-notification {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 200px;
+  background-color: white;
+  border: 1px solid #414141;
+  border-radius: 10px;
+  z-index: 100;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }

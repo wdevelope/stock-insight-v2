@@ -70,7 +70,7 @@
 
 > 아래 이미지를 클릭하면 시연 영상을 시청할 수 있습니다.
 
-[![시연영상](./src/static/photo/stock2.png)](https://www.youtube.com/watch?v=_55dJlvUmz0)
+[![시연영상](./src/static/photo/stock2.png)](https://youtu.be/v2_u7Ux1ZpE)
 
 <br>
 <br>
