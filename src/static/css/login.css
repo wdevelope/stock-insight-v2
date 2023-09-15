@@ -31,9 +31,10 @@ canvas {
 
 #countdown-container {
   border: 1px solid #e0e0e0;
-  padding: 10px;
+  padding: 5px;
   border-radius: 5px;
   text-align: center;
   font-weight: bold;
   color: #ff4500;
+  margin-top: 4px;
 }

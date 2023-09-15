@@ -28,6 +28,17 @@
           </a>
           <!-- 알림,회원 -->
           <div class="d-flex ms-auto">
+            <!-- 알림 -->
+            <button
+              class="btn btn-outline-light me-2"
+              onclick="toggleNotification()"
+            >
+              <i class="fas fa-bell fa-2x"></i>
+            </button>
+            <!-- 알림 정보 영역 -->
+            <div class="user-notification" id="userNotification">
+              <div class="user-noti" id="userNoti"></div>
+            </div>
             <!-- 회원 -->
             <button class="btn btn-outline-light" onclick="toggleProfile()">
               <i class="fas fa-user fa-2x"></i>
@@ -237,6 +248,7 @@
                   type="password"
                   class="form-control"
                   id="password"
+                  placeholder="현재 비밀번호를 입력하세요"
                   required
                 />
               </div>
@@ -246,6 +258,7 @@
                   type="password"
                   class="form-control"
                   id="newPassword"
+                  placeholder="새로운 비밀번호를 입력하세요"
                   required
                 />
               </div>
@@ -255,6 +268,7 @@
                   type="password"
                   class="form-control"
                   id="newConfirm"
+                  placeholder="새로운 비밀번호를 한번 더 입력하세요"
                   required
                 />
               </div>
@@ -291,6 +305,7 @@
                   type="password"
                   class="form-control"
                   id="nickpassword"
+                  placeholder="현재 비밀번호를 입력하세요."
                   required
                 />
               </div>
@@ -331,5 +346,6 @@
     ></script>
     <script src="/static/js/index.js"></script>
     <script src="/static/js/userInfo.js"></script>
+    <script src="/static/js/userNotification.js"></script>
   </body>
 </html>
