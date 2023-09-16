@@ -31,11 +31,11 @@ export class LikesService {
       if (existedLike === null) {
         updateBoardDto.likeCount = cnt + 1;
         await this.likesRepository.save(user, boardId);
-        await this.likesRepository.update(boardId, updateBoardDto);
+        await this.likesRepository.incrementLikes(boardId);
       } else {
         updateBoardDto.likeCount = likescount - 1;
         await this.likesRepository.remove(existedLike);
-        await this.likesRepository.update(boardId, updateBoardDto);
+        await this.likesRepository.decrementLikes(boardId);
       }
     } catch (error) {
       throw new BadRequestException('SERVICE_ERROR');

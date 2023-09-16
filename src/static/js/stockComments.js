@@ -49,7 +49,7 @@ async function fetchStockComment() {
                               ${commentsHTML}
                                 <div>
                                 <br>
-                                    <h5>댓글 작성하기</h5>
+                                    <h5>작성하기</h5>
                                     <textarea class="form-control mb-3" rows="4" placeholder="댓글을 입력하세요..."></textarea>
                                     <button class="btn btn-primary" id="postCommentButton" onclick="createStockComment()">댓글 등록</button>
                                 </div>

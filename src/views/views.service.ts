@@ -6,10 +6,14 @@ import {
 import { ViewsRepository } from './views.repository';
 import { Users } from 'src/users/users.entity';
 import { UpdateBoardDto } from 'src/boards/dto/update-board.dto';
+import { BoardsRepository } from 'src/boards/boards.repository';
 
 @Injectable()
 export class ViewsService {
-  constructor(private viewsRepository: ViewsRepository) {}
+  constructor(
+    private viewsRepository: ViewsRepository,
+    private boardsRepository: BoardsRepository,
+  ) {}
 
   async createOrAdd(
     user: Users,
@@ -24,17 +28,9 @@ export class ViewsService {
     const existedView = await this.viewsRepository.findOne({
       where: { user: { id: userId }, board: { id: boardId } },
     });
-    const cnt = 0;
-    const viewscount = existedBoard.viewCount;
+
     try {
-      if (existedView === null) {
-        updateBoardDto.viewCount = cnt + 1;
-        await this.viewsRepository.create(user, boardId);
-        await this.viewsRepository.update(boardId, updateBoardDto);
-      } else {
-        updateBoardDto.viewCount = viewscount + 1;
-        await this.viewsRepository.update(boardId, updateBoardDto);
-      }
+      await this.boardsRepository.increaseViewCount(boardId);
     } catch (error) {
       throw new BadRequestException('SERVICE_ERROR');
     }
