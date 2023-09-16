@@ -12,8 +12,8 @@ import { BoardsRepository } from 'src/boards/boards.repository';
 @Module({
   imports: [
     ThrottlerModule.forRoot({
-      ttl: 10, // Throttle 시간 (초 단위)
-      limit: 1000, // 요청 제한 수
+      ttl: 5, // Throttle 시간 (초 단위)
+      limit: 5, // 요청 제한 수
     }),
     BoardsModule,
     TypeOrmModule.forFeature([Views]),
