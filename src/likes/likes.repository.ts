@@ -64,4 +64,20 @@ export class LikesRepository {
       throw new BadGatewayException('REPOSITORY_ERROR');
     }
   }
+
+  async incrementLikes(boardId: number): Promise<void> {
+    try {
+      await this.boardsRepository.incrementLikes(boardId);
+    } catch (error) {
+      throw new BadGatewayException('REPOSITORY_ERROR');
+    }
+  }
+
+  async decrementLikes(boardId: number): Promise<void> {
+    try {
+      await this.boardsRepository.decrementLikes(boardId);
+    } catch (error) {
+      throw new BadGatewayException('REPOSITORY_ERROR');
+    }
+  }
 }

@@ -170,10 +170,58 @@ export class BoardsRepository {
             description: updateBoardDto.description,
             image: updateBoardDto.image,
             likeCount: updateBoardDto.likeCount,
-            viewCount: () => `viewCount + 1`,
+            viewCount: updateBoardDto.viewCount,
             is_checked: updateBoardDto.is_checked,
           })
           .where('id=:id', { id: boardId })
+          .execute();
+      });
+    } catch (error) {
+      throw new BadRequestException('REPOSITORY_ERROR');
+    }
+  }
+
+  // 조회수 증가
+  async increaseViewCount(boardId: number): Promise<void> {
+    try {
+      await this.boardsRepository.manager.transaction(async (transaction) => {
+        await transaction
+          .createQueryBuilder()
+          .update(Board)
+          .set({
+            viewCount: () => 'viewCount + 1',
+          })
+          .where('id=:id', { id: boardId })
+          .execute();
+      });
+    } catch (error) {
+      throw new BadRequestException('REPOSITORY_ERROR');
+    }
+  }
+
+  async incrementLikes(boardId: number): Promise<void> {
+    try {
+      await this.boardsRepository.manager.transaction(async (transaction) => {
+        await transaction
+          .createQueryBuilder()
+          .update(Board)
+          .set({ likeCount: () => 'likeCount + 1' })
+          .where('id = :id', { id: boardId })
+          .execute();
+      });
+    } catch (error) {
+      throw new BadRequestException('REPOSITORY_ERROR');
+    }
+  }
+
+  async decrementLikes(boardId: number): Promise<void> {
+    try {
+      await this.boardsRepository.manager.transaction(async (transaction) => {
+        await transaction
+          .createQueryBuilder()
+          .update(Board)
+          .set({ likeCount: () => 'likeCount - 1' })
+          .where('id = :id', { id: boardId })
           .execute();
       });
     } catch (error) {
