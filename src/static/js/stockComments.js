@@ -18,6 +18,8 @@ async function fetchStockComment() {
 
     const comments = await response.json();
     const commentsList = document.querySelector('.comments-list');
+    const defaultImageUrl = 'https://ifh.cc/g/a2Sg64.png';
+
     commentsList.innerHTML = ''; // Clear previous comments
 
     const commentsHTML = comments
