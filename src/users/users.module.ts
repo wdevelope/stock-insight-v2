@@ -9,11 +9,12 @@ import { AuthModule } from 'src/auth/auth.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { EmailService } from './email/email.service';
+import { Quiz } from 'src/quiz/quiz.entity';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    TypeOrmModule.forFeature([Users]),
+    TypeOrmModule.forFeature([Users, Quiz]),
     forwardRef(() => AuthModule),
     MailerModule.forRoot({
       transport: {

@@ -87,17 +87,17 @@ export class UsersRepository extends Repository<Users> {
   }
 
   async getQuizDay() {
-    const currentTime = new Date();
-    currentTime.setHours(currentTime.getHours() + 9);
-    const today = currentTime.toISOString().substring(0, 10).replace(/-/g, '');
-    const updated_date = today;
+    // const currentTime = new Date();
+    // currentTime.setHours(currentTime.getHours() + 9);
+    // const today = currentTime.toISOString().substring(0, 10).replace(/-/g, '');
+    // const updated_date = today;
 
     const user = await this.createQueryBuilder('u')
       .select('u.id')
       .addSelect('u.point')
       .leftJoinAndSelect('u.quiz', 'quiz')
-      .where('quiz.updated_date = :updated_date', {
-        updated_date: updated_date,
+      .where('quiz.is_checked = :is_checked', {
+        is_checked: false,
       })
       .getRawMany();
 
