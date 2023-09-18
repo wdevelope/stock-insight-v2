@@ -26,4 +26,7 @@ export class Quiz {
 
   @Column()
   stockId: string;
+
+  @Column({ default: false })
+  is_checked: boolean;
 }

@@ -9,10 +9,17 @@ import { SignUpDto } from './dto/signUp.dto';
 import { UpdateRequestDto } from './dto/updateRequest.dto';
 import { SubscribeDto } from './dto/subscribe.dto';
 import { Users } from './users.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Quiz } from 'src/quiz/quiz.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(
+    @InjectRepository(Quiz)
+    private quizRepository: Repository<Quiz>,
+    private readonly usersRepository: UsersRepository,
+  ) {}
 
   async signUp(body: SignUpDto) {
     const { email, password, confirm, nickname } = body;
@@ -139,6 +146,14 @@ export class UsersService {
       await this.usersRepository.updateUserStatus(user, {
         status: newStatus,
       });
+      await this.quizRepository
+        .createQueryBuilder()
+        .update(Quiz)
+        .set({
+          is_checked: true,
+        })
+        .where('is_checked=:is_checked', { is_checked: false })
+        .execute();
     });
   }
 
