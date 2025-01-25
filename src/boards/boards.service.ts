@@ -10,15 +10,11 @@ import { Board } from './entities/board.entity';
 import { Users } from 'src/users/users.entity';
 import { BoardsRepository } from './boards.repository';
 import { FindBoardDto } from './dto/find-board.dto';
-import { BoardSearchService } from './boards.search.service';
 // import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class BoardsService {
-  constructor(
-    private boardsRepository: BoardsRepository,
-    private readonly boardSearchService: BoardSearchService,
-  ) {}
+  constructor(private boardsRepository: BoardsRepository) {}
 
   // 보드 검색
   async searchByTitleAndDescriptionAndNickname(
@@ -114,16 +110,6 @@ export class BoardsService {
     };
   }
 
-  // 보드 유저아이디 찾기
-  async getBoardsByUserId(
-    page: number,
-    findBoardDto: FindBoardDto,
-  ): Promise<{ data: Board[]; meta: any }> {
-    return this.boardSearchService.searchByTitleAndDescriptionAndNickname(
-      page,
-      findBoardDto,
-    );
-  }
   // 게시글 상세 조회
   async findOneWithDetails(boardId: number): Promise<Board> {
     const board = await this.boardsRepository.findOneWith(boardId);
@@ -137,25 +123,6 @@ export class BoardsService {
     try {
       await this.boardsRepository.save(createBoardDto, user);
     } catch (error) {
-      throw new BadRequestException('SERVICE_ERROR');
-    }
-  }
-
-  // @Cron('0 */5 * * * *')
-  async indexing(): Promise<void> {
-    const updateBoardDto: UpdateBoardDto = new UpdateBoardDto();
-    updateBoardDto.is_checked = true;
-    const boards: Board[] = await this.boardsRepository.findBy({
-      where: { is_checked: false },
-    });
-
-    try {
-      const boardId = boards.map((board) => board.id);
-      await this.boardsRepository.updateChecked(updateBoardDto, boardId);
-
-      await this.boardSearchService.indexData(boards);
-    } catch (error) {
-      console.log(error);
       throw new BadRequestException('SERVICE_ERROR');
     }
   }

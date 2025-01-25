@@ -112,23 +112,23 @@ export class UsersController {
     return await this.usersService.deleteUser(id);
   }
 
-  // 이메일 인증번호 발송 http://localhost:3000/api/users/email
-  @Post('/email')
-  @ApiOperation({
-    summary: '이메일 인증 API',
-  })
-  sendTemplate(@Body() body: EmailDto): any {
-    return this.emailService.authEmail(body);
-  }
+  // // 이메일 인증번호 발송 http://localhost:3000/api/users/email
+  // @Post('/email')
+  // @ApiOperation({
+  //   summary: '이메일 인증 API',
+  // })
+  // sendTemplate(@Body() body: EmailDto): any {
+  //   return this.emailService.authEmail(body);
+  // }
 
-  // 이메일 인증 확인 http://localhost:3000/api/users/verifyEmail
-  @ApiOperation({
-    summary: '이메일 인증 API',
-  })
-  @Post('/verifyEmail')
-  async verifyEmail(@Body() body) {
-    return this.emailService.verifyEmail(body.email, body.randomCode);
-  }
+  // // 이메일 인증 확인 http://localhost:3000/api/users/verifyEmail
+  // @ApiOperation({
+  //   summary: '이메일 인증 API',
+  // })
+  // @Post('/verifyEmail')
+  // async verifyEmail(@Body() body) {
+  //   return this.emailService.verifyEmail(body.email, body.randomCode);
+  // }
 
   // 유저 포인트 http://localhost:3000/api/users/point
   @ApiOperation({

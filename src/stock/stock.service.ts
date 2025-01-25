@@ -1,6 +1,5 @@
 import {
   ConflictException,
-  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -9,8 +8,6 @@ import { In, Like, MoreThanOrEqual, Not, Repository } from 'typeorm';
 import axios from 'axios';
 import { StockPrice } from './entities/stockPrice.entity';
 import { Stock } from './entities/stock.entity';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Cache } from 'cache-manager';
 import { CronJob } from 'cron';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { MyStock } from './entities/myStock.entity';
@@ -29,7 +26,6 @@ export class StockService {
     @InjectRepository(StockIndex)
     private stockIndexRepository: Repository<StockIndex>,
     private schedulerRegistry: SchedulerRegistry,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async stockNameSave() {
@@ -116,12 +112,13 @@ export class StockService {
   async stockPriceSave() {
     const allStock = await this.stockRepository.find();
     const stockCodes = allStock.map((data) => data.id);
-    let ACCESS_TOKEN = await this.cacheManager.get('token');
-    if (!ACCESS_TOKEN) {
-      await this.tokenCreate();
-      await this.sleep(200);
-      ACCESS_TOKEN = await this.cacheManager.get('token');
-    }
+    // let ACCESS_TOKEN = await this.cacheManager.get('token');
+    const ACCESS_TOKEN = 'as';
+    // if (!ACCESS_TOKEN) {
+    //   await this.tokenCreate();
+    //   await this.sleep(200);
+    //   ACCESS_TOKEN = await this.cacheManager.get('token');
+    // }
 
     for (const stockCode of stockCodes) {
       const config = {
@@ -174,12 +171,13 @@ export class StockService {
     const currentTime = new Date();
     currentTime.setHours(currentTime.getHours() + 9);
     const today = currentTime.toISOString().substring(0, 10).replace(/-/g, '');
-    let ACCESS_TOKEN = await this.cacheManager.get('token');
-    if (!ACCESS_TOKEN) {
-      await this.tokenCreate();
-      await this.sleep(200);
-      ACCESS_TOKEN = await this.cacheManager.get('token');
-    }
+    // let ACCESS_TOKEN = await this.cacheManager.get('token');
+    const ACCESS_TOKEN = 'as';
+    // if (!ACCESS_TOKEN) {
+    //   await this.tokenCreate();
+    //   await this.sleep(200);
+    //   ACCESS_TOKEN = await this.cacheManager.get('token');
+    // }
 
     for (const indexCode of indexCodes) {
       const config = {
@@ -230,9 +228,10 @@ export class StockService {
       .request(config)
       .then((response) => {
         const token = 'token';
-        this.cacheManager.set(token, `Bearer ${response.data.access_token}`, {
-          ttl: 64800,
-        });
+        console.log(response.data.access_token, token);
+        // this.cacheManager.set(token, `Bearer ${response.data.access_token}`, {
+        //   ttl: 64800,
+        // });
       })
       .catch((error) => {
         console.log(error);

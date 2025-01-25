@@ -8,27 +8,18 @@ import {
 } from '@nestjs/websockets';
 import { Logger } from '@nestjs/common';
 import { Socket, Server } from 'socket.io';
-import * as redis from 'redis';
 
 @WebSocketGateway()
 export class AlertGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   @WebSocketServer() server: Server;
-  private logger: Logger = new Logger('alertGateway');
-  private redisClient: any;
-
-  constructor() {
-    this.redisClient = redis.createClient({
-      host: process.env.HOST,
-      port: parseInt(process.env.REDIS_PORT),
-      password: process.env.PASSWORD,
-    });
-  }
+  private logger: Logger = new Logger('AlertGateway');
+  private notice: string = '';
 
   @SubscribeMessage('ntcToServer')
   handleMessage(client: Socket, text: string): void {
-    this.redisClient.set('notice', text, 'EX', 90);
+    this.notice = text;
     this.server.emit('ntcToClient', text);
   }
 
@@ -38,13 +29,7 @@ export class AlertGateway
 
   handleConnection(client: Socket, ...args: any[]) {
     this.logger.log(`Client connected: ${client.id}`);
-    this.redisClient.get('notice', (err, reply) => {
-      if (err) {
-        client.emit('ntcToClient', '오류가 발생했습니다.');
-      } else {
-        client.emit('ntcToClient', reply);
-      }
-    });
+    client.emit('ntcToClient', this.notice);
   }
 
   handleDisconnect(client: Socket) {

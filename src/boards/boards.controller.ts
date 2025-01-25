@@ -21,13 +21,7 @@ import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
 import { Users } from 'src/users/users.entity';
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiOperation,
-  ApiQuery,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth('JWT-auth')
@@ -63,29 +57,6 @@ export class BoardsController {
       page,
       findBoardDto,
     );
-  }
-
-  // 보드 오픈서치 검색
-  @Get('find')
-  @ApiOperation({
-    summary: '게시물 조회 API(title & description).',
-    description: '게시물을 조건(title & description) 조회한다.',
-  })
-  @ApiQuery({ name: 'title', type: String, required: false })
-  @ApiQuery({ name: 'description', type: String, required: false })
-  @ApiQuery({ name: 'nickname', type: String, required: false })
-  findBoardBy(
-    @Query('page') page: number = 1,
-    @Query('title') title: string,
-    @Query('description') description: string,
-    @Query('nickname') nickname: string,
-  ): Promise<{ data: Board[]; meta: any }> {
-    try {
-      const findBoardDto = { title, description, nickname };
-      return this.boardsService.getBoardsByUserId(page, findBoardDto);
-    } catch (error) {
-      throw new BadRequestException('CONTROLLER_ERROR');
-    }
   }
 
   //페이지 네이션
@@ -154,19 +125,6 @@ export class BoardsController {
       return this.boardsService.findOneWithDetails(boardId);
     } catch (error) {
       console.log(error);
-      throw new BadRequestException('CONTROLLER_ERROR');
-    }
-  }
-  //스케줄러를 이용하여 주기적으로 보드 인덱싱
-  @Patch('/indexing')
-  @ApiOperation({
-    summary: 'DB 게시물 인덱싱 API.',
-    description: '게시물을 상시적으로 인덱싱한다.',
-  })
-  boardsIndexing(): Promise<void> {
-    try {
-      return this.boardsService.indexing();
-    } catch (error) {
       throw new BadRequestException('CONTROLLER_ERROR');
     }
   }

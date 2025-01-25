@@ -8,8 +8,6 @@ import {
 } from '@nestjs/websockets';
 import { Logger } from '@nestjs/common';
 import { Socket, Server } from 'socket.io';
-import * as redis from 'redis';
-import { config } from 'dotenv';
 
 @WebSocketGateway()
 export class ChatGateway
@@ -17,28 +15,16 @@ export class ChatGateway
 {
   @WebSocketServer() server: Server;
   private logger: Logger = new Logger('ChatGateway');
-  private redisClient: any;
-  private clearRedisMessages() {
-    this.redisClient.del('messages', (err, reply) => {
-      if (err) {
-        this.logger.error('Failed to clear Redis messages');
-      } else {
-        this.logger.log('Redis messages cleared');
-      }
-    });
-  }
+  private messages: string[] = [];
 
-  constructor() {
-    this.redisClient = redis.createClient({
-      host: process.env.HOST,
-      port: parseInt(process.env.REDIS_PORT),
-      password: process.env.PASSWORD,
-    });
+  private clearMessages() {
+    this.messages = [];
+    this.logger.log('Messages cleared');
   }
 
   @SubscribeMessage('msgToServer')
   handleMessage(client: Socket, text: string): void {
-    this.redisClient.lpush('messages', text);
+    this.messages.push(text);
     this.server.emit('msgToClient', [text]);
   }
 
@@ -50,10 +36,10 @@ export class ChatGateway
       (60 - now.getMinutes()) * 60 * 1000 - now.getSeconds() * 1000;
 
     setTimeout(() => {
-      this.clearRedisMessages();
+      this.clearMessages();
       setInterval(
         () => {
-          this.clearRedisMessages();
+          this.clearMessages();
         },
         1000 * 60 * 60,
       ); // 매 1시간마다 초기화
@@ -62,9 +48,7 @@ export class ChatGateway
 
   handleConnection(client: Socket, ...args: any[]) {
     this.logger.log(`Client connected: ${client.id}`);
-    this.redisClient.lrange('messages', 0, -1, (err, reply) => {
-      client.emit('msgToClient', reply);
-    });
+    client.emit('msgToClient', this.messages);
   }
 
   handleDisconnect(client: Socket) {
