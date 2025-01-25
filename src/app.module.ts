@@ -12,7 +12,7 @@ import { ViewsModule } from './views/views.module';
 import { NoticeboardsModule } from './noticeboards/noticeboards.module';
 import { StockModule } from './stock/stock.module';
 import { EventsModule } from './events/events.module';
-import { UploadModule } from './upload/upload.module';
+// import { UploadModule } from './upload/upload.module';
 import { QuizModule } from './quiz/quiz.module';
 import { AskboardsModule } from './askboards/askboards.module';
 import { APP_FILTER } from '@nestjs/core';
@@ -35,7 +35,7 @@ import { StockCommentModule } from './stockcomment/stockcomment.module';
     NoticeboardsModule,
     StockModule,
     EventsModule,
-    UploadModule,
+    // UploadModule,
     QuizModule,
     AskboardsModule,
     ExceptionModule,
